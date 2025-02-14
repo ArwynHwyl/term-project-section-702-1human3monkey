@@ -7,3 +7,6 @@ Mixkupp Peeranat Thiwongsa 662115034
 RinZ5 Supawit Promma 662115049
 
 Arwynhwyl Sattaya Mingsathia 662115050
+
+UI designed + User flow
+https://www.figma.com/design/qTdQm42Gcuc8QkYXhz8dLK/Frontend-Project?node-id=2-2&t=liKnoWEs2ok8ZnnT-1
