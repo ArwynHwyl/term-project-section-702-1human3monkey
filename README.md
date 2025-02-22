@@ -91,3 +91,8 @@ fix(config): hide api key in the .env
 
 Closes #69
 ```
+
+### Naming Convention
+- **camelCase** for js file: `server.js`
+- **camelCase** for variables and functions: `fetchProductData()`
+- **camelCase** for html and css filenames: `cartPage.html`
