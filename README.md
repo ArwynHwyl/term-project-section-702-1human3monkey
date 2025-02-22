@@ -93,9 +93,21 @@ Closes #69
 ```
 
 ### Naming Convention
+#### For coding
 - **camelCase** for js file: `server.js`
 - **camelCase** for variables and functions: `fetchProductData()`
 - **camelCase** for html and css filenames: `cartPage.html`
+
+#### For branching
+Branch should follow this structure:
+`<type>/<short-description>`
+Example:
+```
+feature/user-authentication
+feature/cart-page
+```
+you may include feature of each page in `feature/[]-page` like fetching api and dynamically create a list of product in the page with JS.
+if you don't know wheter you should make a new branch for that feature or put in other breanch you may ask in group chat for discussion.
 
 ### Code Styling Specification
 - `""` for `string`, `"\filepath"` and `"\api\endpoint"`
