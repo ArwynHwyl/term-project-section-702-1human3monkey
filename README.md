@@ -87,7 +87,7 @@ feat(api)!: change api endpoint for adding new product to cart
 BREAKING CHANGES: use cart/add/[productID] instead of the old product/add/[productID]
 ```
 ```
-fix(config): hide api key in the .env
+chore(config): hide api key in the .env
 
 Closes #69
 ```
