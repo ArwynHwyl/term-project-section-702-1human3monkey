@@ -96,3 +96,9 @@ Closes #69
 - **camelCase** for js file: `server.js`
 - **camelCase** for variables and functions: `fetchProductData()`
 - **camelCase** for html and css filenames: `cartPage.html`
+
+### Code Styling Specification
+- `""` for `string`, `"\filepath"` and `"\api\endpoint"`
+- `''` for `char`
+- **2** tab spaces
+    - I recommend you change VSCode default tab space in Setting > Editor: Tab Size or you can change it manually using `CTRL\COMMAND + SHIFT + P` > Change Tab Display Size
