@@ -20,7 +20,7 @@ This project follows the [Conventional Commits](https://www.conventionalcommits.
 #### **Formats**
 ##### Default
 ```
-<type>(optional scope): <description>
+<type>(scope): <description>
 <optional body>
 <optional footer>
 ``` 
