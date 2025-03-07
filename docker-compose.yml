@@ -1,4 +1,19 @@
 services:
+  express:
+    build: .
+    container_name: dazzle-express
+    restart: always
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    networks:
+      - dazzle-network
+    entrypoint: ["./wait-for-it.sh", "dazzle-mysql:3306", "--", "npm", "start"]
+
   mysql:
     image: mysql:latest
     container_name: dazzle-mysql
@@ -12,6 +27,11 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - dazzle-network
+
+networks:
+  dazzle-network:
 
 volumes:
   mysql_data:
