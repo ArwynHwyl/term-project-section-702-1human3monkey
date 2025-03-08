@@ -1,7 +1,7 @@
 const express = require("express");
 const db = require("./services/db");
 const testDatabaseConnection = require("./services/testDatabaseConnection");
-
+const path = require('path');
 const app = express();
 
 app.set("view engine", "ejs");
