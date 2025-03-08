@@ -1,0 +1,66 @@
+.navbar {
+    background-color: #8B1A1A;
+    padding: 1rem;
+}
+
+.navbar-brand {
+    color: white !important;
+    font-family: "Old Standard TT";
+    font-size: 1.5rem !important;
+    font-style: normal;
+    font-weight: 700;
+}
+
+.navbar-toggler {
+    border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
+
+.dropdown-item a{
+    color: black;
+    text-decoration: none;
+}
+
+#navbarContent{
+    border-top: 1px solid white;
+}
+
+#navbarContent .nav-item a {
+    color: white;
+    font-style: normal;
+    font-weight: 600;
+}
+
+#navbarContent .navbar-nav li {
+    list-style: circle;
+}
+
+#navbarContent .nav-link {
+    padding: 0;
+}
+
+#navbarContent .nav-item {
+    border-bottom: 1px solid white;
+    width: 150px;
+    margin: 1rem 0;
+}
+
+#navbarContent .dropdown-menu-item {
+    color: white;
+    text-decoration: none;
+}
+
+#navbarContent .dropdown-menu-item li {
+    list-style: none;
+}
+
+.navbar-icons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.navbar-icons .bi {
+    color: white;
+    margin-left: 1rem;
+    font-size: 1.2rem;
+}
