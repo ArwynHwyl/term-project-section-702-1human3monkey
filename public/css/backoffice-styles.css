@@ -104,16 +104,16 @@ body {
 .search-container {
   margin-bottom: 20px;
   display: flex;
-  justify-content: flex-start; /* ชิดซ้าย */
+  justify-content: flex-start;
 }
 
 .input-group {
   width: 100%;
-  max-width: 400px; /* ลดความกว้างเพื่อให้มีที่ว่างด้านขวา */
+  max-width: 400px;
 }
 
 .search-input {
-  border: 1px solid #ced4da; /* ขอบสีเทาอ่อน */
+  border: 1px solid #ced4da;
   border-right: none;
   border-radius: 4px 0 0 4px;
   padding: 10px 15px;
@@ -139,7 +139,7 @@ body {
   font-size: 16px;
 }
 
-/* ปรับแต่งตาราง (Table) */
+
 .table-responsive {
   overflow-x: auto;
 }
@@ -147,7 +147,7 @@ body {
 table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid black; /* เพิ่มขอบรอบตาราง */
+  border: 2px solid black;
 }
 
 table th,
@@ -155,12 +155,12 @@ table td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 2px solid black;
-  border-right: 2px solid black; /* เพิ่มเส้นขอบแนวตั้ง */
+  border-right: 2px solid black;
 }
 
 table th:last-child,
 table td:last-child {
-  border-right: none; /* ลบเส้นขอบแนวตั้งของคอลัมน์สุดท้าย */
+  border-right: none;
 }
 
 table th {
