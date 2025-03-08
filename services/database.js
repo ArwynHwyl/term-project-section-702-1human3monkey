@@ -1,14 +1,14 @@
 const db = require("./db");
 
 const createCategoryTableQuery = `
-  CREATE TABLE Category (
+  CREATE TABLE IF NOT EXISTS Category (
     category_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     category_name VARCHAR(255)
   );
 `;
 
 const createProductTableQuery = `
-  CREATE TABLE Product (
+  CREATE TABLE IF NOT EXISTS Product (
     product_id INT PRIMARY KEY AUTO_INCREMENT,
     category_id INT,
     description VARCHAR(255),
@@ -21,7 +21,7 @@ const createProductTableQuery = `
 `;
 
 const createProductColorTableQuery = `
-  CREATE TABLE ProductColor (
+  CREATE TABLE IF NOT EXISTS ProductColor (
     product_color_id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT,
     color VARCHAR(255),
@@ -31,7 +31,7 @@ const createProductColorTableQuery = `
 `;
 
 const createProductSizeTableQuery = `
-  CREATE TABLE ProductSize (
+  CREATE TABLE IF NOT EXISTS ProductSize (
     product_size_id INT PRIMARY KEY AUTO_INCREMENT,
     product_id INT,
     size VARCHAR(255),
@@ -41,20 +41,20 @@ const createProductSizeTableQuery = `
 `;
 
 const createUserTableQuery = `
-  CREATE TABLE User (
+  CREATE TABLE IF NOT EXISTS User (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255),
     password VARCHAR(255),
     email VARCHAR(255),
-    role VARCHAR(255)
+    role VARCHAR(255),
     first_name VARCHAR(255),
     last_name VARCHAR(255),
-    phone_number VARCHAR(255),
+    phone_number VARCHAR(255)
   );
 `;
 
 const createAddressTableQuery = `
-  CREATE TABLE Address (
+  CREATE TABLE IF NOT EXISTS Address (
     address_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     city VARCHAR(255),
@@ -67,7 +67,7 @@ const createAddressTableQuery = `
 `;
 
 const createCreditCardTableQuery = `
-  CREATE TABLE CreditCard (
+  CREATE TABLE IF NOT EXISTS CreditCard (
     credit_card_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     card_number VARCHAR(255),
@@ -78,15 +78,15 @@ const createCreditCardTableQuery = `
 `;
 
 const createCartTableQuery = `
-  CREATE TABLE Cart (
+  CREATE TABLE IF NOT EXISTS Cart (
     cart_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
-    FOREIGN KEY (user_id) REFERENCES User(user_id),
+    FOREIGN KEY (user_id) REFERENCES User(user_id)
   );
 `;
 
 const createCartItemTableQuery = `
-  CREATE TABLE CartItem (
+  CREATE TABLE IF NOT EXISTS CartItem (
     cart_item_id INT PRIMARY KEY AUTO_INCREMENT,
     cart_id INT,
     product_id INT,
@@ -95,18 +95,38 @@ const createCartItemTableQuery = `
     FOREIGN KEY (cart_id) REFERENCES Cart(cart_id),
     FOREIGN KEY (product_id) REFERENCES Product(product_id),
     FOREIGN KEY (product_color_id) REFERENCES ProductColor(product_color_id),
-    FOREIGN KEY (product_size_id) REFERENCES ProductSize(product_size_id),
+    FOREIGN KEY (product_size_id) REFERENCES ProductSize(product_size_id)
   );
 `;
 
 const createHistoryTableQuery = `
-  CREATE TABLE History (
+  CREATE TABLE IF NOT EXISTS History (
     history_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
     cart_item_id INT,
     status VARCHAR(255),
     order_date DATE,
     FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (cart_item_id) REFERENCES CartItem(cart_item_id),
+    FOREIGN KEY (cart_item_id) REFERENCES CartItem(cart_item_id)
   );
 `;
+
+async function createTables(dbConnection) {
+  try {
+    await dbConnection.query(createCategoryTableQuery);
+    await dbConnection.query(createProductTableQuery);
+    await dbConnection.query(createProductColorTableQuery);
+    await dbConnection.query(createProductSizeTableQuery);
+    await dbConnection.query(createUserTableQuery);
+    await dbConnection.query(createAddressTableQuery);
+    await dbConnection.query(createCreditCardTableQuery);
+    await dbConnection.query(createCartTableQuery);
+    await dbConnection.query(createCartItemTableQuery);
+    await dbConnection.query(createHistoryTableQuery);
+  } catch (error) {
+    console.error("ERROR: Failed to create tables: ", error.message);
+    throw error;
+  }
+}
+
+module.exports = createTables;
