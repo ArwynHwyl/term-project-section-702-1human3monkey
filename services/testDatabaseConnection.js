@@ -5,6 +5,8 @@ async function testDatabaseConnection(db) {
   }
 
   try {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     const connection = await db.getConnection();
     console.log("Database connected successfully!");
 
