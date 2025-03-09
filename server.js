@@ -38,5 +38,16 @@ app.get('/backoffice/category', (req, res) => {
   ];
   res.render('pages/backoffice-category-page', { categories, activePage: 'categories' });
 });
+app.get('/backoffice/category/add', (req, res) => {
+  const categories = [
+    { name: 'Shirt', stock: 300 },
+    { name: 'Pants', stock: 200 },
+    { name: 'Hood', stock: 500 },
+    { name: 'Dress', stock: 100 },
+    { name: 'Shoes', stock: 50 },
+    { name: 'Sweater', stock: 300 }
+  ];
+  res.render('pages/backoffice-addcategory-page', { categories, activePage: 'categories' });
+});
 
 startServer(db);
