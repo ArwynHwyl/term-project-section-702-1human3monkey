@@ -18,10 +18,6 @@ async function startServer(db) {
     res.render("index");
   });
 
-  app.get("/login", (req, res) => {
-    res.render("pages/login");
-  })
-
   app.listen(3000, () => {
     console.log("Server running on port 3000");
   })
