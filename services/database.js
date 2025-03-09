@@ -130,3 +130,4 @@ async function createTables(dbConnection) {
 }
 
 module.exports = createTables;
+
