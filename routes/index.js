@@ -1,12 +1,16 @@
 const express = require("express");
-const backofficeCategoryRoute = require("./backofficeCategoryRoute");
+const createBackofficeCategoryRoute = require("./backofficeCategoryRoute");
 
-const router = express.Router();
+function createRouter(db) {
+  const router = express.Router();
 
-router.get("/backoffice", (req, res) => {
-  res.redirect("/backoffice/category");
-});
+  router.get("/backoffice", (req, res) => {
+    res.redirect("/backoffice/category");
+  });
 
-router.use(backofficeCategoryRoute);
+  router.use(createBackofficeCategoryRoute(db));
 
-module.exports = router;
+  return router;
+}
+
+module.exports = createRouter;
