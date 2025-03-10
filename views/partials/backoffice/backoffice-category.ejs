@@ -17,7 +17,6 @@
             <tr>
               <th class="checkbox-cell"><input type="checkbox"></th>
               <th>Category_Name</th>
-              <th class="stock-cell">stock</th>
               <th class="action-cell"><button style="border-radius: 5px; border-color:black ;"><i class="bi bi-sort-alpha-down"></button></i></th>
             </tr>
           </thead>
@@ -25,8 +24,7 @@
             <% categories.forEach(category => { %>
               <tr>
                 <td class="checkbox-cell"><input type="checkbox"></td>
-                <td><%= category.name %></td>
-                <td class="stock-cell"><%= category.stock %></td>
+                <td><%= category.category_name %></td>
                 <td class="action-cell"><i class="bi bi-three-dots-vertical"></i></td>
               </tr>
             <% }) %>
