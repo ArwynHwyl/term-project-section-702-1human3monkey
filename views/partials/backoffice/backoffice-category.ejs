@@ -24,11 +24,19 @@
         <tbody>
           <% categories.forEach(category=> { %>
             <tr>
-              <td class="checkbox-cell"><input type="checkbox"></td>
-              <td>
-                <%= category.category_name %>
-              </td>
-              <td class="action-cell">
+              <th class="checkbox-cell"><input type="checkbox"></th>
+              <th>Image</th>
+              <th>Category Name</th>
+              <th class="action-cell"><button style="border-radius: 5px; border-color:black ;"><i class="bi bi-sort-alpha-down"></button></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categories.forEach(category => { %>
+              <tr>
+                <td class="checkbox-cell"><input type="checkbox"></td>
+                <td><img class="tableImage" src="<%= category.image_path %>" alt="<%= category.category_name %>"></td>
+                <td><%= category.category_name %></td>
+                <td class="action-cell">
                 <div class="dropdown">
                   <button class="btn dropdown-toggle no-caret-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bi bi-three-dots-vertical"></i>
@@ -38,8 +46,8 @@
                     <a class="dropdown-item" href="#">Delete</a>
                   </div>
                 </div>
-              </td>
-            </tr>
+                </td>
+              </tr>
             <% }) %>
         </tbody>
       </table>

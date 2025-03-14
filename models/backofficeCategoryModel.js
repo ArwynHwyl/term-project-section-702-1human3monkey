@@ -14,10 +14,10 @@ class backofficeCategoryModel {
     }
   }
 
-  async addCategory(name) {
-    const query = `INSERT INTO Category (category_name) VALUES ('${name}')`;
+  async addCategory(name, imagePath) {
+    const query = `INSERT INTO Category (category_name, image_path) VALUES (? ,?)`;
     try {
-      const [result] = await this.db.execute(query);
+      const [result] = await this.db.execute(query, [name, imagePath]);
       return result;
     } catch (error) {
       console.error("Error adding category: ", error);

@@ -3,6 +3,7 @@ const db = require("./db");
 const createCategoryTableQuery = `
   CREATE TABLE IF NOT EXISTS Category (
     category_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    image_path VARCHAR(255),
     category_name VARCHAR(255)
   );
 `;
@@ -12,7 +13,7 @@ const createProductTableQuery = `
     product_id INT PRIMARY KEY AUTO_INCREMENT,
     category_id INT,
     description VARCHAR(255),
-    product_images VARCHAR(255),
+    image_path VARCHAR(255),
     normal_price DECIMAL(10,2),
     promotion_percent DECIMAL(10,2),
     product_name VARCHAR(255),
