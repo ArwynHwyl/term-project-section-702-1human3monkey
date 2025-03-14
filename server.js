@@ -67,6 +67,13 @@ async function startServer(dbConnection) {
     };
     res.render('pages/backoffice-product-edit-page', { product });
   });
+  app.get('/backoffice/history', (req, res) => {
+    const history = [
+      { userId: '1123', productname: 'Hoodie', color: 'Black', size: 'Hood', quantity: 'x 50000', price: '2,252.231 THB', status: '' },
+      { userId: 'h123', productname: 'Elephant Pant', color: 'Vintage Washed Elephant Pant', size: 'Pants', quantity: '1000 THB', price: '0.000011 THB', status: '' }
+    ];
+    res.render('pages/backoffice-history-page', { history, activePage: 'history' });
+  });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
   })
