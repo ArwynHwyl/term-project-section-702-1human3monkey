@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAZZLE admin - Edit Product</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/public/css/backoffice-styles.css">
+  <link rel="stylesheet" href="/public/css/backoffice-productedit-style.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <%- include('../partials/backoffice/backoffice-header') %>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Content Area -->
+      <div class="col-md-12">
+        <div class="content">
+          <h3>Products Details</h3>
+          <div class="product-edit-container">
+            <div class="product-image-section">
+              <img src="<%= product.image || 'https://via.placeholder.com/100' %>" alt="Product Image" class="product-image">
+            </div>
+            <div class="product-details-section">
+              <div class="form-group">
+                <label for="product-name">Name:</label>
+                <input type="text" id="product-name" class="form-control" value="<%= product.name %>" readonly>
+              </div>
+              <div class="form-group">
+                <label for="product-category">Category:</label>
+                <input type="text" id="product-category" class="form-control" value="<%= product.category %>" readonly>
+              </div>
+              <div class="table-responsive">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Color</th>
+                      <th>Size</th>
+                      <th>Qty</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="variant-table">
+                    <% product.variants.forEach(variant => { %>
+                    <tr>
+                      <td>
+                        <span class="color-circle" style="background-color: <%= variant.color %>;"></span>
+                        <%= variant.colorName || variant.color %>
+                      </td>
+                      <td><%= variant.size %></td>
+                      <td><%= variant.quantity %></td>
+                      <td class="action-cell">
+                        <i class="bi bi-chevron-down" onclick="editVariantViaArrow(this)"></i>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+              <div class="action-buttons">
+                <button class="btn btn-outline-success" onclick="addVariant()">Add</button>
+                <button class="btn btn-outline-secondary" onclick="removeVariant()">Remove</button>
+              </div>
+            </div>
+          </div>
+          <div class="confirm-button">
+            <button class="btn btn-success" onclick="confirmEdit()">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    const colors = {
+      'red': '#FF0000',
+      'blue': '#0000FF',
+      'black': '#000000',
+      'green': '#008000'
+    };
+
+    function editVariantViaArrow(icon) {
+      const row = icon.closest('tr');
+      const colorCell = row.cells[1];
+      const sizeCell = row.cells[2];
+      const qtyCell = row.cells[3];
+
+      const originalColor = colorCell.querySelector('.color-circle').style.backgroundColor;
+      const originalSize = sizeCell.textContent;
+      const originalQty = qtyCell.textContent;
+
+      colorCell.innerHTML = `
+    <select class="form-control color-select" onchange="selectColor(this)">
+      <option value="" disabled>Select Color</option>
+      ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}" ${rgbToHex(originalColor) === colors[c] ? 'selected' : ''}>${c}</option>`).join('')}
+    </select>
+  `;
+      sizeCell.innerHTML = `<input type="text" value="${originalSize}" class="form-control">`;
+      qtyCell.innerHTML = `<input type="number" value="${originalQty}" class="form-control">`;
+
+      icon.className = 'bi bi-check';
+      icon.onclick = function() {
+        saveVariantEdit(this, originalColor, originalSize, originalQty);
+      };
+    }
+
+    function saveVariantEdit(icon, originalColor, originalSize, originalQty) {
+      const row = icon.closest('tr');
+      const colorCell = row.cells[1];
+      const sizeCell = row.cells[2];
+      const qtyCell = row.cells[3];
+      const colorSelect = colorCell.querySelector('.color-select');
+      const newColor = colorSelect.value;
+      const newSize = sizeCell.querySelector('input').value;
+      const newQty = qtyCell.querySelector('input').value;
+
+      colorCell.innerHTML = `
+    <span class="color-circle" style="background-color: ${colors[newColor]};"></span>
+    ${newColor}
+  `;
+      sizeCell.textContent = newSize;
+      qtyCell.textContent = newQty;
+
+      icon.className = 'bi bi-chevron-down';
+      icon.onclick = function() {
+        editVariantViaArrow(this);
+      };
+    }
+
+
+    function selectColor(select) {
+      const color = select.value;
+      const hex = colors[color];
+      const circle = document.createElement('span');
+      circle.className = 'color-circle';
+      circle.style.backgroundColor = hex;
+      const td = select.parentElement;
+      td.innerHTML = '';
+      td.appendChild(circle);
+      td.appendChild(document.createTextNode(color));
+    }
+
+    function updateColor(input) {
+      const circle = input.parentElement.querySelector('.color-circle');
+      circle.style.backgroundColor = input.value;
+    }
+
+    function removeVariant() {
+      const table = document.getElementById('variant-table');
+      const checkedRows = table.querySelectorAll('input[type="checkbox"]:checked');
+      checkedRows.forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        row.remove();
+      });
+    }
+
+    function editVariant(icon) {
+      const row = icon.closest('tr');
+      const colorCell = row.cells[1];
+      const sizeCell = row.cells[2];
+      const qtyCell = row.cells[3];
+
+      const color = colorCell.querySelector('.color-circle').style.backgroundColor;
+      const size = sizeCell.textContent;
+      const qty = qtyCell.textContent;
+
+      colorCell.innerHTML = `
+        <select class="form-control color-select" onchange="selectColor(this)">
+          <option value="" disabled>Select Color</option>
+          ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}" ${rgbToHex(color) === colors[c] ? 'selected' : ''}>${c}</option>`).join('')}
+        </select>
+      `;
+      sizeCell.innerHTML = `<input type="text" value="${size}" class="form-control">`;
+      qtyCell.innerHTML = `<input type="number" value="${qty}" class="form-control">`;
+    }
+
+    function rgbToHex(rgb) {
+      const [r, g, b] = rgb.match(/\d+/g).map(Number);
+      return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+    }
+
+    function confirmEdit() {
+      window.location.href = '/backoffice/product';
+    }
+
+    function addVariant() {
+      const table = document.getElementById('variant-table');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+    <td>
+      <select class="form-control color-select" onchange="selectColor(this)">
+        <option value="" disabled selected>Select Color</option>
+        ${Object.keys(colors).map(color => `<option value="${color}" data-hex="${colors[color]}">${color}</option>`).join('')}
+        <option value="custom">Add New Color</option>
+      </select>
+      <input type="text" class="form-control custom-color-input" style="display:none;" placeholder="Enter custom color (e.g., #FF0000 or color name)">
+    </td>
+    <td><input type="text" value="S" class="form-control"></td>
+    <td><input type="number" value="0" class="form-control"></td>
+    <td class="action-cell">
+      <i class="bi bi-pencil edit-icon" onclick="editVariant(this)"></i>
+    </td>
+  `;
+      table.appendChild(newRow);
+
+      const colorSelect = newRow.querySelector('.color-select');
+      const customInput = newRow.querySelector('.custom-color-input');
+      colorSelect.onchange = function() {
+        if (colorSelect.value === 'custom') {
+          colorSelect.style.display = 'none';
+          customInput.style.display = 'block';
+          customInput.focus();
+          customInput.onblur = function() {
+            const customColor = customInput.value;
+            if (customColor && isValidColor(customColor)) {
+              colors[customColor.toLowerCase()] = getHexColor(customColor);
+              selectColor(customInput, customColor.toLowerCase());
+              colorSelect.style.display = 'block';
+              customInput.style.display = 'none';
+              colorSelect.innerHTML = `
+            <option value="" disabled>Select Color</option>
+            ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}">${c}</option>`).join('')}
+            <option value="custom">Add New Color</option>
+          `;
+            }
+          };
+        } else if (colorSelect.value) {
+          selectColor(colorSelect);
+        }
+      };
+    }
+
+    function isValidColor(color) {
+      const s = new Option().style;
+      s.color = color;
+      return s.color !== '';
+    }
+
+    function getHexColor(color) {
+      const temp = document.createElement('div');
+      temp.style.color = color;
+      document.body.appendChild(temp);
+      const hex = window.getComputedStyle(temp).color;
+      document.body.removeChild(temp);
+      return rgbToHex(hex);
+    }
+  </script>
+</body>
+
+</html>

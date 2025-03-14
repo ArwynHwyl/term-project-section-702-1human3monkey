@@ -47,7 +47,26 @@ async function startServer(dbConnection) {
       pageContact: contact
     });
   });
-
+  app.get('/backoffice/product', (req, res) => {
+    const products = [
+      { image: 'https://via.placeholder.com/50', productname: 'Hoodie', description: 'Vintage Washed Denim Hooded', category: 'Hood', normalPrice: '2,252.31 THB', discountPercent: '0%', stock: 'x 5000' },
+      { image: 'https://via.placeholder.com/50', productname: 'Elephant Pant', description: 'Vintage Washed Elephant Pant', category: 'Pants', normalPrice: '0.000011 THB', discountPercent: '50%', stock: 'x 5000' }
+    ];
+    res.render('pages/backoffice-product-page', { products, activePage: 'products' });
+  });
+  app.get('/backoffice/product/edit/:id', (req, res) => {
+    const product = {
+      image: 'https://via.placeholder.com/100',
+      name: 'Hoodie',
+      category: 'Hood',
+      variants: [
+        { color: 'red', size: 'XL', quantity: 10 },
+        { color: 'red', size: 'L', quantity: 10 },
+        { color: 'black', size: 'S', quantity: 0 }
+      ]
+    };
+    res.render('pages/backoffice-product-edit-page', { product });
+  });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
   })
