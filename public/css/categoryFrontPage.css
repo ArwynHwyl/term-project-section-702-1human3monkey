@@ -1,8 +1,35 @@
+/* Category Carousel */
+.category-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    max-width: 1200px;
+}
+
+.carousel-content {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+    width: 100%;
+}
+
+.category-item {
+    flex: 0 0 calc(100% / 3);
+    padding: 0 15px;
+    box-sizing: border-box;
+}
+
 .category-box {
-    width: 278px;
+    width: 100%;
     height: 389px;
-    flex-shrink: 0;
-    aspect-ratio: 278/389;
     background: #D9D9D9;
     display: flex;
     flex-direction: column;
@@ -10,7 +37,7 @@
     justify-content: center;
     margin: 0 auto;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid black; /* Added thin black border */
+    border: 1px solid black;
 }
 
 .category-box:hover {
@@ -19,7 +46,7 @@
 }
 
 .category-text {
-    color: white;
+    color: #333;
     font-family: Inter, sans-serif;
     font-size: 48px;
     font-style: normal;
@@ -28,7 +55,7 @@
     letter-spacing: -0.912px;
     margin-top: 20px;
     text-align: center;
-    text-transform: uppercase; /* Added for consistency */
+    text-transform: uppercase;
 }
 
 .category-icon {
@@ -43,32 +70,55 @@
 .category-icon img {
     width: 80px;
     height: 80px;
-    filter: brightness(0) contrast(100%); /* Ensures black outline appearance */
+    filter: brightness(0) contrast(100%);
 }
 
-#categorys{
-    border: 1px solid black;
-}
-
-/* Navigation Buttons */
-#prevBtn, #nextBtn {
+.carousel-nav {
     background: none;
-    border: none;
-    font-size: 24px;
-    color: black;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #333;
     cursor: pointer;
+    z-index: 10;
+    margin: 0 15px;
 }
 
-#prevBtn:hover, #nextBtn:hover {
-    color: gray;
+.carousel-nav:hover {
+    background-color: #f0f0f0;
+}
+
+/* Category indicators */
+.category-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.indicator.active {
+    background-color: #333;
 }
 
 /* Responsive adjustments */
 @media (max-width: 992px) {
     .category-box {
-        width: 220px;
         height: 308px;
-        aspect-ratio: 220/308;
     }
     
     .category-text {
@@ -87,11 +137,44 @@
     }
 }
 
+/* Mobile view - show only one card */
+@media (max-width: 767px) {
+    .category-item {
+        flex: 0 0 100%;
+    }
+    
+    .category-box {
+        height: 280px;
+        max-width: 200px;
+    }
+    
+    .category-text {
+        font-size: 32px;
+        line-height: 36px;
+    }
+    
+    .category-icon {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .category-icon img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .carousel-nav {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        margin: 0 10px;
+    }
+}
+
 @media (max-width: 576px) {
     .category-box {
-        width: 160px;
         height: 224px;
-        aspect-ratio: 160/224;
+        max-width: 160px;
     }
     
     .category-text {
@@ -105,7 +188,7 @@
     }
     
     .category-icon img {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
     }
 }
