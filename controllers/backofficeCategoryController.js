@@ -1,3 +1,5 @@
+const path = require("path");
+
 function createBackofficeCategoryController(categoryModel) {
   async function getCategories(req, res) {
     try {
@@ -14,13 +16,20 @@ function createBackofficeCategoryController(categoryModel) {
 
   async function addCategories(req, res) {
     const name = req.body.categoryName;
+    const image = req.file;
 
     if (!name) {
       return res.status(400).json({ error: "Category name is required" });
     }
 
+    if (!image) {
+      return res.status(400).json({ error: "Category image is required" });
+    }
+
+    const imagePath = path.join("/uploads", image.filename);
+
     try {
-      await categoryModel.addCategory(name);
+      await categoryModel.addCategory(name, imagePath);
       return res.status(201).json({ message: "Category added successfully", redirect: "/backoffice/category" }); 
     } catch (error) {
       console.error(error);

@@ -203,6 +203,11 @@ table td {
   color: #666;
 }
 
+.tableImage {
+  width: 100px;
+  height: auto;
+}
+
 input[type="checkbox"] {
   width: 16px;
   height: 16px;

@@ -4,14 +4,16 @@ const testDatabaseConnection = require("./services/testDatabaseConnection");
 const createTables = require("./services/database");
 const path = require('path');
 const createRouter = require("./routes/index");
+const bodyParser = require("body-parser");
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.set('views', path.join(__dirname, 'views')); 
 app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);

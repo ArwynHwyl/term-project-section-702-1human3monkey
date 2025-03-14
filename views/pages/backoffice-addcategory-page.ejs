@@ -38,6 +38,8 @@
             name="categoryName"
             placeholder="Enter category name"
           />
+          <label for="categoryName">Image</label>
+          <input type="file" class="form-control" name="imageInput" id="imageInput" />
         </div>
         <button type="submit" class="btn btn-success">Submit</button>
       </form>
@@ -57,17 +59,17 @@
       });
 
       function handleFormSubmission() {
-        const categoryName = $("#categoryName").val();
+        const formData = new FormData(document.getElementById("addCategoryForm"));
 
         $.ajax({
           url: "/backoffice/category/add",
           method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({ categoryName }),
+          data: formData,
+          processData: false,
+          contentType: false,
           success: function (response) {
-            if (response.redirect) {
-              window.location.href = response.redirect;
-            }
+            alert(response.message);
+            window.location.href = "/backoffice/category";
           },
           error: function (xhr) {
             alert(xhr.responseJSON.error);
