@@ -5,6 +5,7 @@ const createTables = require("./services/database");
 const path = require('path');
 const createRouter = require("./routes/index");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 const app = express();
 
 app.set("view engine", "ejs");
@@ -14,6 +15,11 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+const uploadsDir = path.join(__dirname, "public/uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
