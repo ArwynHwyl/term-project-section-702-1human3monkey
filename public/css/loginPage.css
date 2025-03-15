@@ -36,3 +36,8 @@
   ::-ms-input-placeholder {
     color: #8B8F91 !important;
   }
+
+#login .header{
+    font-family: "Koh Santepheap", serif;
+    font-weight: 600;
+}
