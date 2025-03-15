@@ -3,6 +3,7 @@ const db = require("./services/db");
 const testDatabaseConnection = require("./services/testDatabaseConnection");
 const authRouter = require("./routes/auth");
 const bodyParser = require("body-parser");
+const createRouter = require("./routes/index");
 
 const app = express();
 
@@ -11,10 +12,12 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // use authRouter for all routes starting with /auth
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 
 async function startServer(db) {
   await testDatabaseConnection(db);
+
+  app.use(createRouter(db));
 
   app.get("/", (req, res) => {
     res.render("index");

@@ -1,28 +1,29 @@
 const express = require('express');
 const router = express.Router();
+const AuthController = require('../controllers/authController');
+const UserModel = require('../models/userModel');
 
-router.get('/login', (req, res) => {
-    res.render('pages/authen/login', { pageTitle: 'Sign in to your account' });
-});
+// router.post('/login', authController.login);
 
-router.get('/register', (req, res) => {
-    res.render('pages/authen/register', { pageTitle: 'Create an account' });
-});
+// router.post('/register', authController.register);
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+function createAuthRoute(db) {
+    const userModel = new UserModel(db);
+    const authController = new AuthController(userModel);
 
-    console.log('Email:', email);
-    console.log('Password, length:', password.length);
-});
+    router.get('/login', (req, res) => {
+        res.render('pages/authen/login', { pageTitle: 'Sign in to your account' });
+    });
+    
+    router.get('/register', (req, res) => {
+        res.render('pages/authen/register', { pageTitle: 'Create an account' });
+    });
 
-router.post('/register', async (req, res) => {
-    const { email, password, firstName, lastName } = req.body;
+    router.post('/login', authController.login);
 
-    console.log('Email:', email);
-    console.log('Password, length:', password.length);
-    console.log('First name:', firstName);
-    console.log('Last name:', lastName);
-});
+    router.post('/register', authController.register);
 
-module.exports = router;
+    return router;
+}
+
+module.exports = createAuthRoute;
