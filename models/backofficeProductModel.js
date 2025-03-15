@@ -4,7 +4,11 @@ class backofficeProductModel {
   }
 
   async getProducts() {
-    const query = "SELECT * FROM Product";
+    const query = `
+      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.promotion_percent, c.category_name
+      FROM Product p
+      JOIN Category c ON p.category_id = c.category_id
+  `;
     try {
       const [products] = await this.db.execute(query);
       return products;

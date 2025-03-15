@@ -2,7 +2,11 @@
   <div class="content">
     <div class="search-container">
       <div class="input-group">
-        <input type="text" class="form-control search-input" placeholder="Search...">
+        <input
+          type="text"
+          class="form-control search-input"
+          placeholder="Search..."
+        />
         <div class="input-group-append">
           <button class="btn search-button" type="button">
             <i class="bi bi-search"></i>
@@ -16,31 +20,44 @@
         <thead>
           <tr>
             <th>Image</th>
-            <th>Product Name</th>
-            <th>Product Description</th>
+            <th>Name</th>
+            <th>Description</th>
             <th>Category</th>
             <th>Normal Price</th>
             <th>Discount Percent</th>
-            <th class="stock-cell">Stock</th>
             <th class="action-cell"></th>
           </tr>
         </thead>
         <tbody>
-          <% products.forEach((product, index) => { %>
-            <tr>
-              <td><img src="<%= product.image || 'https://via.placeholder.com/50' %>" alt="Product Image" class="product-image"></td>
-              <td><%= product.productname %></td>
-              <td><%= product.description %></td>
-              <td><%= product.category %></td>
-              <td><%= product.normalPrice %></td>
-              <td><%= product.discountPercent %></td>
-              <td class="stock-cell"><%= product.stock %></td>
-              <td class="action-cell">
-                <a href="/backoffice/product/edit/<%= index %>">
-                  <i class="bi bi-pencil edit-icon"></i>
-                </a>
-              </td>
-            </tr>
+          <% products.forEach(product => { %>
+          <tr>
+            <td>
+              <img
+                src="/public/<%= product.image_path %>"
+                alt="<%= product.product_name %>"
+                class="img-thumbnail"
+                style="width: 100px"
+              />
+            </td>
+            <td><%= product.product_name %></td>
+            <td><%= product.description %></td>
+            <td><%= product.category_name %></td>
+            <td><%= product.normal_price %></td>
+            <td><%= product.promotion_percent %></td>
+            <td>
+              <a
+                href="/backoffice/product/edit/<%= product.product_id %>"
+                class="btn btn-warning btn-sm"
+                >Edit</a
+              >
+              <button
+                class="btn btn-danger btn-sm delete-product"
+                data-id="<%= product.product_id %>"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
           <% }) %>
         </tbody>
       </table>
