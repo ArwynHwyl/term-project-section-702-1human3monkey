@@ -14,22 +14,28 @@
                         <%= pageTitle %>
                     </h1>
 
-                    <label for="full-name" class="mb-3 fw-semibold">Name</label>
-                    <input id="full-name" name="name" type="text" class="form-control mb-3"
-                        placeholder="Enter your name" required>
+                    <div class="row mt-5">
+                        <div class="col col-12 col-md-6">
+                            <label for="full-name" class="mb-3 fw-semibold">Firstname</label>
+                        <input id="full-name" name="firstName" type="text" class="form-control mb-3"
+                            placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="col col-12 col-md-6">
+                            <label for="full-name" class="mb-3 fw-semibold">Lastname</label>
+                        <input id="full-name" name="lastName" type="text" class="form-control mb-3"
+                            placeholder="Enter your name" required>
+                        </div>
+                    </div>
 
                     <label for="email" class="mb-3 fw-semibold">Email</label>
                     <input id="email" type="email" class="form-control mb-3" placeholder="Enter your email" required>
-
-                    <label for="username" class="mb-3 fw-semibold">Username</label>
-                    <input id="username" type="text" class="form-control mb-3" placeholder="Enter your username"
-                        required>
 
                     <label for="password" class="mb-3 fw-semibold">Password</label>
                     <input id="password" type="password" class="form-control mb-3" placeholder="Create a password"
                         required>
                     <button type="submit" class="btn w-100 mt-4">Register</button>
-                    <p class="mt-5 text-body-tertiary text-center">Already have an account? <a href="/auth/login" class="text-dark fw-semibold">Log in</a></p>
+                    <p class="mt-3 text-body-tertiary text-center">Already have an account? <a href="/auth/login" class="text-dark fw-semibold">Log in</a></p>
                 </form>
             </div>
         </div>

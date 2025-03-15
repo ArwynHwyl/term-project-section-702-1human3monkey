@@ -6,7 +6,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/register', (req, res) => {
-    res.render('pages/authen/register', { pageTitle: 'Create your account' });
+    res.render('pages/authen/register', { pageTitle: 'Create an account' });
 });
 
 router.post('/login', async (req, res) => {
