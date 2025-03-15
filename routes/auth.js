@@ -10,8 +10,10 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
+    console.log('Email:', email);
+    console.log('Password, length:', password.length);
 });
 
 module.exports = router;

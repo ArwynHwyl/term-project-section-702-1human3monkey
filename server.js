@@ -2,11 +2,13 @@ const express = require("express");
 const db = require("./services/db");
 const testDatabaseConnection = require("./services/testDatabaseConnection");
 const authRouter = require("./routes/auth");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // use authRouter for all routes starting with /auth
 app.use("/auth", authRouter);
