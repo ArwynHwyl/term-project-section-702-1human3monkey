@@ -74,6 +74,8 @@ function createBackofficeCategoryRoute(db) {
     categoryController.updateCategoryById
   );
 
+  router.delete("/backoffice/category/delete/:id", categoryController.deleteCategoryById);
+
   return router;
 }
 

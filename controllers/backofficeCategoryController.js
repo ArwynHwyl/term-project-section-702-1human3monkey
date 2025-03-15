@@ -90,11 +90,32 @@ function createBackofficeCategoryController(categoryModel) {
     }
   }
 
+  async function deleteCategoryById(req, res) {
+    const id = req.params.id;
+
+    try {
+      await categoryModel.deleteCategoryById(id);
+
+      return res
+        .status(200)
+        .json({
+          message: "Category deleted successfully",
+          redirect: "/backoffice/category",
+        });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while deleting the category" });
+    }
+  }
+
   return {
     getCategories,
     addCategories,
     getCategoryById,
     updateCategoryById,
+    deleteCategoryById,
   };
 }
 

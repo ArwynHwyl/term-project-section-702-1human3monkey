@@ -46,6 +46,17 @@ class backofficeCategoryModel {
       throw new Error("Error updating category");
     }
   }
+
+  async deleteCategoryById(categoryId) {
+    const query = "DELETE FROM Category WHERE category_id = ?";
+    try {
+      const [result] = await this.db.execute(query, [categoryId]);
+      return result;
+    } catch (error) {
+      console.error("Error deleting category: ", error);
+      throw new Error("Error deleting category");
+    }
+  }
 }
 
 module.exports = backofficeCategoryModel;
