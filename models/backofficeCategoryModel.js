@@ -4,7 +4,7 @@ class backofficeCategoryModel {
   }
 
   async getCategories() {
-    const query = "SELECT * FROM Category";
+    const query = "SELECT * FROM Category ORDER BY category_name ASC";
     try {
       const [categories] = await this.db.execute(query);
       return categories;
