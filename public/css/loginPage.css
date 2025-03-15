@@ -23,3 +23,16 @@
     border-radius: 0.5rem;
     margin-top: 1rem;
 }
+
+::placeholder {
+    color: #8B8F91 !important;
+    opacity: 1;
+  }
+  
+  :-ms-input-placeholder {
+    color: #8B8F91 !important;
+  }
+  
+  ::-ms-input-placeholder {
+    color: #8B8F91 !important;
+  }
