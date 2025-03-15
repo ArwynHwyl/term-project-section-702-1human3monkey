@@ -17,12 +17,10 @@ const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
   if (!allowedTypes.includes(file.mimetype)) {
     cb(
-      new Error(
-        "Invalid file type. Only JPEG, PNG, JPG files are allowed."
-      ),
+      new Error("Invalid file type. Only JPEG, PNG, JPG files are allowed."),
       false
     );
-    return
+    return;
   }
   cb(null, true);
 };
@@ -57,7 +55,10 @@ function createBackofficeCategoryRoute(db) {
     categoryController.addCategories
   );
 
-  router.get("/backoffice/category/edit/:id", categoryController.getCategoryById);
+  router.get(
+    "/backoffice/category/edit/:id",
+    categoryController.getCategoryById
+  );
 
   router.post(
     "/backoffice/category/edit/:id",
@@ -74,7 +75,10 @@ function createBackofficeCategoryRoute(db) {
     categoryController.updateCategoryById
   );
 
-  router.delete("/backoffice/category/delete/:id", categoryController.deleteCategoryById);
+  router.delete(
+    "/backoffice/category/delete/:id",
+    categoryController.deleteCategoryById
+  );
 
   return router;
 }
