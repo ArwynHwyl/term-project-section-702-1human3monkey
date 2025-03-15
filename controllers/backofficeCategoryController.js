@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 
 function createBackofficeCategoryController(categoryModel) {
   async function getCategories(req, res) {
@@ -73,7 +74,15 @@ function createBackofficeCategoryController(categoryModel) {
 
     try {
       const category = await categoryModel.getCategoryById(id);
-      const imagePath = image ? path.join("/uploads", image.filename) : category.image_path;
+      let imagePath = category.image_path;
+
+      if (image) {
+        const oldImagePath = path.join(__dirname, "..", "public", category.image_path);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+        imagePath = path.join("/uploads", image.filename);
+      }
 
       await categoryModel.updateCategoryById(id, name, imagePath);
       return res
@@ -94,6 +103,13 @@ function createBackofficeCategoryController(categoryModel) {
     const id = req.params.id;
 
     try {
+      const category = await categoryModel.getCategoryById(id);
+      const imagePath = path.join(__dirname, "..", "public", category.image_path);
+
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+
       await categoryModel.deleteCategoryById(id);
 
       return res
