@@ -57,6 +57,23 @@ function createBackofficeCategoryRoute(db) {
     categoryController.addCategories
   );
 
+  router.get("/backoffice/category/edit/:id", categoryController.getCategoryById);
+
+  router.post(
+    "/backoffice/category/edit/:id",
+    (req, res, next) => {
+      upload.single("imageInput")(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).json({ error: err.message });
+        } else if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        next();
+      });
+    },
+    categoryController.updateCategoryById
+  );
+
   return router;
 }
 

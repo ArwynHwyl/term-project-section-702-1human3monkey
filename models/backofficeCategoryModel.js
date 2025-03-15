@@ -24,6 +24,28 @@ class backofficeCategoryModel {
       throw new Error("Error adding category");
     }
   }
+
+  async getCategoryById(categoryId) {
+    const query = "SELECT * FROM Category WHERE category_id = ?";
+    try {
+      const [category] = await this.db.execute(query, [categoryId]);
+      return category[0];
+    } catch (error) {
+      console.error("Error getting category by id: ", error);
+      throw new Error("Error getting category by id");
+    }
+  }
+
+  async updateCategoryById(categoryId, name, imagePath) {
+    const query = `UPDATE Category SET category_name = ?, image_path = ? WHERE category_id = ?`;
+    try {
+      const [result] = await this.db.execute(query, [name, imagePath, categoryId]);
+      return result;
+    } catch (error) {
+      console.error("Error updating category: ", error);
+      throw new Error("Error updating category");
+    }
+  }
 }
 
 module.exports = backofficeCategoryModel;

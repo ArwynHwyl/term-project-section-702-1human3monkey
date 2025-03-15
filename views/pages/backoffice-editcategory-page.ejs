@@ -19,10 +19,20 @@
       <h2 class="ml-2 mb-0">Edit Category</h2>
     </div>
 
-    <form>
+    <form id="editCategoryForm">
       <div class="form-group">
         <label for="categoryName">Name</label>
-        <input type="text" class="form-control" id="categoryName" placeholder="Enter category name">
+        <input type="text" class="form-control" id="categoryName" name="categoryName" value="<%= category.category_name %>" placeholder="Enter category name">
+      </div>
+      <div class="form-group">
+        <label for="categoryImage">Current Image</label>
+        <div>
+          <img src="<%= category.image_path %>" alt="<%= category.category_name %>" class="tableImage" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="imageInput">Change Image</label>
+        <input type="file" class="form-control-file" id="categoryImage" name="imageInput">
       </div>
       <button type="submit" class="btn btn-success">Submit</button>
     </form>
@@ -35,8 +45,30 @@
   <script>
     document.querySelector('.menusidebar').remove();
     $(document).ready(function() {
-      // code Js here
+      $("#editCategoryForm").on("submit", function(e) {
+        e.preventDefault();
+        handleFormSubmission();
+      });
     });
+
+    function handleFormSubmission() {
+      const formData = new FormData(document.getElementById('editCategoryForm'));
+
+      $.ajax({
+        url: "/backoffice/category/edit/<%= category.category_id %>",
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          alert(response.message);
+          window.location.href = "/backoffice/category";
+        },
+        error: function(xhr) {
+          alert(xhr.responseJSON.error);
+        }
+      })
+    }
   </script>
 </body>
 </html>

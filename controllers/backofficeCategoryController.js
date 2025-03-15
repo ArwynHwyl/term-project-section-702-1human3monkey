@@ -10,7 +10,9 @@ function createBackofficeCategoryController(categoryModel) {
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "An error occurred while getting the categories" });
+      return res
+        .status(500)
+        .json({ error: "An error occurred while getting the categories" });
     }
   }
 
@@ -30,16 +32,69 @@ function createBackofficeCategoryController(categoryModel) {
 
     try {
       await categoryModel.addCategory(name, imagePath);
-      return res.status(201).json({ message: "Category added successfully", redirect: "/backoffice/category" }); 
+      return res
+        .status(201)
+        .json({
+          message: "Category added successfully",
+          redirect: "/backoffice/category",
+        });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({ error: "An error occurred while adding the category" });
+      return res
+        .status(500)
+        .json({ error: "An error occurred while adding the category" });
+    }
+  }
+
+  async function getCategoryById(req, res) {
+    const id = req.params.id;
+    try {
+      const category = await categoryModel.getCategoryById(id);
+      res.render("pages/backoffice-editcategory-page", {
+        category,
+        activePage: "categories",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while getting the category" });
+    }
+  }
+
+  async function updateCategoryById(req, res) {
+    const id = req.params.id;
+    const name = req.body.categoryName;
+    const image = req.file;
+
+    if (!name) {
+      return res.status(400).json({ error: "Category name is required" });
+    }
+
+    try {
+      const category = await categoryModel.getCategoryById(id);
+      const imagePath = image ? path.join("/uploads", image.filename) : category.image_path;
+
+      await categoryModel.updateCategoryById(id, name, imagePath);
+      return res
+        .status(200)
+        .json({
+          message: "Category updated successfully",
+          redirect: "/backoffice/category",
+        });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while updating the category" });
     }
   }
 
   return {
     getCategories,
     addCategories,
+    getCategoryById,
+    updateCategoryById,
   };
 }
 
