@@ -1,258 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DAZZLE admin - Edit Product</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="/public/css/backoffice-styles.css" />
+    <link
+      rel="stylesheet"
+      href="/public/css/backoffice-productedit-style.css"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <%- include('../partials/backoffice/backoffice-header') %>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAZZLE admin - Edit Product</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/public/css/backoffice-styles.css">
-  <link rel="stylesheet" href="/public/css/backoffice-productedit-style.css">
-</head>
+    <!-- Main Content -->
+    <div class="container mt-4">
+      <div class="d-flex align-items-center mb-3">
+        <i
+          class="bi bi-file-arrow-down-fill text-primary"
+          style="font-size: 24px"
+        ></i>
+        <h2 class="ml-2 mb-0">Edit Product</h2>
+      </div>
 
-<body>
-  <!-- Header -->
-  <%- include('../partials/backoffice/backoffice-header') %>
-
-  <!-- Main Content -->
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Content Area -->
-      <div class="col-md-12">
-        <div class="content">
-          <h3>Products Details</h3>
-          <div class="product-edit-container">
-            <div class="product-image-section">
-              <img src="<%= product.image || 'https://via.placeholder.com/100' %>" alt="Product Image" class="product-image">
-            </div>
-            <div class="product-details-section">
-              <div class="form-group">
-                <label for="product-name">Name:</label>
-                <input type="text" id="product-name" class="form-control" value="<%= product.name %>" readonly>
-              </div>
-              <div class="form-group">
-                <label for="product-category">Category:</label>
-                <input type="text" id="product-category" class="form-control" value="<%= product.category %>" readonly>
-              </div>
-              <div class="table-responsive">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Color</th>
-                      <th>Size</th>
-                      <th>Qty</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody id="variant-table">
-                    <% product.variants.forEach(variant => { %>
-                    <tr>
-                      <td>
-                        <span class="color-circle" style="background-color: <%= variant.color %>;"></span>
-                        <%= variant.colorName || variant.color %>
-                      </td>
-                      <td><%= variant.size %></td>
-                      <td><%= variant.quantity %></td>
-                      <td class="action-cell">
-                        <i class="bi bi-chevron-down" onclick="editVariantViaArrow(this)"></i>
-                      </td>
-                    </tr>
-                    <% }) %>
-                  </tbody>
-                </table>
-              </div>
-              <div class="action-buttons">
-                <button class="btn btn-outline-success" onclick="addVariant()">Add</button>
-                <button class="btn btn-outline-secondary" onclick="removeVariant()">Remove</button>
-              </div>
-            </div>
-          </div>
-          <div class="confirm-button">
-            <button class="btn btn-success" onclick="confirmEdit()">Confirm</button>
+      <form
+        id="editProductForm"
+        enctype="multipart/form-data"
+        action="/backoffice/product/edit/<%= product.product_id %>"
+        method="POST"
+      >
+        <div class="form-group">
+          <label for="productName">Product Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="productName"
+            name="productName"
+            value="<%= product.product_name %>"
+            placeholder="Enter product name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="productDescription">Product Description</label>
+          <textarea
+            class="form-control"
+            id="productDescription"
+            name="productDescription"
+            placeholder="Enter product description"
+          ><%= product.description %></textarea>
+        </div>
+        <div class="form-group">
+          <label for="productCategory">Category</label>
+          <select
+            class="form-control"
+            id="productCategory"
+            name="productCategory"
+          >
+            <% categories.forEach(category => { %> <option value="<%=
+            category.category_id %>" <%= category.category_id ===
+            product.category_id ? 'selected' : '' %>><%= category.category_name
+            %> <% }) %>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="productPrice">Normal Price</label>
+          <input
+            type="number"
+            class="form-control"
+            id="productPrice"
+            name="productPrice"
+            value="<%= product.normal_price %>"
+            placeholder="Enter product price"
+          />
+        </div>
+        <div class="form-group">
+          <label for="productDiscount">Discount Percent</label>
+          <input
+            type="number"
+            class="form-control"
+            id="productDiscount"
+            name="productDiscount"
+            value="<%= product.discount_percent %>"
+            placeholder="Enter discount percent"
+            min="0"
+            max="1"
+            step="0.01"
+          />
+        </div>
+        <div class="form-group">
+          <label for="productImage">Current Image</label>
+          <div>
+            <img
+              src="/public/<%= product.image_path %>"
+              alt="<%= product.product_name %>"
+              class="tableImage"
+            />
           </div>
         </div>
-      </div>
+        <div class="form-group">
+          <label for="productImage">Change Image</label>
+          <input
+            type="file"
+            class="form-control-file"
+            id="productImage"
+            name="productImage"
+          />
+        </div>
+        <div class="form-group">
+          <label>Product Attributes</label>
+          <div class="table-responsive">
+            <table class="table table-bordered" id="attributesTable">
+              <thead>
+                <tr>
+                  <th>Color</th>
+                  <th>Size</th>
+                  <th>Quantity</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% product.attributes.forEach(attribute => { %>
+                <tr>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="attributeColor[]"
+                      value="<%= attribute.color %>"
+                      placeholder="Enter color"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="attributeSize[]"
+                      value="<%= attribute.size %>"
+                      placeholder="Enter size"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="number"
+                      class="form-control"
+                      name="attributeQuantity[]"
+                      value="<%= attribute.quantity %>"
+                      placeholder="Enter quantity"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      onclick="removeAttribute(this)"
+                    >
+                      Remove
+                    </button>
+                  </td>
+                </tr>
+                <% }) %>
+                <tr>
+                  <td colspan="4" class="text-center">
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      onclick="addAttribute()"
+                    >
+                      Add Attribute
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
     </div>
-  </div>
 
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  <script>
-    const colors = {
-      'red': '#FF0000',
-      'blue': '#0000FF',
-      'black': '#000000',
-      'green': '#008000'
-    };
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("input[name='attributeColor[]']").each(function () {
+          updateColor(this);
+        });
 
-    function editVariantViaArrow(icon) {
-      const row = icon.closest('tr');
-      const colorCell = row.cells[1];
-      const sizeCell = row.cells[2];
-      const qtyCell = row.cells[3];
+        $("#editProductForm").on("submit", function (e) {
+          e.preventDefault();
+          handleFormSubmission();
+        });
 
-      const originalColor = colorCell.querySelector('.color-circle').style.backgroundColor;
-      const originalSize = sizeCell.textContent;
-      const originalQty = qtyCell.textContent;
+        $("#attributesTable").on("click", ".btn-danger", function () {
+          $(this).closest("tr").remove();
+        });
 
-      colorCell.innerHTML = `
-    <select class="form-control color-select" onchange="selectColor(this)">
-      <option value="" disabled>Select Color</option>
-      ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}" ${rgbToHex(originalColor) === colors[c] ? 'selected' : ''}>${c}</option>`).join('')}
-    </select>
-  `;
-      sizeCell.innerHTML = `<input type="text" value="${originalSize}" class="form-control">`;
-      qtyCell.innerHTML = `<input type="number" value="${originalQty}" class="form-control">`;
-
-      icon.className = 'bi bi-check';
-      icon.onclick = function() {
-        saveVariantEdit(this, originalColor, originalSize, originalQty);
-      };
-    }
-
-    function saveVariantEdit(icon, originalColor, originalSize, originalQty) {
-      const row = icon.closest('tr');
-      const colorCell = row.cells[1];
-      const sizeCell = row.cells[2];
-      const qtyCell = row.cells[3];
-      const colorSelect = colorCell.querySelector('.color-select');
-      const newColor = colorSelect.value;
-      const newSize = sizeCell.querySelector('input').value;
-      const newQty = qtyCell.querySelector('input').value;
-
-      colorCell.innerHTML = `
-    <span class="color-circle" style="background-color: ${colors[newColor]};"></span>
-    ${newColor}
-  `;
-      sizeCell.textContent = newSize;
-      qtyCell.textContent = newQty;
-
-      icon.className = 'bi bi-chevron-down';
-      icon.onclick = function() {
-        editVariantViaArrow(this);
-      };
-    }
-
-
-    function selectColor(select) {
-      const color = select.value;
-      const hex = colors[color];
-      const circle = document.createElement('span');
-      circle.className = 'color-circle';
-      circle.style.backgroundColor = hex;
-      const td = select.parentElement;
-      td.innerHTML = '';
-      td.appendChild(circle);
-      td.appendChild(document.createTextNode(color));
-    }
-
-    function updateColor(input) {
-      const circle = input.parentElement.querySelector('.color-circle');
-      circle.style.backgroundColor = input.value;
-    }
-
-    function removeVariant() {
-      const table = document.getElementById('variant-table');
-      const checkedRows = table.querySelectorAll('input[type="checkbox"]:checked');
-      checkedRows.forEach(checkbox => {
-        const row = checkbox.closest('tr');
-        row.remove();
+        $("#attributesTable").on(
+          "input",
+          "input[name='attributeColor[]']",
+          function () {
+            updateColor(this);
+          }
+        );
       });
-    }
 
-    function editVariant(icon) {
-      const row = icon.closest('tr');
-      const colorCell = row.cells[1];
-      const sizeCell = row.cells[2];
-      const qtyCell = row.cells[3];
+      function handleFormSubmission() {
+        const formData = new FormData(
+          document.getElementById("editProductForm")
+        );
 
-      const color = colorCell.querySelector('.color-circle').style.backgroundColor;
-      const size = sizeCell.textContent;
-      const qty = qtyCell.textContent;
+        // Collect product attributes
+        const attributes = [];
+        $("#attributesTable tbody tr").each(function () {
+          const color = $(this).find("input[name='attributeColor[]']").val();
+          const size = $(this).find("input[name='attributeSize[]']").val();
+          const quantity = $(this)
+            .find("input[name='attributeQuantity[]']")
+            .val();
+          if (color && size && quantity) {
+            attributes.push({ color, size, quantity });
+          }
+        });
+        formData.append("attributes", JSON.stringify(attributes));
 
-      colorCell.innerHTML = `
-        <select class="form-control color-select" onchange="selectColor(this)">
-          <option value="" disabled>Select Color</option>
-          ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}" ${rgbToHex(color) === colors[c] ? 'selected' : ''}>${c}</option>`).join('')}
-        </select>
+        $.ajax({
+          url: "/backoffice/product/<%= product.product_id %>",
+          method: "PUT",
+          data: formData,
+          processData: false,
+          contentType: false,
+          success: function (response) {
+            alert(response.message);
+            window.location.href = "/backoffice/product";
+          },
+          error: function (xhr) {
+            alert(xhr.responseJSON.error);
+          },
+        });
+      }
+
+      function addAttribute() {
+        const table = $("#attributesTable tbody");
+        const newRow = `
+        <tr>
+          <td><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color"></td>
+          <td><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size"></td>
+          <td><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity"></td>
+          <td><button type="button" class="btn btn-danger" onclick="removeAttribute(this)">Remove</button></td>
+        </tr>
       `;
-      sizeCell.innerHTML = `<input type="text" value="${size}" class="form-control">`;
-      qtyCell.innerHTML = `<input type="number" value="${qty}" class="form-control">`;
-    }
+        $(newRow).insertBefore("#attributesTable tbody tr:last");
+      }
 
-    function rgbToHex(rgb) {
-      const [r, g, b] = rgb.match(/\d+/g).map(Number);
-      return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
-    }
+      function removeAttribute(button) {
+        $(button).closest("tr").remove();
+      }
 
-    function confirmEdit() {
-      window.location.href = '/backoffice/product';
-    }
-
-    function addVariant() {
-      const table = document.getElementById('variant-table');
-      const newRow = document.createElement('tr');
-      newRow.innerHTML = `
-    <td>
-      <select class="form-control color-select" onchange="selectColor(this)">
-        <option value="" disabled selected>Select Color</option>
-        ${Object.keys(colors).map(color => `<option value="${color}" data-hex="${colors[color]}">${color}</option>`).join('')}
-        <option value="custom">Add New Color</option>
-      </select>
-      <input type="text" class="form-control custom-color-input" style="display:none;" placeholder="Enter custom color (e.g., #FF0000 or color name)">
-    </td>
-    <td><input type="text" value="S" class="form-control"></td>
-    <td><input type="number" value="0" class="form-control"></td>
-    <td class="action-cell">
-      <i class="bi bi-pencil edit-icon" onclick="editVariant(this)"></i>
-    </td>
-  `;
-      table.appendChild(newRow);
-
-      const colorSelect = newRow.querySelector('.color-select');
-      const customInput = newRow.querySelector('.custom-color-input');
-      colorSelect.onchange = function() {
-        if (colorSelect.value === 'custom') {
-          colorSelect.style.display = 'none';
-          customInput.style.display = 'block';
-          customInput.focus();
-          customInput.onblur = function() {
-            const customColor = customInput.value;
-            if (customColor && isValidColor(customColor)) {
-              colors[customColor.toLowerCase()] = getHexColor(customColor);
-              selectColor(customInput, customColor.toLowerCase());
-              colorSelect.style.display = 'block';
-              customInput.style.display = 'none';
-              colorSelect.innerHTML = `
-            <option value="" disabled>Select Color</option>
-            ${Object.keys(colors).map(c => `<option value="${c}" data-hex="${colors[c]}">${c}</option>`).join('')}
-            <option value="custom">Add New Color</option>
-          `;
-            }
-          };
-        } else if (colorSelect.value) {
-          selectColor(colorSelect);
+      function updateColor(input) {
+        let color = input.value.trim();
+        if (/^#[0-9A-F]{6}$/i.test(color)) {
+          input.style.backgroundColor = color;
+          input.style.color = getTextColor(color);
+        } else {
+          input.style.backgroundColor = "";
         }
-      };
-    }
+      }
 
-    function isValidColor(color) {
-      const s = new Option().style;
-      s.color = color;
-      return s.color !== '';
-    }
-
-    function getHexColor(color) {
-      const temp = document.createElement('div');
-      temp.style.color = color;
-      document.body.appendChild(temp);
-      const hex = window.getComputedStyle(temp).color;
-      document.body.removeChild(temp);
-      return rgbToHex(hex);
-    }
-  </script>
-</body>
-
+      function getTextColor(hex) {
+        hex = hex.replace("#", "");
+        let r = parseInt(hex.substring(0, 2), 16);
+        let g = parseInt(hex.substring(2, 4), 16);
+        let b = parseInt(hex.substring(4, 6), 16);
+        let brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 125 ? "#000000" : "#FFFFFF";
+      }
+    </script>
+  </body>
 </html>

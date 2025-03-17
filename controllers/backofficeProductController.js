@@ -32,6 +32,25 @@ function createBackofficeProductController(productModel, categoryModel) {
     }
   }
 
+  async function renderEditProductPage(req, res) {
+    const productId = req.params.productId;
+
+    try {
+      const product = await productModel.getProductById(productId);
+      const categories = await categoryModel.getCategories();
+      res.render("pages/backoffice-product-edit-page", {
+        product,
+        categories,
+        activePage: "products",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while getting the product" });
+    } 
+  }
+
   async function addProduct(req, res) {
     const name = req.body.productName;
     const description = req.body.productDescription;
@@ -78,6 +97,58 @@ function createBackofficeProductController(productModel, categoryModel) {
     }
   }
 
+  async function updateProductById(req, res) {
+    const productId = req.params.productId;
+    const name = req.body.productName;
+    const description = req.body.productDescription;
+    const category = req.body.productCategory;
+    const normalPrice = req.body.productPrice;
+    const discountPercent = req.body.productDiscount;
+    const image = req.file;
+
+    if (!name || !description || !category || !normalPrice || !discountPercent) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+      const product = await productModel.getProductById(productId);
+      let imagePath = product.image_path;
+
+      if (image) {
+        const oldImagePath = path.join(__dirname, "..", "public", product.image_path);
+        if (fs.existsSync(oldImagePath)) {
+          fs.unlinkSync(oldImagePath);
+        }
+        imagePath = path.join("/uploads", image.filename);
+      }
+
+      await productModel.updateProductById(
+        productId,
+        name,
+        description,
+        category,
+        normalPrice,
+        discountPercent,
+        imagePath
+      );
+
+      const attributes = JSON.parse(req.body.attributes);
+      await productModel.updateProductAttribute(productId, attributes);
+
+      return res
+        .status(200)
+        .json({
+          message: "Product updated successfully",
+          redirect: "/backoffice/product",
+        });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while updating the product" });
+    }
+  }
+
   async function deleteProductById(req, res) {
     const productId = req.params.productId;
 
@@ -108,7 +179,9 @@ function createBackofficeProductController(productModel, categoryModel) {
   return {
     getProducts,
     renderAddProductPage,
+    renderEditProductPage,
     addProduct,
+    updateProductById,
     deleteProductById
   };
 }

@@ -39,6 +39,11 @@ function createBackofficeProductRoutes(db) {
 
   router.get("/backoffice/product", productController.getProducts);
   router.get("/backoffice/product/add", productController.renderAddProductPage);
+  router.get(
+    "/backoffice/product/edit/:productId",
+    productController.renderEditProductPage
+  );
+
   router.post(
     "/backoffice/product/add",
     (req, res, next) => {
@@ -53,6 +58,22 @@ function createBackofficeProductRoutes(db) {
     },
     productController.addProduct
   );
+
+  router.put(
+    "/backoffice/product/:productId",
+    (req, res, next) => {
+      upload.single("productImage")(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+          return res.status(400).json({ error: err.message });
+        } else if (err) {
+          return res.status(400).json({ error: err.message });
+        }
+        next();
+      });
+    },
+    productController.updateProductById
+  );
+
   router.delete(
     "/backoffice/product/:productId",
     productController.deleteProductById
