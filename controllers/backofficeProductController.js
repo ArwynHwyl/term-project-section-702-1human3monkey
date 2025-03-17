@@ -1,5 +1,4 @@
 const path = require("path");
-const fs = require("fs");
 
 function createBackofficeProductController(productModel, categoryModel) {
   async function getProducts(req, res) {
@@ -54,7 +53,7 @@ function createBackofficeProductController(productModel, categoryModel) {
     const imagePath = path.join("/uploads", image.filename);
 
     try {
-      await productModel.addProduct(
+      const productId = await productModel.addProduct(
         name,
         description,
         category,
@@ -62,6 +61,10 @@ function createBackofficeProductController(productModel, categoryModel) {
         discountPercent,
         imagePath
       );
+
+      const attributes = JSON.parse(req.body.attributes);
+      await productModel.addProductAttribute(productId, attributes);
+
       return res.status(201).json({
         message: "Product added successfully",
         redirect: "/backoffice/product",

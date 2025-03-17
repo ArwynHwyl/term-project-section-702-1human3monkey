@@ -23,10 +23,21 @@ class backofficeProductModel {
     const query = `INSERT INTO Product (product_name, description, category_id, normal_price, discount_percent, image_path) VALUES (?, ?, ?, ?, ?, ?)`;
     try {
       const [result] = await this.db.execute(query, [name, description, categoryId, normalPrice, discountPercent, imagePath]);
-      return result;
+      return result.insertId;
     } catch (error) {
       console.error("Error adding product: ", error);
       throw new Error("Error adding product");
+    }
+  }
+
+  async addProductAttribute(productId, attributes) {
+    const query = `INSERT INTO ProductAttribute (product_id, color, size, quantity) VALUES ?`;
+    const values = attributes.map((attribute) => [productId, attribute.color, attribute.size, attribute.quantity]);
+    try {
+      await this.db.query(query, [values]);
+    } catch (error) {
+      console.error("Error adding product attribute: ", error);
+      throw new Error("Error adding product attribute");
     }
   }
 } 
