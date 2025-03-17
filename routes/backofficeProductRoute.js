@@ -53,6 +53,10 @@ function createBackofficeProductRoutes(db) {
     },
     productController.addProduct
   );
+  router.delete(
+    "/backoffice/product/:productId",
+    productController.deleteProductById
+  );
 
   return router;
 }

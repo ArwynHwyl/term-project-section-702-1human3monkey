@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 
 function createBackofficeProductController(productModel, categoryModel) {
   async function getProducts(req, res) {
@@ -77,10 +78,38 @@ function createBackofficeProductController(productModel, categoryModel) {
     }
   }
 
+  async function deleteProductById(req, res) {
+    const productId = req.params.productId;
+
+    try {
+      const product = await productModel.getProductById(productId);
+      const imagePath = path.join("public", product.image_path);
+
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      }
+
+      await productModel.deleteProductById(productId);
+
+      return res
+        .status(200)
+        .json({
+          message: "Product deleted successfully",
+          redirect: "/backoffice/product",
+        });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while deleting the product" });
+    }
+  }
+
   return {
     getProducts,
     renderAddProductPage,
     addProduct,
+    deleteProductById
   };
 }
 

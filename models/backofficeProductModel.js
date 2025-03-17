@@ -40,6 +40,32 @@ class backofficeProductModel {
       throw new Error("Error adding product attribute");
     }
   }
+
+  async getProductById(productId) {
+    const query = `
+      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.discount_percent, c.category_name
+      FROM Product p
+      JOIN Category c ON p.category_id = c.category_id
+      WHERE p.product_id = ?
+    `;
+    try {
+      const [product] = await this.db.execute(query, [productId]);
+      return product[0];
+    } catch (error) {
+      console.error("Error getting product by id: ", error);
+      throw new Error("Error getting product by id");
+    }
+  }
+
+  async deleteProductById(productId) {
+    const query = `DELETE FROM Product WHERE product_id = ?`;
+    try {
+      await this.db.execute(query, [productId]);
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      throw new Error("Error deleting product");
+    }
+  }
 } 
 
 module.exports = backofficeProductModel;
