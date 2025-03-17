@@ -1,4 +1,4 @@
-class backofficeProductModel {
+class productModel {
   constructor(db) {
     this.db = db;
   }
@@ -175,4 +175,4 @@ class backofficeProductModel {
   }
 }
 
-module.exports = backofficeProductModel;
+module.exports = productModel;

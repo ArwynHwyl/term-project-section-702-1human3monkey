@@ -1,6 +1,6 @@
 const express = require("express");
 const createBackofficeCategoryController = require("../controllers/backofficeCategoryController");
-const backofficeCategoryModel = require("../models/backofficeCategoryModel");
+const categoryModel = require("../models/categoryModel");
 const multer = require("multer");
 const path = require("path");
 
@@ -29,8 +29,8 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 function createBackofficeCategoryRoute(db) {
   const router = express.Router();
-  const categoryModel = new backofficeCategoryModel(db);
-  const categoryController = createBackofficeCategoryController(categoryModel);
+  const backofficeCategoryModel = new categoryModel(db);
+  const categoryController = createBackofficeCategoryController(backofficeCategoryModel);
 
   router.get("/backoffice/category", categoryController.getCategories);
   router.get("/backoffice/category/add", categoryController.renderAddCategoryPage);

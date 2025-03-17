@@ -1,7 +1,7 @@
 const express = require("express");
 const createBackofficeProductController = require("../controllers/backofficeProductController");
-const backofficeProductModel = require("../models/backofficeProductModel");
-const backofficeCategoryModel = require("../models/backofficeCategoryModel");
+const productModel = require("../models/productModel");
+const categoryModel = require("../models/categoryModel");
 const multer = require("multer");
 const path = require("path");
 
@@ -30,11 +30,11 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 function createBackofficeProductRoutes(db) {
   const router = express.Router();
-  const productModel = new backofficeProductModel(db);
-  const categoryModel = new backofficeCategoryModel(db);
+  const backofficeProductModel = new productModel(db);
+  const backofficeCategoryModel = new categoryModel(db);
   const productController = createBackofficeProductController(
-    productModel,
-    categoryModel
+    backofficeProductModel,
+    backofficeCategoryModel
   );
 
   router.get("/backoffice/product", productController.getProducts);
