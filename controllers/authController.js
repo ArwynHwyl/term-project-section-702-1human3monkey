@@ -24,13 +24,12 @@ function createAuthController(userModel) {
                 });
         }
 
+        // Save user info in session
         req.session.authenticated = true;
         req.session.userId = user[0].user_id;
         req.session.role = user[0].role;
 
-        console.log(req.session);
-
-        res.send('Logged in');
+        res.redirect('/');
     }
 
     async function register(req, res) {
@@ -57,10 +56,30 @@ function createAuthController(userModel) {
         res.send('Logged out');
     }
 
+    async function authentication(req, res, next) {
+        if (!req.session.authenticated) {
+            return res.redirect('/?q=session-expired');
+        }
+
+        try {
+            const user = await userModel.getUserById(req.session.userId);
+            if (!user || user.length === 0) {
+                req.session.destroy();
+                return res.redirect('/?q=session-expired');
+            }
+            next();
+
+        } catch (err) {
+            console.log(err);
+            return res.redirect('/auth/login');
+        }
+    }
+
     return {
         login,
         register,
-        logout
+        logout,
+        authentication,
     }
 }
 

@@ -15,7 +15,7 @@ class userModel {
     }
 
     async getUserById(id){
-        const query = 'SELECT * FROM User WHERE id = ?';
+        const query = 'SELECT * FROM User WHERE user_id = ?';
         try{
             const [result] = await this.db.execute(query, [id]);
             return result;

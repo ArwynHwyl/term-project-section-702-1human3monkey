@@ -24,15 +24,15 @@ async function startServer(db) {
   app.use(
     session({
       store: sessionStore,
-      secret: "your-secret-key",
-      resave: false,
-      saveUninitialized: false,
+      secret: "jklfsodifjsktnwjasdp465dd", // A secret key used to sign the session ID cookie
+      resave: true, // Forces the session to be saved back to the session store
+      saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
       cookie: {
-        maxAge: 3600000,
+        maxAge: 3600000, // Sets the cookie expiration time in milliseconds (1 hour here)
         sameSite: true,
-        httpOnly: true,
-        secure: false // Set to true in production with HTTPS
-      }
+        httpOnly: true, // Reduces client-side script control over the cookie
+        secure: false, // Ensures cookies are only sent over HTTPS //we do not impmentment HTTPS yet, so, this is false
+      },
     })
   )
 
