@@ -111,6 +111,7 @@
                       class="form-control"
                       name="attributeColor[]"
                       placeholder="Enter color"
+                      required
                     />
                   </td>
                   <td>
@@ -119,6 +120,7 @@
                       class="form-control"
                       name="attributeSize[]"
                       placeholder="Enter size"
+                      required
                     />
                   </td>
                   <td>
@@ -127,6 +129,7 @@
                       class="form-control"
                       name="attributeQuantity[]"
                       placeholder="Enter quantity"
+                      required
                     />
                   </td>
                   <td>
@@ -195,6 +198,7 @@
           }
         });
         formData.append("attributes", JSON.stringify(attributes));
+        formData.append("createdAt", new Date().toISOString());
 
         $.ajax({
           url: "/backoffice/product",
@@ -216,9 +220,9 @@
         const table = $("#attributesTable tbody");
         const newRow = `
           <tr>
-            <td><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color"></td>
-            <td><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size"></td>
-            <td><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity"></td>
+            <td><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color" required></td>
+            <td><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size" required></td>
+            <td><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity" required></td>
             <td><button type="button" class="btn btn-danger" onclick="removeAttribute(this)">Remove</button></td>
           </tr>
         `;

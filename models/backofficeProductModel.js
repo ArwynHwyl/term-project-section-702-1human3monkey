@@ -25,9 +25,10 @@ class backofficeProductModel {
     categoryId,
     normalPrice,
     discountPercent,
-    imagePath
+    imagePath,
+    createdAt
   ) {
-    const query = `INSERT INTO Product (product_name, description, category_id, normal_price, discount_percent, image_path) VALUES (?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO Product (product_name, description, category_id, normal_price, discount_percent, image_path, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)`;
     try {
       const [result] = await this.db.execute(query, [
         name,
@@ -36,6 +37,7 @@ class backofficeProductModel {
         normalPrice,
         discountPercent,
         imagePath,
+        createdAt
       ]);
       return result.insertId;
     } catch (error) {

@@ -58,6 +58,7 @@ function createBackofficeProductController(productModel, categoryModel) {
     const normalPrice = req.body.productPrice;
     const discountPercent = req.body.productDiscount;
     const image = req.file;
+    const createdAt = new Date(req.body.createdAt).toISOString().slice(0, 19).replace("T", " ");
 
     if (
       !name ||
@@ -65,7 +66,8 @@ function createBackofficeProductController(productModel, categoryModel) {
       !category ||
       !normalPrice ||
       !discountPercent ||
-      !image
+      !image ||
+      !createdAt
     ) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -79,7 +81,8 @@ function createBackofficeProductController(productModel, categoryModel) {
         category,
         normalPrice,
         discountPercent,
-        imagePath
+        imagePath,
+        createdAt
       );
 
       const attributes = JSON.parse(req.body.attributes);
