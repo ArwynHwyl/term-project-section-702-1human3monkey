@@ -2,11 +2,7 @@
   <div class="content">
     <div class="search-container">
       <div class="input-group">
-        <input
-          type="text"
-          class="form-control search-input"
-          placeholder="Search..."
-        />
+        <input type="text" class="form-control search-input" placeholder="Search..." />
         <div class="input-group-append">
           <button class="btn search-button" type="button">
             <i class="bi bi-search-heart-fill"></i>
@@ -18,56 +14,21 @@
       <table>
         <thead>
           <tr>
-            <th class="checkbox-cell"><input type="checkbox" /></th>
             <th>Image</th>
             <th>Category Name</th>
-            <th class="action-cell">
-              <button style="border-radius: 5px; border-color: black">
-                <i class="bi bi-sort-alpha-down"></i>
-              </button>
-            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <% categories.forEach(category => { %>
+          <% categories.forEach((category, index) => { %>
           <tr>
-            <td class="checkbox-cell"><input type="checkbox" /></td>
-            <td>
-              <img
-                class="tableImage"
-                src="<%= category.image_path %>"
-                alt="<%= category.category_name %>"
-              />
+            <td data-cell="Image">
+              <img class="tableImage" style="padding-right: 10px;" src="<%= category.image_path %>"alt=" <%= category.category_name %>"/>
             </td>
-            <td><%= category.category_name %></td>
-            <td class="action-cell">
-              <div class="dropdown">
-                <button
-                  class="btn dropdown-toggle no-caret-dropdown"
-                  type="button"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a
-                    class="dropdown-item"
-                    href="/backoffice/category/edit/<%= category.category_id %>"
-                  >
-                    <i class="bi bi-pencil-fill mr-2"></i> Edit</a
-                  >
-                  <a
-                    class="dropdown-item delete-category"
-                    href="#"
-                    data-id="<%= category.category_id %>"
-                  >
-                    <i class="bi bi-trash-fill mr-2"></i>
-                    Delete</a
-                  >
-                </div>
-              </div>
+            <td data-cell="Category Name" style="padding-right: 10px;"><%= category.category_name %></td>
+            <td data-cell="Action" style="padding-right: 10px;">
+              <a href="/backoffice/category/edit/<%= category.category_id %>" class="btn btn-warning btn-sm">Edit</a>
+              <button class="btn btn-danger btn-sm delete-category" data-id="<%= category.category_id %>">Delete</button>
             </td>
           </tr>
           <% }) %>
