@@ -12,11 +12,19 @@ function createAuthRoute(db) {
     const authController = new AuthController(userModel);
 
     router.get('/login', (req, res) => {
-        res.render('pages/authen/login', { pageTitle: 'Sign in to your account' });
+        res.render('pages/authen/login',
+            {
+                pageTitle: 'Sign in to your account',
+                errorMessage: null,
+            });
     });
-    
+
     router.get('/register', (req, res) => {
-        res.render('pages/authen/register', { pageTitle: 'Create an account' });
+        res.render('pages/authen/register',
+            {
+                pageTitle: 'Create an account',
+                errorMessage: null,
+            });
     });
 
     router.post('/login', authController.login);

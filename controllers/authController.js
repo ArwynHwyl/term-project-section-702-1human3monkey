@@ -6,14 +6,22 @@ function createAuthController(userModel) {
 
         const user = await userModel.getUserByEmail(email);
 
-        if (!user) {
-            return res.status(401).send('Invalid email or password');
+        if (!user || user.length === 0) {
+            return res.render('pages/authen/login',
+                {
+                    pageTitle: 'Sign in to your account',
+                    errorMessage: "Email not found, please try again",
+                });
         }
 
-        const validPassword = await bcrypt.compare(password, user.password);
+        const validPassword = await bcrypt.compare(password, user[0].password);
 
         if (!validPassword) {
-            return res.status(401).send('Invalid email or password');
+            return res.render('pages/authen/login',
+                {
+                    pageTitle: 'Sign in to your account',
+                    errorMessage: "Invalid password, please try again",
+                });
         }
 
         res.send('Logged in');
@@ -25,15 +33,18 @@ function createAuthController(userModel) {
         const user = await userModel.getUserByEmail(email);
 
         if (user.length > 0) {
-            console.log(user);
-            return res.status(400).send('User already exists');
+            return res.render('pages/authen/register',
+                {
+                    pageTitle: 'Create an account',
+                    errorMessage: 'Email already exists, please try again',
+                });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await userModel.createUser({ email, password: hashedPassword, firstName, lastName });
 
-        res.send('User created');
+        res.redirect('/auth/login');
     }
 
     async function logout(req, res) {

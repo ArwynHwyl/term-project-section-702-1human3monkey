@@ -29,7 +29,6 @@ class userModel {
         const query = 'SELECT * FROM User WHERE email = ?';
         try{
             const [result] = await this.db.execute(query, [email]);
-            console.log('result: ', result);
             return result;
         } catch (error){
             console.error('Error userModel.getUserByEmail: ', error);
