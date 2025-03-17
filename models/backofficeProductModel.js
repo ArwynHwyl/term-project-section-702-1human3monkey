@@ -5,7 +5,7 @@ class backofficeProductModel {
 
   async getProducts() {
     const query = `
-      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.promotion_percent, c.category_name
+      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.discount_percent, c.category_name
       FROM Product p
       JOIN Category c ON p.category_id = c.category_id
       ORDER BY p.product_name DESC
@@ -20,7 +20,7 @@ class backofficeProductModel {
   }
 
   async addProduct(name, description, categoryId, normalPrice, discountPercent, imagePath) {
-    const query = `INSERT INTO Product (product_name, description, category_id, normal_price, promotion_percent, image_path) VALUES (?, ?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO Product (product_name, description, category_id, normal_price, discount_percent, image_path) VALUES (?, ?, ?, ?, ?, ?)`;
     try {
       const [result] = await this.db.execute(query, [name, description, categoryId, normalPrice, discountPercent, imagePath]);
       return result;
