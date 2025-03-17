@@ -33,12 +33,8 @@ function createBackofficeCategoryRoute(db) {
   const categoryController = createBackofficeCategoryController(categoryModel);
 
   router.get("/backoffice/category", categoryController.getCategories);
-
-  router.get("/backoffice/category/add", (req, res) => {
-    res.render("pages/backoffice-addcategory-page", {
-      activePage: "categories",
-    });
-  });
+  router.get("/backoffice/category/add", categoryController.renderAddCategoryPage);
+  router.get("/backoffice/category/edit/:id", categoryController.renderEditCategoryPage);
 
   router.post(
     "/backoffice/category",
@@ -53,11 +49,6 @@ function createBackofficeCategoryRoute(db) {
       });
     },
     categoryController.addCategories
-  );
-
-  router.get(
-    "/backoffice/category/edit/:id",
-    categoryController.getCategoryById
   );
 
   router.put(

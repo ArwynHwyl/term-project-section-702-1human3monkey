@@ -17,6 +17,29 @@ function createBackofficeCategoryController(categoryModel) {
     }
   }
 
+  async function renderAddCategoryPage(req, res) {
+    res.render("pages/backoffice-addcategory-page", {
+      activePage: "categories",
+    });
+  }
+
+  async function renderEditCategoryPage(req, res) {
+    const id = req.params.id;
+
+    try {
+      const category = await categoryModel.getCategoryById(id);
+      res.render("pages/backoffice-editcategory-page", {
+        category,
+        activePage: "categories",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while getting the category" });
+    }
+  }
+
   async function addCategories(req, res) {
     const name = req.body.categoryName;
     const image = req.file;
@@ -128,6 +151,8 @@ function createBackofficeCategoryController(categoryModel) {
 
   return {
     getCategories,
+    renderAddCategoryPage,
+    renderEditCategoryPage,
     addCategories,
     getCategoryById,
     updateCategoryById,
