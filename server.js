@@ -1,8 +1,9 @@
 const express = require("express");
-const db = require("./services/db");
-const testDatabaseConnection = require("./services/testDatabaseConnection");
-const authRouter = require("./routes/auth");
 const bodyParser = require("body-parser");
+const session = require("express-session");
+const mysqlStore = require("express-mysql-session")(session);
+const { db, config } = require("./services/db");
+const testDatabaseConnection = require("./services/testDatabaseConnection");
 const createRouter = require("./routes/index");
 
 const app = express();
@@ -16,6 +17,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 async function startServer(db) {
   await testDatabaseConnection(db);
+
+  // Set up session store
+  const sessionStore = new mysqlStore(config, db);
+
+  app.use(
+    session({
+      store: sessionStore,
+      secret: "your-secret-key",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 3600000,
+        sameSite: true,
+        httpOnly: true,
+        secure: false // Set to true in production with HTTPS
+      }
+    })
+  )
 
   app.use(createRouter(db));
 

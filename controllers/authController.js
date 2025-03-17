@@ -24,6 +24,12 @@ function createAuthController(userModel) {
                 });
         }
 
+        req.session.authenticated = true;
+        req.session.userId = user[0].user_id;
+        req.session.role = user[0].role;
+
+        console.log(req.session);
+
         res.send('Logged in');
     }
 
