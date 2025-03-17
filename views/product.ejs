@@ -1,0 +1,152 @@
+<%- include("./partials/header.ejs") %>
+  <%- include("./partials/navbarFrontPage.ejs") %>
+
+    <div class="product-container">
+      <div id="product-detail" class="product-detail"></div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', async function () {
+        let productData;
+
+        async function fetchProductData() {
+          try {
+            const pathSegments = window.location.pathname.split("/");
+            const productId = pathSegments[pathSegments.length - 1]; // Extract product ID
+
+            console.log("Fetching product data for ID:", productId);
+            const response = await fetch(`/api/product/${productId}`);
+            productData = await response.json();
+
+            if (productData.error) {
+              document.getElementById('product-detail').innerHTML = "<p>Product not found.</p>";
+              return;
+            }
+
+            populateProductDetails(productData);
+          } catch (error) {
+            console.error('Error fetching product data:', error);
+            document.getElementById('product-detail').innerHTML = "<p>Error loading product.</p>";
+          }
+        }
+
+        function populateProductDetails(product) {
+          const productDetail = document.getElementById('product-detail');
+          productDetail.innerHTML = `
+      <div class="product-image">
+        <img src="${product.image_path}" alt="${product.product_name}">
+      </div>
+      <div class="product-info">
+        <div class="product-header">
+          <p class="product-category">NEW</p>
+          <p class="product-id">ID: ${product.product_id}</p>
+        </div>
+        <h1 class="product-title">${product.product_name}</h1>
+        <div class="product-price">$${product.normal_price.toLocaleString()}</div>
+        <div class="product-rating">
+          ${Array.from({ length: 5 }).map((_, i) => `
+            <span class="star ${i < Math.floor(product.rating || 0) ? 'filled' : ''}">★</span>
+          `).join('')}
+        </div>
+        <div class="product-features">
+          <ul>
+            ${product.description ? `<li>${product.description}</li>` : ''}
+            ${product.features.map(feature => `<li>${feature}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="product-options">
+          <div class="size-selector">
+            <h3>Size</h3>
+            <div class="size-options">
+              ${['XS', 'S', 'M', 'L'].map(size => `
+                <button class="size-btn ${product.attributes.some(attr => attr.size === size && attr.quantity > 0) ? '' : 'disabled'}"
+                  data-size="${size}"
+                  ${product.attributes.some(attr => attr.size === size && attr.quantity > 0) ? '' : 'disabled'}>
+                  ${size}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="color-selector">
+            <h3>Color</h3>
+            <div class="color-options">
+              <!-- Colors will be dynamically updated -->
+            </div>
+          </div>
+        </div>
+        <div class="product-actions">
+          <button class="add-to-cart-btn">ADD TO CART</button>
+        </div>
+        <div class="shipping-info">
+          <p>*No refund on return</p>
+        </div>
+      </div>
+    `;
+
+          addEventListeners();
+        }
+
+        function addEventListeners() {
+          document.querySelectorAll('.size-btn:not(.disabled)').forEach(btn => {
+            btn.addEventListener('click', function () {
+              document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+              this.classList.add('selected');
+
+              updateAvailableColors(this.dataset.size);
+            });
+          });
+
+          document.querySelector('.add-to-cart-btn').addEventListener('click', function () {
+            const selectedSize = document.querySelector('.size-btn.selected')?.textContent.trim();
+            const selectedColor = document.querySelector('.color-btn.selected')?.dataset.color;
+
+            if (!selectedSize || !selectedColor) {
+              alert('Please select both size and color');
+              return;
+            }
+
+            console.log('Adding to cart:', {
+              productId: productData.product_id,
+              size: selectedSize,
+              color: selectedColor
+            });
+
+            this.textContent = 'ADDED!';
+            setTimeout(() => this.textContent = 'ADD TO CART', 2000);
+          });
+        }
+
+        function updateAvailableColors(selectedSize) {
+          const colorContainer = document.querySelector('.color-options');
+          colorContainer.innerHTML = ''; // Clear previous colors
+
+          // Get colors available for the selected size
+          const availableColors = productData.attributes
+            .filter(attr => attr.size === selectedSize && attr.quantity > 0)
+            .map(attr => attr.color);
+
+          availableColors.forEach(color => {
+            const colorBtn = document.createElement('button');
+            colorBtn.classList.add('color-btn');
+            colorBtn.style.backgroundColor = color;
+            if (color.toLowerCase() === 'white') colorBtn.style.border = '1px solid #ddd';
+            colorBtn.dataset.color = color;
+
+            colorBtn.addEventListener('click', function () {
+              document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+              this.classList.add('selected');
+            });
+
+            colorContainer.appendChild(colorBtn);
+          });
+
+          // Auto-select the first available color
+          const firstColorBtn = colorContainer.querySelector('.color-btn');
+          if (firstColorBtn) firstColorBtn.classList.add('selected');
+        }
+
+        fetchProductData();
+      });
+    </script>
+
+    <%- include("./partials/footer.ejs") %>
