@@ -45,7 +45,7 @@ function createBackofficeProductRoutes(db) {
   );
 
   router.post(
-    "/backoffice/product/add",
+    "/backoffice/product",
     (req, res, next) => {
       upload.single("productImage")(req, res, function (err) {
         if (err instanceof multer.MulterError) {
