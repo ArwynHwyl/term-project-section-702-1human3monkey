@@ -143,6 +143,15 @@ body {
   overflow-x: auto;
   padding: 0; /* Remove any padding that might constrain the table */
 }
+#categoryimage_th{
+  width: 33%;
+}
+#category_name{
+  width: 33%;
+}
+#category_action{
+  width: 33%;
+}
 
 table {
   width: 100%;
@@ -150,7 +159,39 @@ table {
   border: 2px solid black;
   table-layout: fixed; /* Ensures columns maintain their defined widths */
 }
-
+#attributesTable th:nth-child(1){
+  width: 20%;
+}
+#attributesTable th:nth-child(2){
+  width: 20%;
+}
+#attributesTable th:nth-child(3){
+  width: 20%;
+}
+#attributesTable th:nth-child(4){
+  width: 20%;
+}
+#product_Img_th{
+  width: 30%;
+}
+#product_Name_th{
+  width: 20%;
+}
+#product_Desciption_th {
+  width: 30%;
+}
+#product_Category_th{
+  width: 15%;
+}
+#product_Price_th{
+  width: 15%;
+}
+#product_Discount_th{
+  width: 15%;
+}
+#product_Action_th{
+  width: 15%;
+}
 table th,
 table td {
   padding: 12px 15px;
@@ -165,14 +206,12 @@ table td {
 
 table th:nth-child(1),
 table td:nth-child(1) {
-  width: 20%; /* Image column */
   min-width: 100px; /* Minimum width for image */
   text-align: center;
 }
 
 table th:nth-child(2),
 table td:nth-child(2) {
-  width: 15%; /* Product Name column */
   padding-right: 10px ;
   min-width: 150px;
   text-align: center;
@@ -180,7 +219,6 @@ table td:nth-child(2) {
 
 table th:nth-child(3),
 table td:nth-child(3) {
-  width: 20%; /* Product Description column */
   min-width: 200px;
   text-align: center;
 }
@@ -215,7 +253,6 @@ table td:nth-child(7) {
 
 table th:nth-child(8),
 table td:nth-child(8) {
-  width: 5%; /* Action column */
   min-width: 100px;
   text-align: center;
 }
@@ -229,16 +266,16 @@ table th {
 }
 
 .product-image {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   display: block;
   margin: 0 auto;
 }
 
 .tableImage {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
   display: block; /* Ensure block display for centering */
   margin: 0 auto; /* Center the image in desktop view */
@@ -311,6 +348,68 @@ input[type="checkbox"] {
   .search-container {
     margin-bottom: 15px;
   }
+  #attributesTable th {
+    display: none;
+  }
+
+  #attributesTable tr {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 0;
+  }
+
+  #attributesTable td {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: none;
+    border-right: none;
+    min-height: 30px;
+    white-space: normal;
+    word-break: break-word;
+    box-sizing: border-box;
+  }
+
+  #attributesTable td:before {
+    content: attr(data-cell);
+    position: absolute;
+    left: 15px;
+    font-weight: 700;
+    text-transform: capitalize;
+    text-align: left;
+  }
+  #attributesTable td[data-cell="Color"],
+  #attributesTable td[data-cell="Size"],
+  #attributesTable td[data-cell="Quantity"],
+  #attributesTable td[data-cell="Action"] {
+    padding-left: 50%;
+    text-align: right;
+    padding-right: 15px;
+  }
+
+  #attributesTable td[data-cell="Action"] .btn {
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  .product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .tableImage {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
 }
 
 @media (max-width: 576px) {
@@ -330,7 +429,7 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 650px) {
-  table th {
+  table th,tr,td {
     display: none;
   }
   
@@ -341,7 +440,6 @@ input[type="checkbox"] {
   table tr {
     display: block;
     width: 100%; /* Ensure row takes full width */
-    border-bottom: 2px solid black;
     margin-bottom: 15px;
     padding: 0; /* Remove padding to avoid extra space */
   }
@@ -434,7 +532,60 @@ input[type="checkbox"] {
     -webkit-line-clamp: 2; /* จำกัด 2 บรรทัด */
     -webkit-box-orient: vertical; /* จัดแนวในแนวตั้ง */
   }
+  #attributesTable th {
+    display: none;
+  }
 
+  #attributesTable tr {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 0;
+  }
+
+  #attributesTable td {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: none;
+    border-right: none;
+    min-height: 30px;
+    white-space: normal;
+    word-break: break-word;
+    box-sizing: border-box;
+  }
+
+  #attributesTable td:before {
+    content: attr(data-cell);
+    position: absolute;
+    left: 15px;
+    font-weight: 700;
+    text-transform: capitalize;
+    text-align: left;
+  }
+
+  #attributesTable td[data-cell="Color"],
+  #attributesTable td[data-cell="Size"],
+  #attributesTable td[data-cell="Quantity"],
+  #attributesTable td[data-cell="Action"] {
+    padding-left: 50%;
+    text-align: right;
+    padding-right: 15px;
+  }
+
+  #attributesTable td[data-cell="Action"] .btn {
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 5px 10px;
+    font-size: 14px;
+    text-align: center;
+  }
+  #addAttribute {
+    padding-right: 15px;
+  }
 }
 
 .no-caret-dropdown::after {

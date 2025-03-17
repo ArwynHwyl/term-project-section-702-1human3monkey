@@ -14,19 +14,19 @@
       <table>
         <thead>
           <tr>
-            <th>Image</th>
-            <th>Category Name</th>
-            <th></th>
+            <th id="categoryimage_th">Image</th>
+            <th id="category_name">Category Name</th>
+            <th id="category_action"></th>
           </tr>
         </thead>
         <tbody>
           <% categories.forEach((category, index) => { %>
           <tr>
             <td data-cell="Image">
-              <img class="tableImage" style="padding-right: 10px;" src="<%= category.image_path %>"alt=" <%= category.category_name %>"/>
+              <img class="tableImage" " src="<%= category.image_path %>"alt=" <%= category.category_name %>"/>
             </td>
-            <td data-cell="Category Name" style="padding-right: 10px;"><%= category.category_name %></td>
-            <td data-cell="Action" style="padding-right: 10px;">
+            <td data-cell="Category Name" ><%= category.category_name %></td>
+            <td data-cell="Action" >
               <a href="/backoffice/category/edit/<%= category.category_id %>" class="btn btn-warning btn-sm">Edit</a>
               <button class="btn btn-danger btn-sm delete-category" data-id="<%= category.category_id %>">Delete</button>
             </td>
