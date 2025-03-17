@@ -41,7 +41,7 @@ function createBackofficeCategoryRoute(db) {
   });
 
   router.post(
-    "/backoffice/category/add",
+    "/backoffice/category",
     (req, res, next) => {
       upload.single("imageInput")(req, res, function (err) {
         if (err instanceof multer.MulterError) {
@@ -60,8 +60,8 @@ function createBackofficeCategoryRoute(db) {
     categoryController.getCategoryById
   );
 
-  router.post(
-    "/backoffice/category/edit/:id",
+  router.put(
+    "/backoffice/category/:id",
     (req, res, next) => {
       upload.single("imageInput")(req, res, function (err) {
         if (err instanceof multer.MulterError) {

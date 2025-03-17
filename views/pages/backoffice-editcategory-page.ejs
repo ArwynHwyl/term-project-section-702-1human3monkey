@@ -55,8 +55,8 @@
       const formData = new FormData(document.getElementById('editCategoryForm'));
 
       $.ajax({
-        url: "/backoffice/category/edit/<%= category.category_id %>",
-        method: "POST",
+        url: "/backoffice/category/<%= category.category_id %>",
+        method: "PUT",
         data: formData,
         processData: false,
         contentType: false,

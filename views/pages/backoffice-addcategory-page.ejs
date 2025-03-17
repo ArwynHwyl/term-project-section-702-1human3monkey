@@ -62,7 +62,7 @@
         const formData = new FormData(document.getElementById("addCategoryForm"));
 
         $.ajax({
-          url: "/backoffice/category/add",
+          url: "/backoffice/category",
           method: "POST",
           data: formData,
           processData: false,
