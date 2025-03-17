@@ -29,6 +29,9 @@ if (!fs.existsSync(uploadsDir)) {
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
+  
+  // Store the database connection in app.locals so it's accessible in routes
+  app.locals.db = dbConnection;
 
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
@@ -63,49 +66,141 @@ async function startServer(dbConnection) {
     });
   });
 
-  app.get("/backoffice/product/edit/:id", (req, res) => {
-    const product = {
-      image: "https://via.placeholder.com/100",
-      name: "Hoodie",
-      category: "Hood",
-      variants: [
-        { color: "red", size: "XL", quantity: 10 },
-        { color: "red", size: "L", quantity: 10 },
-        { color: "black", size: "S", quantity: 0 },
-      ],
-    };
-    res.render("pages/backoffice-product-edit-page", { product });
+  app.get("/backoffice/product/edit/:id", async (req, res) => {
+    try {
+      const productId = req.params.id;
+      
+      // Get product details
+      const [products] = await dbConnection.query(`
+        SELECT p.*, c.category_name 
+        FROM Product p
+        LEFT JOIN Category c ON p.category_id = c.category_id
+        WHERE p.product_id = ?
+      `, [productId]);
+      
+      if (!products || products.length === 0) {
+        return res.status(404).send("Product not found");
+      }
+      
+      // Get product attributes
+      const [variants] = await dbConnection.query(`
+        SELECT color, size, quantity
+        FROM ProductAttribute
+        WHERE product_id = ?
+      `, [productId]);
+      
+      const product = {
+        product_id: products[0].product_id,
+        image: products[0].image_path,
+        name: products[0].product_name,
+        category: products[0].category_name,
+        description: products[0].description,
+        normal_price: products[0].normal_price,
+        discount_percent: products[0].discount_percent,
+        variants: variants
+      };
+      
+      res.render("pages/backoffice-product-edit-page", { product });
+    } catch (error) {
+      console.error("Error fetching product for edit:", error);
+      res.status(500).send("Error loading product");
+    }
   });
 
-  app.get("/backoffice/history", (req, res) => {
-    const history = [
-      {
-        userId: "1123",
-        productname: "Hoodie",
-        color: "Black",
-        size: "Hood",
-        quantity: "x 50000",
-        price: "2,252.231 THB",
-        status: "",
-      },
-      {
-        userId: "h123",
-        productname: "Elephant Pant",
-        color: "Vintage Washed Elephant Pant",
-        size: "Pants",
-        quantity: "1000 THB",
-        price: "0.000011 THB",
-        status: "",
-      },
-    ];
-    res.render("pages/backoffice-history-page", {
-      history,
-      activePage: "history",
-    });
+  app.get("/backoffice/history", async (req, res) => {
+    try {
+      // Get order history with details
+      const [historyRecords] = await dbConnection.query(`
+        SELECT h.history_id, h.user_id, h.order_date,
+               p.product_name, pa.color, pa.size, ci.quantity,
+               p.normal_price, p.discount_percent
+        FROM History h
+        JOIN CartItem ci ON h.cart_item_id = ci.cart_item_id
+        JOIN Product p ON ci.product_id = p.product_id
+        JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
+        ORDER BY h.order_date DESC
+      `);
+      
+      // Format the data for the view
+      const history = historyRecords.map(record => {
+        const discountedPrice = record.normal_price * (1 - (record.discount_percent / 100));
+        const totalPrice = discountedPrice * record.quantity;
+        
+        return {
+          userId: record.user_id,
+          productname: record.product_name,
+          color: record.color,
+          size: record.size,
+          quantity: `x ${record.quantity}`,
+          price: `${totalPrice.toLocaleString()} THB`,
+          status: record.status || "Completed",
+          orderDate: new Date(record.order_date).toLocaleDateString()
+        };
+      });
+      
+      res.render("pages/backoffice-history-page", {
+        history,
+        activePage: "history",
+      });
+    } catch (error) {
+      console.error("Error fetching order history:", error);
+      res.render("pages/backoffice-history-page", {
+        history: [],
+        activePage: "history",
+        error: "Failed to load order history"
+      });
+    }
+  });
+
+  app.get("/products", async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
+      const offset = (page - 1) * limit;
+      
+      // Get products with pagination
+      const [products] = await db.query(`
+        SELECT p.*, c.category_name 
+        FROM Product p
+        LEFT JOIN Category c ON p.category_id = c.category_id
+        ORDER BY p.created_at DESC
+        LIMIT ? OFFSET ?
+      `, [limit, offset]);
+      
+      // Get total count for pagination
+      const [countResult] = await db.query(`
+        SELECT COUNT(*) as total FROM Product
+      `);
+      
+      const totalProducts = countResult[0].total;
+      const totalPages = Math.ceil(totalProducts / limit);
+      
+      res.render("pages/all-products", {
+        products,
+        pagination: {
+          currentPage: page,
+          totalPages,
+          totalProducts
+        },
+        pageTitle: "All Products"
+      });
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      res.status(500).render("pages/all-products", {
+        products: [],
+        pagination: {
+          currentPage: 1,
+          totalPages: 1,
+          totalProducts: 0
+        },
+        pageTitle: "All Products",
+        error: "Failed to load products"
+      });
+    }
   });
 
   app.get("/product/:name/:id", (req, res) => {
-    res.render("product", { productId: req.params.id }); //Example -> http://localhost:3000/product/Cotton-Sweatshirt/1234 and 
+    res.render("product", { productId: req.params.id });
   });
 
   app.listen(3000, () => {
