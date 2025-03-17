@@ -19,6 +19,23 @@ class backofficeProductModel {
     }
   }
 
+  async getProductsByCategory(categoryId) {
+    const query = `
+      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.discount_percent, c.category_name
+      FROM Product p
+      JOIN Category c ON p.category_id = c.category_id
+      WHERE p.category_id = ?
+      ORDER BY p.product_name DESC
+    `;
+    try {
+      const [products] = await this.db.execute(query, [categoryId]);
+      return products;
+    } catch (error) {
+      console.error("Error getting products by category: ", error);
+      throw new Error("Error getting products by category");
+    }
+  }
+
   async addProduct(
     name,
     description,
@@ -37,7 +54,7 @@ class backofficeProductModel {
         normalPrice,
         discountPercent,
         imagePath,
-        createdAt
+        createdAt,
       ]);
       return result.insertId;
     } catch (error) {

@@ -5,9 +5,32 @@ function createBackofficeProductController(productModel, categoryModel) {
   async function getProducts(req, res) {
     try {
       const products = await productModel.getProducts();
+      const categories = await categoryModel.getCategories();
       res.render("pages/backoffice-product-page", {
         products,
+        categories,
         activePage: "products",
+        selectedCategory: "all",
+      });
+    } catch (error) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: "An error occurred while getting the products" });
+    }
+  }
+
+  async function renderProductsByCategory(req, res) {
+    const categoryId = req.params.categoryId;
+
+    try {
+      const products = await productModel.getProductsByCategory(categoryId);
+      const categories = await categoryModel.getCategories();
+      res.render("pages/backoffice-product-page", {
+        products,
+        categories,
+        activePage: "products",
+        selectedCategory: categoryId,
       });
     } catch (error) {
       console.error(error);
@@ -48,7 +71,7 @@ function createBackofficeProductController(productModel, categoryModel) {
       return res
         .status(500)
         .json({ error: "An error occurred while getting the product" });
-    } 
+    }
   }
 
   async function addProduct(req, res) {
@@ -58,7 +81,10 @@ function createBackofficeProductController(productModel, categoryModel) {
     const normalPrice = req.body.productPrice;
     const discountPercent = req.body.productDiscount;
     const image = req.file;
-    const createdAt = new Date(req.body.createdAt).toISOString().slice(0, 19).replace("T", " ");
+    const createdAt = new Date(req.body.createdAt)
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
 
     if (
       !name ||
@@ -109,7 +135,13 @@ function createBackofficeProductController(productModel, categoryModel) {
     const discountPercent = req.body.productDiscount;
     const image = req.file;
 
-    if (!name || !description || !category || !normalPrice || !discountPercent) {
+    if (
+      !name ||
+      !description ||
+      !category ||
+      !normalPrice ||
+      !discountPercent
+    ) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -118,7 +150,12 @@ function createBackofficeProductController(productModel, categoryModel) {
       let imagePath = product.image_path;
 
       if (image) {
-        const oldImagePath = path.join(__dirname, "..", "public", product.image_path);
+        const oldImagePath = path.join(
+          __dirname,
+          "..",
+          "public",
+          product.image_path
+        );
         if (fs.existsSync(oldImagePath)) {
           fs.unlinkSync(oldImagePath);
         }
@@ -138,12 +175,10 @@ function createBackofficeProductController(productModel, categoryModel) {
       const attributes = JSON.parse(req.body.attributes);
       await productModel.updateProductAttribute(productId, attributes);
 
-      return res
-        .status(200)
-        .json({
-          message: "Product updated successfully",
-          redirect: "/backoffice/product",
-        });
+      return res.status(200).json({
+        message: "Product updated successfully",
+        redirect: "/backoffice/product",
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -165,12 +200,10 @@ function createBackofficeProductController(productModel, categoryModel) {
 
       await productModel.deleteProductById(productId);
 
-      return res
-        .status(200)
-        .json({
-          message: "Product deleted successfully",
-          redirect: "/backoffice/product",
-        });
+      return res.status(200).json({
+        message: "Product deleted successfully",
+        redirect: "/backoffice/product",
+      });
     } catch (error) {
       console.error(error);
       return res
@@ -181,11 +214,12 @@ function createBackofficeProductController(productModel, categoryModel) {
 
   return {
     getProducts,
+    renderProductsByCategory,
     renderAddProductPage,
     renderEditProductPage,
     addProduct,
     updateProductById,
-    deleteProductById
+    deleteProductById,
   };
 }
 

@@ -38,6 +38,7 @@ function createBackofficeProductRoutes(db) {
   );
 
   router.get("/backoffice/product", productController.getProducts);
+  router.get("/backoffice/product/category/:categoryId", productController.renderProductsByCategory);
   router.get("/backoffice/product/add", productController.renderAddProductPage);
   router.get(
     "/backoffice/product/edit/:productId",
