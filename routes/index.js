@@ -9,8 +9,8 @@ function createRouter(db) {
     const authController = new AuthController(userModel);
 
     router.get("/", authController.authentication, (req, res) => {
-        res.render("index");
-      });
+        res.render("index", { session: req.session });
+    });
 
     router.use("/auth", createAuthRoute(db));
     return router;

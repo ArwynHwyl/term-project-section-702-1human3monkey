@@ -27,6 +27,8 @@ function createAuthRoute(db) {
             });
     });
 
+    router.get('/logout', authController.logout);
+
     router.post('/login', authController.login);
 
     router.post('/register', authController.register);

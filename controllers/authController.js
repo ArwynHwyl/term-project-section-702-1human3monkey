@@ -53,12 +53,13 @@ function createAuthController(userModel) {
     }
 
     async function logout(req, res) {
-        res.send('Logged out');
+        req.session.destroy();
+        return res.redirect('/?q=session-expired');
     }
 
     async function authentication(req, res, next) {
         if (!req.session.authenticated) {
-            return res.redirect('/?q=session-expired');
+            return res.redirect('/auth/login');
         }
 
         try {
