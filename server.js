@@ -2,15 +2,30 @@ const express = require("express");
 const db = require("./services/db");
 const testDatabaseConnection = require("./services/testDatabaseConnection");
 const createTables = require("./services/database");
-
+const path = require('path');
+const createRouter = require("./routes/index");
+const bodyParser = require("body-parser");
+const fs = require("fs");
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.set('views', path.join(__dirname, 'views')); 
+app.use('/public', express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+const uploadsDir = path.join(__dirname, "public/uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
+
+  app.use(createRouter(dbConnection));
 
   app.get("/", (req, res) => {
     res.render("index");
@@ -40,7 +55,26 @@ async function startServer(dbConnection) {
       pageContact: contact
     });
   });
-
+  app.get('/backoffice/product/edit/:id', (req, res) => {
+    const product = {
+      image: 'https://via.placeholder.com/100',
+      name: 'Hoodie',
+      category: 'Hood',
+      variants: [
+        { color: 'red', size: 'XL', quantity: 10 },
+        { color: 'red', size: 'L', quantity: 10 },
+        { color: 'black', size: 'S', quantity: 0 }
+      ]
+    };
+    res.render('pages/backoffice-product-edit-page', { product });
+  });
+  app.get('/backoffice/history', (req, res) => {
+    const history = [
+      { userId: '1123', productname: 'Hoodie', color: 'Black', size: 'Hood', quantity: 'x 50000', price: '2,252.231 THB', status: '' },
+      { userId: 'h123', productname: 'Elephant Pant', color: 'Vintage Washed Elephant Pant', size: 'Pants', quantity: '1000 THB', price: '0.000011 THB', status: '' }
+    ];
+    res.render('pages/backoffice-history-page', { history, activePage: 'history' });
+  });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
   })
