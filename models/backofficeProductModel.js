@@ -157,12 +157,20 @@ class backofficeProductModel {
   }
 
   async deleteProductById(productId) {
-    const query = `DELETE FROM Product WHERE product_id = ?`;
+    const deleteAttributesQuery = `DELETE FROM ProductAttribute WHERE product_id = ?`;
+    const deleteProductQuery = `DELETE FROM Product WHERE product_id = ?`;
+    const connection = await this.db.getConnection();
     try {
-      await this.db.execute(query, [productId]);
+      await connection.beginTransaction();
+      await connection.execute(deleteAttributesQuery, [productId]);
+      await connection.execute(deleteProductQuery, [productId]);
+      await connection.commit();
     } catch (error) {
+      await connection.rollback();
       console.error("Error deleting product: ", error);
       throw new Error("Error deleting product");
+    } finally {
+      connection.release();
     }
   }
 }
