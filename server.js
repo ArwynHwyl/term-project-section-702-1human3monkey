@@ -55,7 +55,6 @@ async function startServer(dbConnection) {
       pageContact: contact
     });
   });
-
   app.get('/backoffice/product/edit/:id', (req, res) => {
     const product = {
       image: 'https://via.placeholder.com/100',

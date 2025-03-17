@@ -14,7 +14,6 @@
         </div>
       </div>
     </div>
-
     <div class="table-responsive">
       <table>
         <thead>
@@ -31,7 +30,7 @@
         <tbody>
           <% products.forEach(product => { %>
           <tr>
-            <td>
+            <td data-cell="Image">
               <img
                 src="/public/<%= product.image_path %>"
                 alt="<%= product.product_name %>"
@@ -39,12 +38,12 @@
                 style="width: 100px"
               />
             </td>
-            <td><%= product.product_name %></td>
-            <td><%= product.description %></td>
-            <td><%= product.category_name %></td>
-            <td><%= product.normal_price %></td>
-            <td><%= product.promotion_percent %></td>
-            <td>
+            <td data-cell="Products Name"><%= product.product_name %></td>
+            <td data-cell="Description"><%= product.description %></td>
+            <td data-cell="Category"><%= product.category_name %></td>
+            <td data-cell="Price"><%= product.normal_price %></td>
+            <td data-cell="Discount"><%= product.promotion_percent %></td>
+            <td data-cell="Action">
               <a
                 href="/backoffice/product/edit/<%= product.product_id %>"
                 class="btn btn-warning btn-sm"

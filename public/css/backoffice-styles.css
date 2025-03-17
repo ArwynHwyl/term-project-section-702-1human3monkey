@@ -4,7 +4,7 @@
 body {
   padding-top: 0;
   margin: 0;
-  font-family: 'Koh Santepheap', sans-serif;
+  font-family: 'Koh Santepheap', sans-serif, Arial, Helvetica;
   background-color: #f2f2f2;
 }
 
@@ -101,7 +101,6 @@ body {
   margin: 20px 0;
 }
 
-
 .search-container {
   margin-bottom: 20px;
   display: flex;
@@ -140,15 +139,16 @@ body {
   font-size: 16px;
 }
 
-
 .table-responsive {
   overflow-x: auto;
+  padding: 0; /* Remove any padding that might constrain the table */
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   border: 2px solid black;
+  table-layout: fixed; /* Ensures columns maintain their defined widths */
 }
 
 table th,
@@ -157,11 +157,67 @@ table td {
   text-align: left;
   border-bottom: 2px solid black;
   border-right: 2px solid black;
+  vertical-align: middle;
+  white-space: normal;
+  word-break: break-word;
+  font-size: 14px;
 }
 
-table th:last-child,
-table td:last-child {
-  border-right: none;
+table th:nth-child(1),
+table td:nth-child(1) {
+  width: 20%; /* Image column */
+  min-width: 100px; /* Minimum width for image */
+  text-align: center;
+}
+
+table th:nth-child(2),
+table td:nth-child(2) {
+  width: 15%; /* Product Name column */
+  padding-right: 10px ;
+  min-width: 150px;
+  text-align: center;
+}
+
+table th:nth-child(3),
+table td:nth-child(3) {
+  width: 20%; /* Product Description column */
+  min-width: 200px;
+  text-align: center;
+}
+
+table th:nth-child(4),
+table td:nth-child(4) {
+  width: 15%; /* Category column */
+  min-width: 100px;
+  text-align: center;
+}
+
+table th:nth-child(5),
+table td:nth-child(5) {
+  width: 15%; /* Normal Price column */
+  min-width: 100px;
+  text-align: center;
+}
+
+table th:nth-child(6),
+table td:nth-child(6) {
+  width: 15%; /* Discount Percent column */
+  min-width: 100px;
+  text-align: center;
+}
+
+table th:nth-child(7),
+table td:nth-child(7) {
+  width: 20%; /* Stock column */
+  min-width: 100px;
+  text-align: center;
+}
+
+table th:nth-child(8),
+table td:nth-child(8) {
+  width: 5%; /* Action column */
+  min-width: 100px;
+  text-align: center;
 }
 
 table th {
@@ -172,15 +228,20 @@ table th {
   color: #333;
 }
 
-table td {
-  font-size: 14px;
-  color: #333;
+.product-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
 }
 
-.product-image {
-  width: 50px;
-  height: 50px;
+.tableImage {
+  width: 100px;
+  height: 100px;
   object-fit: cover;
+  display: block; /* Ensure block display for centering */
+  margin: 0 auto; /* Center the image in desktop view */
 }
 
 .checkbox-cell {
@@ -189,7 +250,7 @@ table td {
 }
 
 .stock-cell {
-  width: 100px;
+  min-width: 100px;
   text-align: center;
 }
 
@@ -203,18 +264,12 @@ table td {
   color: #666;
 }
 
-.tableImage {
-  width: 100px;
-  height: auto;
-}
-
 input[type="checkbox"] {
   width: 16px;
   height: 16px;
   cursor: pointer;
 }
 
-/* Media Queries */
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
@@ -274,23 +329,128 @@ input[type="checkbox"] {
   }
 }
 
+@media (max-width: 650px) {
+  table th {
+    display: none;
+  }
+  
+  table {
+    width: 100%; /* Ensure table takes full width */
+  }
+  
+  table tr {
+    display: block;
+    width: 100%; /* Ensure row takes full width */
+    border-bottom: 2px solid black;
+    margin-bottom: 15px;
+    padding: 0; /* Remove padding to avoid extra space */
+  }
+  
+  table td {
+    display: block;
+    position: relative;
+    width: 100%; /* Ensure td takes full width of the row */
+    padding-left: 50%;
+    text-align: right;
+    border-bottom: none;
+    border-right: none;
+    min-height: 30px;
+    white-space: normal;
+    word-break: break-word;
+    padding-right: 0; /* Ensure no right padding */
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow: visible; /* Ensure content isn’t clipped */
+  }
+  
+  table td:before {
+    content: attr(data-cell);
+    position: absolute;
+    left: 15px;
+    font-weight: 700;
+    text-transform: capitalize;
+    text-align: left;
+  }
+  
+  table td:first-child {
+    padding-left: 0; /* Remove padding-left to center the image properly */
+    text-align: center; /* Center the image in mobile view */
+    padding-right: 0; /* Remove padding to make image flush with right edge */
+    width: 100%; /* Ensure td takes full width */
+    min-height: 170px; /* Accommodate image height (150px + margin) */
+  }
+  
+  table td:first-child .product-image,
+  table td:first-child .tableImage {
+    float: none; /* Remove float to center the image */
+    margin: 10px auto; /* Center the image horizontally */
+    max-width: 100%; /* Ensure it doesn’t exceed cell width */
+  }
+  
+  .product-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .tableImage {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+  }
+  
+  table td:nth-child(2),
+  table td:nth-child(3),table td:nth-child(4),table td:nth-child(5),table td:nth-child(6),table td:nth-child(7) {
+    padding-left: 50%; /* Apply consistent padding for Category Name and Action */
+    text-align: right; /* Align content to the right */
+    padding-right: 15px; /* Ensure no right padding */
+    width: 100%; /* Ensure td takes full width */
+    white-space: nowrap; /* Prevent wrapping of content */
+    clear: both; /* Clear any floated elements (though float is removed) */
+
+  }
+  
+  table td:nth-child(3) .btn {
+    margin-left: 5px; /* Add spacing between buttons */
+    display: inline-block; /* Keep buttons on the same line */
+    vertical-align: middle; /* Align buttons vertically */
+    padding: 5px 10px; /* Ensure buttons have consistent padding */
+    font-size: 14px; /* Adjust font size for better fit */
+  }
+  
+  .edit-icon {
+    font-size: 20px;
+    padding: 5px;
+  }
+  table td[data-cell="Description"],
+  table td[data-cell="Product Name"] {
+    white-space: normal; /* อนุญาตให้ข้อความตัดบรรทัดได้ */
+    word-break: break-word; /* ตัดคำเมื่อจำเป็น */
+    max-height: 60px; /* จำกัดความสูงเพื่อป้องกันการล้น */
+    overflow: hidden; /* ซ่อนส่วนที่ล้น */
+    text-overflow: ellipsis; /* เพิ่ม ... ถ้ามีการตัด */
+    display: -webkit-box; /* ใช้สำหรับ multi-line ellipsis */
+    -webkit-line-clamp: 2; /* จำกัด 2 บรรทัด */
+    -webkit-box-orient: vertical; /* จัดแนวในแนวตั้ง */
+  }
+
+}
+
 .no-caret-dropdown::after {
   display: none !important;
 }
 
-/* Center the dropdown menu below the button */
 .action-cell .dropdown-menu {
   transform: translateX(-50%);
   margin-top: 2px;
 }
 
-/* Make sure the dropdown container doesn't clip the menu */
 .action-cell {
   position: relative;
   overflow: visible;
 }
 
-/* Ensure table cells don't clip the dropdown */
 table {
   overflow: visible;
 }
