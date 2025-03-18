@@ -18,6 +18,7 @@ class cartModel {
   async getCartItemsByIds(cartId) {
     const query = `
     SELECT 
+      ci.cart_item_id,
       p.product_name AS name,
       pa.size,
       pa.color,

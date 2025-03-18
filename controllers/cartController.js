@@ -24,8 +24,26 @@ function createCartController(cartModel, userModel) {
     }
   }
 
+  async function removeFromCart(req, res) {
+    try {
+      const { cart_item_id } = req.params;
+
+      const result = await cartModel.deleteCartItem(cart_item_id);
+
+      if(result.affectedRows === 0) {
+        return res.status(400).send("Failed to remove from cart");
+      }
+
+      res.redirect("/checkout");
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+      res.status(500).send("Error removing from cart");
+    }
+  }
+
   return {
     addToCart,
+    removeFromCart
   }
 }
 

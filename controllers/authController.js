@@ -28,6 +28,9 @@ function createAuthController(userModel) {
         req.session.authenticated = true;
         req.session.userId = user[0].user_id;
         req.session.role = user[0].role;
+        req.session.firstName = user[0].first_name;
+        req.session.lastName = user[0].last_name;
+        req.session.email = user[0].email;
 
         res.redirect('/');
     }
@@ -58,7 +61,7 @@ function createAuthController(userModel) {
     }
 
     async function authentication(req, res, next) {
-        
+
         if (!req.session || !req.session.authenticated) {
             return res.redirect('/auth/login');
         }

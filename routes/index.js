@@ -67,9 +67,6 @@ function createRouter(db) {
       const cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
       const addressInfo = await addressModel.getAddressByUserId(req.session.userId);
 
-      console.log(cardInfo);
-      console.log(addressInfo);
-
       const mockData = {
         order: {
           products: cartItems,
@@ -79,9 +76,6 @@ function createRouter(db) {
           }
         },
         customer: {
-          contact: {
-            email: "example@example.com"
-          },
           delivery: addressInfo,
           payment: cardInfo
         }
