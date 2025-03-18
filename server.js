@@ -75,46 +75,6 @@ async function startServer(dbConnection) {
     ];
     res.render('pages/backoffice-history-page', { history, activePage: 'history' });
   });
-  const mockhomepage = {
-    carouselImages: [
-      "https://picsum.photos/200/300",
-      "https://picsum.photos/200/300",
-      "https://picsum.photos/200/300"
-    ],
-    discountedProducts: [
-      {
-        id: 1,
-        name: "Product 1",
-        price: 29.99,
-        originalPrice: 49.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 2,
-        name: "Product 2",
-        price: 19.99,
-        originalPrice: 39.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 3,
-        name: "Product 3",
-        price: 39.99,
-        originalPrice: 59.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 4,
-        name: "Product 4",
-        price: 15.99,
-        originalPrice: 29.99,
-        image: "https://picsum.photos/200/300"
-      }
-    ]
-  };
-  app.get('/homepage', (req, res) => {
-    res.render('pages/homepage', { data: mockhomepage });
-  });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
   })
