@@ -21,9 +21,6 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// use authRouter for all routes starting with /auth
-// app.use("/auth", authRouter);
-
 // if this will cause bug?
 // app.set("views", path.join(__dirname, "views"));
 // app.use("/public", express.static(path.join(__dirname, "public")));
@@ -35,7 +32,6 @@ const uploadsDir = path.join(__dirname, "public/uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
-
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
