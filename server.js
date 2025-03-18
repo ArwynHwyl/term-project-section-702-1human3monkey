@@ -125,7 +125,9 @@ const mockData = {
   }
 };
 
-
+app.get('/checkout', (req, res) => {
+  res.render('pages/checkout', { data: mockData });
+});
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
@@ -321,10 +323,6 @@ async function startServer(dbConnection) {
 
   app.get("/product/:name/:id", (req, res) => {
     res.render("product", { productId: req.params.id, session: req.session });
-  });
-
-  app.get('/checkout', (req, res) => {
-    res.render('pages/checkout', { data: mockData, session: req.session });
   });
 
   app.listen(3000, () => {
