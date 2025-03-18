@@ -7,8 +7,9 @@ const createRouter = require("./routes/index");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const dotenv = require("dotenv");
-const productRoute = require('./routes/productRoute');
+const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoutes");
+const ProductModel = require("./models/productModel");
 
 dotenv.config();
 
@@ -30,13 +31,13 @@ if (!fs.existsSync(uploadsDir)) {
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
-  
+
   // Store the database connection in app.locals so it's accessible in routes
   app.locals.db = dbConnection;
 
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
-  app.use("/", categoryRoutes);
+  app.use("/category", categoryRoutes);
 
   app.get("/", (req, res) => {
     res.render("index");
@@ -71,26 +72,32 @@ async function startServer(dbConnection) {
   app.get("/backoffice/product/edit/:id", async (req, res) => {
     try {
       const productId = req.params.id;
-      
+
       // Get product details
-      const [products] = await dbConnection.query(`
+      const [products] = await dbConnection.query(
+        `
         SELECT p.*, c.category_name 
         FROM Product p
         LEFT JOIN Category c ON p.category_id = c.category_id
         WHERE p.product_id = ?
-      `, [productId]);
-      
+      `,
+        [productId]
+      );
+
       if (!products || products.length === 0) {
         return res.status(404).send("Product not found");
       }
-      
+
       // Get product attributes
-      const [variants] = await dbConnection.query(`
+      const [variants] = await dbConnection.query(
+        `
         SELECT color, size, quantity
         FROM ProductAttribute
         WHERE product_id = ?
-      `, [productId]);
-      
+      `,
+        [productId]
+      );
+
       const product = {
         product_id: products[0].product_id,
         image: products[0].image_path,
@@ -99,9 +106,9 @@ async function startServer(dbConnection) {
         description: products[0].description,
         normal_price: products[0].normal_price,
         discount_percent: products[0].discount_percent,
-        variants: variants
+        variants: variants,
       };
-      
+
       res.render("pages/backoffice-product-edit-page", { product });
     } catch (error) {
       console.error("Error fetching product for edit:", error);
@@ -122,12 +129,13 @@ async function startServer(dbConnection) {
         JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
         ORDER BY h.order_date DESC
       `);
-      
+
       // Format the data for the view
-      const history = historyRecords.map(record => {
-        const discountedPrice = record.normal_price * (1 - (record.discount_percent / 100));
+      const history = historyRecords.map((record) => {
+        const discountedPrice =
+          record.normal_price * (1 - record.discount_percent / 100);
         const totalPrice = discountedPrice * record.quantity;
-        
+
         return {
           userId: record.user_id,
           productname: record.product_name,
@@ -136,10 +144,10 @@ async function startServer(dbConnection) {
           quantity: `x ${record.quantity}`,
           price: `${totalPrice.toLocaleString()} THB`,
           status: record.status || "Completed",
-          orderDate: new Date(record.order_date).toLocaleDateString()
+          orderDate: new Date(record.order_date).toLocaleDateString(),
         };
       });
-      
+
       res.render("pages/backoffice-history-page", {
         history,
         activePage: "history",
@@ -149,7 +157,7 @@ async function startServer(dbConnection) {
       res.render("pages/backoffice-history-page", {
         history: [],
         activePage: "history",
-        error: "Failed to load order history"
+        error: "Failed to load order history",
       });
     }
   });
@@ -159,32 +167,35 @@ async function startServer(dbConnection) {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
       const offset = (page - 1) * limit;
-      
+
       // Get products with pagination
-      const [products] = await db.query(`
+      const [products] = await db.query(
+        `
         SELECT p.*, c.category_name 
         FROM Product p
         LEFT JOIN Category c ON p.category_id = c.category_id
         ORDER BY p.created_at DESC
         LIMIT ? OFFSET ?
-      `, [limit, offset]);
-      
+      `,
+        [limit, offset]
+      );
+
       // Get total count for pagination
       const [countResult] = await db.query(`
         SELECT COUNT(*) as total FROM Product
       `);
-      
+
       const totalProducts = countResult[0].total;
       const totalPages = Math.ceil(totalProducts / limit);
-      
+
       res.render("pages/all-products", {
         products,
         pagination: {
           currentPage: page,
           totalPages,
-          totalProducts
+          totalProducts,
         },
-        pageTitle: "All Products"
+        pageTitle: "All Products",
       });
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -193,10 +204,10 @@ async function startServer(dbConnection) {
         pagination: {
           currentPage: 1,
           totalPages: 1,
-          totalProducts: 0
+          totalProducts: 0,
         },
         pageTitle: "All Products",
-        error: "Failed to load products"
+        error: "Failed to load products",
       });
     }
   });
