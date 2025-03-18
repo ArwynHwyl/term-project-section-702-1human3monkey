@@ -170,23 +170,23 @@ body {
     flex: 1;
 }
 
-.card {
+#checkout .card {
     border-radius: 0;
     border: 1px solid black;
 }
 
-.card-body {
+#checkout .card-body {
     background-color: #FFFED2;
 }
 
-.card-title {
+#checkout .card-title {
     font-size: x-large;
     font-weight: 700;
     margin-bottom: 18px !important;
     color: #000000;
 }
 
-.product-item {
+#checkout .product-item {
     display: flex;
     align-items: center;
     margin-bottom: 15px;
@@ -195,7 +195,7 @@ body {
     background-color: #FFFFFF;
 }
 
-.product-item img {
+#checkout .product-item img {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -204,14 +204,14 @@ body {
     border: 1px solid #DDDDDD;
 }
 
-.product-item h6 {
+#checkout .product-item h6 {
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 5px;
     color: #000000;
 }
 
-.product-item p {
+#checkout .product-item p {
     font-size: 14px;
     margin-bottom: 5px;
     color: #000000;
