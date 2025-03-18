@@ -15,8 +15,10 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.set("views", path.join(__dirname, "views"));
-app.use("/public", express.static(path.join(__dirname, "public")));
+
+// if this will cause bug?
+// app.set("views", path.join(__dirname, "views"));
+// app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -201,6 +203,10 @@ async function startServer(dbConnection) {
 
   app.get("/product/:name/:id", (req, res) => {
     res.render("product", { productId: req.params.id });
+  });
+
+  app.get("/", (req, res) => {
+    res.render("index");
   });
 
   app.listen(3000, () => {
