@@ -9,7 +9,9 @@ const path = require("path");
 const createRouter = require("./routes/index");
 const fs = require("fs");
 const dotenv = require("dotenv");
-const productRoute = require('./routes/productRoute');
+const productRoute = require("./routes/productRoute");
+const categoryRoutes = require("./routes/categoryRoutes");
+const ProductModel = require("./models/productModel");
 
 dotenv.config();
 
@@ -61,6 +63,7 @@ async function startServer(dbConnection) {
 
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
+  app.use("/category", categoryRoutes);
 
   app.get("/contact", (req, res) => {
     const title = "Contact US";
@@ -99,7 +102,9 @@ async function startServer(dbConnection) {
         FROM Product p
         LEFT JOIN Category c ON p.category_id = c.category_id
         WHERE p.product_id = ?
-      `, [productId]);
+      `,
+        [productId]
+      );
 
       if (!products || products.length === 0) {
         return res.status(404).send("Product not found");
