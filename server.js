@@ -7,7 +7,6 @@ const testDatabaseConnection = require("./services/testDatabaseConnection");
 const createTables = require("./services/database");
 const path = require("path");
 const createRouter = require("./routes/index");
-const bodyParser = require("body-parser");
 const fs = require("fs");
 const dotenv = require("dotenv");
 const productRoute = require('./routes/productRoute');
@@ -38,16 +37,30 @@ if (!fs.existsSync(uploadsDir)) {
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
-  
+
   // Store the database connection in app.locals so it's accessible in routes
   app.locals.db = dbConnection;
 
+  // Set up session store
+  const sessionStore = new mysqlStore(config, dbConnection);
+
+  app.use(
+    session({
+      store: sessionStore,
+      secret: "jklfsodifjsktnwjasdp465dd", // A secret key used to sign the session ID cookie
+      resave: true, // Forces the session to be saved back to the session store
+      saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
+      cookie: {
+        maxAge: 3600000, // Sets the cookie expiration time in milliseconds (1 hour here)
+        sameSite: true,
+        httpOnly: true, // Reduces client-side script control over the cookie
+        secure: false, // Ensures cookies are only sent over HTTPS //we do not impmentment HTTPS yet, so, this is false
+      },
+    })
+  );
+
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
-
-  app.get("/", (req, res) => {
-    res.render("index");
-  });
 
   app.get("/contact", (req, res) => {
     const title = "Contact US";
@@ -68,17 +81,18 @@ async function startServer(dbConnection) {
       map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.965940183367!2d100.49596631482264!3d13.744238990352118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e1a6f7e6b0d%3A0x7c1c1f8e6d0e0b1b!2sICONSIAM!5e0!3m2!1sen!2sth!4v1611608431910!5m2!1sen!2sth",
     };
 
-    res.render("contact", {
+    res.render("pages/contact", {
       pageTitle: title,
       pageDescription: description,
       pageContact: contact,
+      session: req.session,
     });
   });
 
   app.get("/backoffice/product/edit/:id", async (req, res) => {
     try {
       const productId = req.params.id;
-      
+
       // Get product details
       const [products] = await dbConnection.query(`
         SELECT p.*, c.category_name 
@@ -86,18 +100,18 @@ async function startServer(dbConnection) {
         LEFT JOIN Category c ON p.category_id = c.category_id
         WHERE p.product_id = ?
       `, [productId]);
-      
+
       if (!products || products.length === 0) {
         return res.status(404).send("Product not found");
       }
-      
+
       // Get product attributes
       const [variants] = await dbConnection.query(`
         SELECT color, size, quantity
         FROM ProductAttribute
         WHERE product_id = ?
       `, [productId]);
-      
+
       const product = {
         product_id: products[0].product_id,
         image: products[0].image_path,
@@ -108,7 +122,7 @@ async function startServer(dbConnection) {
         discount_percent: products[0].discount_percent,
         variants: variants
       };
-      
+
       res.render("pages/backoffice-product-edit-page", { product });
     } catch (error) {
       console.error("Error fetching product for edit:", error);
@@ -129,12 +143,12 @@ async function startServer(dbConnection) {
         JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
         ORDER BY h.order_date DESC
       `);
-      
+
       // Format the data for the view
       const history = historyRecords.map(record => {
         const discountedPrice = record.normal_price * (1 - (record.discount_percent / 100));
         const totalPrice = discountedPrice * record.quantity;
-        
+
         return {
           userId: record.user_id,
           productname: record.product_name,
@@ -146,7 +160,7 @@ async function startServer(dbConnection) {
           orderDate: new Date(record.order_date).toLocaleDateString()
         };
       });
-      
+
       res.render("pages/backoffice-history-page", {
         history,
         activePage: "history",
@@ -166,7 +180,7 @@ async function startServer(dbConnection) {
       const page = parseInt(req.query.page) || 1;
       const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
       const offset = (page - 1) * limit;
-      
+
       // Get products with pagination
       const [products] = await db.query(`
         SELECT p.*, c.category_name 
@@ -175,15 +189,15 @@ async function startServer(dbConnection) {
         ORDER BY p.created_at DESC
         LIMIT ? OFFSET ?
       `, [limit, offset]);
-      
+
       // Get total count for pagination
       const [countResult] = await db.query(`
         SELECT COUNT(*) as total FROM Product
       `);
-      
+
       const totalProducts = countResult[0].total;
       const totalPages = Math.ceil(totalProducts / limit);
-      
+
       res.render("pages/all-products", {
         products,
         pagination: {
@@ -191,7 +205,8 @@ async function startServer(dbConnection) {
           totalPages,
           totalProducts
         },
-        pageTitle: "All Products"
+        pageTitle: "All Products",
+        session: req.session
       });
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -209,28 +224,8 @@ async function startServer(dbConnection) {
   });
 
   app.get("/product/:name/:id", (req, res) => {
-    res.render("product", { productId: req.params.id });
+    res.render("product", { productId: req.params.id, session: req.session });
   });
-
-  // Set up session store
-  const sessionStore = new mysqlStore(config, db);
-
-  app.use(
-    session({
-      store: sessionStore,
-      secret: "jklfsodifjsktnwjasdp465dd", // A secret key used to sign the session ID cookie
-      resave: true, // Forces the session to be saved back to the session store
-      saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
-      cookie: {
-        maxAge: 3600000, // Sets the cookie expiration time in milliseconds (1 hour here)
-        sameSite: true,
-        httpOnly: true, // Reduces client-side script control over the cookie
-        secure: false, // Ensures cookies are only sent over HTTPS //we do not impmentment HTTPS yet, so, this is false
-      },
-    })
-  )
-
-  app.use(createRouter(db));
 
   app.listen(3000, () => {
     console.log("Server running on port 3000");
