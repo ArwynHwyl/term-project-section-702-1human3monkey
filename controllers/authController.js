@@ -58,7 +58,8 @@ function createAuthController(userModel) {
     }
 
     async function authentication(req, res, next) {
-        if (!req.session.authenticated) {
+        
+        if (!req.session || !req.session.authenticated) {
             return res.redirect('/auth/login');
         }
 
