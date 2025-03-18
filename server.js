@@ -110,6 +110,12 @@ async function startServer(dbConnection) {
         price: 15.99,
         originalPrice: 29.99,
         image: "https://picsum.photos/200/300"
+      },{
+        id: 5,
+        name: "Product 4",
+        price: 15.99,
+        originalPrice: 29.99,
+        image: "https://picsum.photos/200/300"
       }
     ]
   };
