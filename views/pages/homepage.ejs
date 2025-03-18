@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAZZLE</title>
+  <link rel="stylesheet" href="/public/css/homepagestyles.css">
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="main-content">
+      <section class="highlight">
+        <h2>HIGHLIGHT</h2>
+        <div class="carousel" id="carousel">
+          <button class="carousel-prev">&lt;</button>
+          <div class="carousel-inner">
+            <% data.carouselImages.forEach(img => { %>
+              <img src="<%= img %>" alt="Carousel Image" style="width: 100%;">
+            <% }) %>
+          </div>
+          <button class="carousel-next">&gt;</button>
+        </div>
+      </section>
+
+      <section class="discounted-products">
+        <h2>SHOP THE DISCOUNTED PRODUCTS</h2>
+        <div class="product-grid" id="productGrid">
+          <% data.discountedProducts.forEach(product => { %>
+          <div class="product-card">
+            <img src="<%= product.image %>" alt="<%= product.name %>">
+            <h4><%= product.name %></h4>
+            <p><s>$<%= product.originalPrice %></s> $<%= product.price %></p>
+          </div>
+          <% }) %>
+        </div>
+      </section>
+    </div>
+    <aside class="sidebar">
+      <div class="card">
+        <h3>ALL PRODUCT</h3>
+        <img src="https://via.placeholder.com/100x100?text=All+Products" alt="All Products">
+        <button onclick="window.location.href='/products'">View</button>
+      </div>
+      <div class="card">
+        <h3>ALL CATEGORY</h3>
+        <img src="https://via.placeholder.com/100x100?text=All+Categories" alt="All Categories">
+        <button onclick="window.location.href='/categories'">View</button>
+      </div>
+    </aside>
+  </div>
+</body>
+
+</html>
