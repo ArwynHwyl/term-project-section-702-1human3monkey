@@ -8,6 +8,14 @@ body {
     background-color: #f8f9fa;
 }
 
+.pay-btn{
+    background-color: #8B1A1A;
+    color: white;
+    border-radius: 8px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
 .equal-height {
     display: flex;
     align-items: stretch;
@@ -18,7 +26,7 @@ body {
 .equal-height .col-lg-6 {
     display: flex;
     flex-direction: column;
-    flex: 1; /* ทำให้ทั้งสองฝั่งขยายเต็มความสูงของ .equal-height */
+    flex: 1; 
 }
 
 #product-summary-col, #contact-payment-col {
@@ -30,13 +38,13 @@ body {
     position: relative;
     overflow-y: hidden;
     background-color: #FFFFFF;
-    flex: 1; /* ขยายเต็มความสูงของคอนเทนเนอร์ */
+    flex: 1; 
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
 }
 
-/* ปรับให้ตารางภายในเลื่อนได้ */
+/* scroll table */
 .table-product-wrapper {
     max-height: 500px;
     overflow-y: auto;
@@ -44,7 +52,7 @@ body {
     border: 1px solid #ddd;
     padding: 10px;
     position: relative;
-    flex: 1; /* ให้ตารางขยายเต็มความสูงที่เหลือใน card-body */
+    flex: 1; 
 }
 
 .table-product-wrapper::-webkit-scrollbar {
@@ -138,7 +146,7 @@ body {
     display: flex;
     flex-direction: column;
     margin-bottom: 0;
-    flex: 1; /* ให้ card ขยายเต็มความสูง */
+    flex: 1; 
 }
 
 #product-summary-col .card-body {
@@ -147,19 +155,19 @@ body {
     background-color: #FFFFFF;
     padding: 20px;
     position: relative;
-    flex: 1; /* ให้ card-body ขยายเต็มความสูง */
+    flex: 1; 
 }
 
 #contact-payment-col {
     overflow-y: hidden;
     background-color: #FFFED2;
-    flex: 1; /* ขยายเต็มความสูงของคอนเทนเนอร์ */
+    flex: 1; 
 }
 
 #contact-payment-col .card-body {
     display: flex;
     flex-direction: column;
-    flex: 1; /* ขยายเต็มความสูง */
+    flex: 1;
 }
 
 .card {
