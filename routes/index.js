@@ -3,105 +3,22 @@ const createAuthRoute = require('./auth');
 const createBackofficeCategoryRoute = require("./backofficeCategoryRoute");
 const createBackofficeProductRoute = require("./backofficeProductRoute");
 const UserModel = require('../models/userModel');
+const CartModel = require('../models/cartModel');
+const ProductModel = require('../models/productModel');
 const AuthController = require('../controllers/authController');
+const CartController = require('../controllers/cartController');
 const createCartRoute = require('../routes/cart');
-
-const mockData = {
-  order: {
-    products: [
-      {
-        name: "Product 1",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },
-      {
-        name: "Product 2",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
-        name: "Product 2",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
-        name: "Product 1",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
-        name: "Product 1",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
-        name: "Product 1",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
-        name: "Product 1",
-        size: "L",
-        color: "Red",
-        price: 12989,
-        currency: "THB",
-        quantity: 1,
-        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      }
-    ],
-    shipping: {
-      cost: 50,
-      currency: "THB"
-    }
-  },
-  customer: {
-    contact: {
-      email: "example@example.com"
-    },
-    delivery: {
-      country: "Thailand",
-      firstName: "John",
-      lastName: "Doe",
-      address: "123 Main St",
-      city: "Bangkok",
-      province: "Bangkok",
-      postalCode: "10100",
-      phone: "0123456789"
-    },
-    payment: {
-      cardNumber: "1234 5678 9012 3456",
-      expiryDate: "12/25",
-      securityCode: "123"
-    }
-  }
-};
 
 function createRouter(db) {
   const router = express.Router();
   const userModel = new UserModel(db);
+  const cartModel = new CartModel(db);
+  const productModel = new ProductModel(db);
   const authController = new AuthController(userModel);
+  const cartController = new CartController(cartModel, userModel);
 
   router.get("/", (req, res) => {
-      res.render("index", { session: req.session });
+    res.render("index", { session: req.session });
   });
 
   router.get("/contact", (req, res) => {
@@ -135,10 +52,54 @@ function createRouter(db) {
     res.redirect("/backoffice/category");
   });
 
-  router.get('/checkout', authController.authentication, (req, res) => {
-    res.render('pages/checkout', { data: mockData, session: req.session });
+  router.get('/checkout', authController.authentication, async (req, res) => {
+    try {
+      // get cartId from user session
+      const [cart_id] = await userModel.getCart(req.session.userId);
+
+      // get cart items by cart id
+      const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
+
+      console.log(cartItems);
+
+
+      const mockData = {
+        order: {
+          products: cartItems,
+          shipping: {
+            cost: 50,
+            currency: "THB"
+          }
+        },
+        customer: {
+          contact: {
+            email: "example@example.com"
+          },
+          delivery: {
+            country: "Thailand",
+            firstName: "John",
+            lastName: "Doe",
+            address: "123 Main St",
+            city: "Bangkok",
+            province: "Bangkok",
+            postalCode: "10100",
+            phone: "0123456789"
+          },
+          payment: {
+            card_number: "1234 5678 9012 3456",
+            expiration_date: "12/25",
+            cvv: "123"
+          }
+        }
+      };
+
+      res.render('pages/checkout', { data: mockData, session: req.session });
+    } catch (error) {
+      console.error("Error getting cart items:", error);
+      res.status(500).send("Error getting cart items");
+    }
   });
-  
+
   router.use("/auth", createAuthRoute(db));
   router.use("/cart", createCartRoute(db));
   router.use(createBackofficeCategoryRoute(db));

@@ -43,11 +43,12 @@
                           </td>
                           <td data-cell="Price">
                             <%= product.price %>
-                              <%= product.currency %>
+                              THB
                           </td>
                           <td class="flex">
                             <%= %>
-                            <input type="number" id="quantity" class="form-control" value="1" min="1" max="99" pattern="[0-9]*" inputmode="numeric">
+                              <input type="number" id="quantity" class="form-control" value="1" min="1" max="99"
+                                pattern="[0-9]*" inputmode="numeric">
                           </td>
                           <td>
                             <a href="" class="icon-link">
@@ -60,7 +61,7 @@
                             <tr>
                               <td colspan="5">No products available.</td>
                             </tr>
-                          <% } %>
+                            <% } %>
                   </tbody>
                 </table>
               </div>
@@ -184,19 +185,19 @@
                   <label for="creditCard" class="form-label">Credit card</label>
                 </div>
                 <input type="text" class="form-control" id="creditCard"
-                  value="<%= (data && data.customer && data.customer.payment && data.customer.payment.cardNumber) ? data.customer.payment.cardNumber : '' %>"
+                  value="<%= (data && data.customer && data.customer.payment && data.customer.payment.card_number) ? data.customer.payment.card_number : '' %>"
                   placeholder="Card number">
                 <div class="row mb-3">
                   <div class="col" style="padding: 0; padding-right: 5px;">
                     <label for="expiryDate" class="form-label">Expiration Date (MM/YY)</label>
                     <input type="text" class="form-control" id="expiryDate"
-                      value="<%= (data && data.customer && data.customer.payment && data.customer.payment.expiryDate) ? data.customer.payment.expiryDate : '' %>"
+                      value="<%= (data && data.customer && data.customer.payment && data.customer.payment.expiration_date) ? data.customer.payment.expiration_date : '' %>"
                       placeholder="MM/YY">
                   </div>
                   <div class="col" style="padding: 0; padding-left: 5px;">
                     <label for="securityCode" class="form-label">Security Code</label>
                     <input type="text" class="form-control" id="securityCode"
-                      value="<%= (data && data.customer && data.customer.payment && data.customer.payment.securityCode) ? data.customer.payment.securityCode : '' %>"
+                      value="<%= (data && data.customer && data.customer.payment && data.customer.payment.cvv) ? data.customer.payment.cvv : '' %>"
                       placeholder="Security Code">
                   </div>
                 </div>
