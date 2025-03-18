@@ -1,3 +1,4 @@
+const session = require("express-session");
 const db = require("../services/db");
 
 async function getAllCategories(req, res) {
@@ -7,7 +8,7 @@ async function getAllCategories(req, res) {
       "SELECT category_id, category_name AS name, image_path AS icon FROM Category"
     );
 
-    res.render("category", { categories });
+    res.render("category", { categories, session: req.session });
   } catch (error) {
     console.error("Error fetching categories:", error);
     res.status(500).send("Error fetching categories");
@@ -19,6 +20,8 @@ async function getCategoryProducts(req, res) {
   const page = parseInt(req.query.page) || 1;
   const limit = 6;
   const offset = (page - 1) * limit;
+
+  const db = req.app.locals.db;
 
   try {
     const [products] = await db.query(
@@ -48,6 +51,7 @@ async function getCategoryProducts(req, res) {
           currentPage: page,
           totalPages,
         },
+        session: req.session,
       });
   } catch (error) {
     console.error("Error fetching category products:", error);
