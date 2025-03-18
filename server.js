@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const fs = require("fs");
 const dotenv = require("dotenv");
 const productRoute = require('./routes/productRoute');
+const categoryRoutes = require("./routes/categoryRoutes");
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ async function startServer(dbConnection) {
 
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
+  app.use("/", categoryRoutes);
 
   app.get("/", (req, res) => {
     res.render("index");
