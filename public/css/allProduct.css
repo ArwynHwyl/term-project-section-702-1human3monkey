@@ -15,8 +15,7 @@
   .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    border: 1px solid #ddd;
+    gap: 8px;
   }
   
   .product-item {
@@ -24,6 +23,7 @@
     background-color: #fff;
     transition: transform 0.3s ease;
     overflow: hidden;
+    width: 18rem;
   }
   
   .product-item:hover {
@@ -38,7 +38,8 @@
   }
   
   .product-image {
-    height: 200px;
+    height: 600px;
+    width: 200px;
     overflow: hidden;
     position: relative;
   }
@@ -55,7 +56,6 @@
   }
   
   .product-info {
-    padding: 10px;
     text-align: left;
   }
   
