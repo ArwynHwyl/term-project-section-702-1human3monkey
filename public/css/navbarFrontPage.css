@@ -14,7 +14,7 @@
 
 .navbar-toggler {
     border: 1px solid rgba(255, 255, 255, 0.55) !important;
-    margin-right: 1.5rem;
+    margin-right: 2rem;
 }
 
 .dropdown-item a, .dropdown-item li{
@@ -70,4 +70,19 @@
     color: white;
     margin-left: 1rem;
     font-size: 1.2rem;
+}
+
+#userIcon{
+    width: 2rem !important;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+    margin-left: 16px;
+}
+
+#userIcon i {
+    margin: 0 !important;
 }
