@@ -205,7 +205,8 @@ async function startServer(dbConnection) {
           totalPages,
           totalProducts
         },
-        pageTitle: "All Products"
+        pageTitle: "All Products",
+        session: req.session
       });
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -223,7 +224,7 @@ async function startServer(dbConnection) {
   });
 
   app.get("/product/:name/:id", (req, res) => {
-    res.render("product", { productId: req.params.id });
+    res.render("product", { productId: req.params.id, session: req.session });
   });
 
   app.listen(3000, () => {

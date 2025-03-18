@@ -10,11 +10,11 @@ function createRouter(db) {
   const userModel = new UserModel(db);
   const authController = new AuthController(userModel);
 
-  router.get("/", authController.authentication, (req, res) => {
+  router.get("/", (req, res) => {
       res.render("index", { session: req.session });
   });
 
-  router.get("/contact", authController.authentication, (req, res) => {
+  router.get("/contact", (req, res) => {
     const title = "Contact US";
     const description =
       "We're here to help with any questions about our products or services.";
