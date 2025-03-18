@@ -21,6 +21,99 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+const mockData = {
+  order: {
+    products: [
+      {
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },
+      {
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      }
+    ],
+    shipping: {
+      cost: 50,
+      currency: "THB"
+    }
+  },
+  customer: {
+    contact: {
+      email: "example@example.com"
+    },
+    delivery: {
+      country: "Thailand",
+      firstName: "John",
+      lastName: "Doe",
+      address: "123 Main St",
+      city: "Bangkok",
+      province: "Bangkok",
+      postalCode: "10100",
+      phone: "0123456789"
+    },
+    payment: {
+      cardNumber: "1234 5678 9012 3456",
+      expiryDate: "12/25",
+      securityCode: "123"
+    }
+  }
+};
+
+app.get('/checkout', (req, res) => {
+  res.render('checkout', { data: mockData });
+});
+
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
@@ -79,5 +172,6 @@ async function startServer(dbConnection) {
     console.log("Server running on port 3000");
   })
 }
+
 
 startServer(db);
