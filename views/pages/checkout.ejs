@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DAZZLE - Checkout</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/css/cartstyle.css">
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+    <%- include('../partials/navbarFrontPage') %>
+    <div class="container mt-4">
+        <div class="row equal-height">
+          <!-- Product Summary -->
+          <div class="col-lg-6" id="product-summary-col">
+            <div class="card mb-3 border-light shadow-sm">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title fw-bold">Product Summary</h5>
+                <div class="table-product-wrapper">
+                  <table class="table-product-selected">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Product Name</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% if (data && data.order && data.order.products) { %>
+                        <% data.order.products.forEach(product => { %>
+                          <tr>
+                            <td data-cell="Image">
+                              <% if (product.src) { %>
+                                <img src="<%= product.src %>" alt="<%= product.name %>" class="img-thumbnail" onerror="this.onerror=null; this.src='https://picsum.photos/200/300';">
+                              <% } else { %>
+                                <img src="https://picsum.photos/200/300" alt="<%= product.name %>" class="img-thumbnail">
+                              <% } %>
+                            </td>
+                            <td data-cell="Product Name"><%= product.name %></td>
+                            <td data-cell="Size"><%= product.size %></td>
+                            <td data-cell="Color"><span class="badge bg-danger rounded-circle"></span> <%= product.color %></td>
+                            <td data-cell="Price"><%= product.price %> <%= product.currency %></td>
+                          </tr>
+                        <% }) %>
+                      <% } else { %>
+                        <tr><td colspan="5">No products available.</td></tr>
+                      <% } %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="price-summary">
+              <% if (data && data.order && data.order.products) { %>
+                <% let total = 0; %>
+                <% data.order.products.forEach(product => { %>
+                  <% const itemTotal = product.price * product.quantity; %>
+                  <% total += itemTotal; %>
+                  <div class="d-flex justify-content-between mb-2">
+                    <div class="price-item">
+                      <span><%= product.name %></span>
+                      <span class="ms-4 size-label"><%= product.size %></span>
+                      <span class="ms-2"><span class="badge bg-danger rounded-circle"></span> <%= product.color %></span>
+                    </div>
+                    <div class="price-values">
+                      <span>-<%= itemTotal %> <%= product.currency %></span>
+                      <span><%= itemTotal %> <%= product.currency %></span>
+                    </div>
+                  </div>
+                <% }) %>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Shipping</span>
+                  <span></span>
+                  <span><%= data.order.shipping.cost %> <%= data.order.shipping.currency %></span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold total-row">
+                  <span>TOTAL</span>
+                  <span></span>
+                  <span><%= total + data.order.shipping.cost %> <%= data.order.shipping.currency %></span>
+                </div>
+              <% } %>
+            </div>
+          </div>
+    <%- include('../partials/footer') %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
