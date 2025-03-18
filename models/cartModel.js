@@ -4,6 +4,17 @@ class cartModel {
     this.historyModel = historyModel;
   }
 
+  async getCartItems(cartId) {
+    const query = "SELECT * FROM CartItem WHERE cart_id = ?";
+    try {
+      const [cartItems] = await this.db.execute(query, [cartId]);
+      return cartItems;
+    } catch (error) {
+      console.error("Error getting cart items: ", error);
+      throw new Error("Error getting cart items");
+    }
+  }
+
   async addCartItems(cartId, productId, productAttributeId, quantity) {
     const query = "INSERT INTO CartItem (cart_id, product_id, product_attribute_id, quantity) VALUES (?, ?, ?, ?)";
 
@@ -53,10 +64,9 @@ class cartModel {
   }
 
   async addCartItemsToHistory(cartId, userId, addressId, creditCardId, orderDate) {
-    const getCartItemsQuery = "SELECT * FROM CartItem WHERE cart_id = ?";
 
     try {
-      const [cartItems] = await this.db.execute(getCartItemsQuery, [cartId]);
+      const cartItems = await this.getCartItems(cartId);
 
       for (const cartItem of cartItems) {
         await this.historyModel.addHistoryItem(userId, cartItem.cart_item_id, addressId, creditCardId, orderDate);
