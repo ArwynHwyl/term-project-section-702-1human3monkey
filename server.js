@@ -111,7 +111,7 @@ const mockData = {
 };
 
 app.get('/checkout', (req, res) => {
-  res.render('checkout', { data: mockData });
+  res.render('pages/checkout', { data: mockData });
 });
 
 async function startServer(dbConnection) {

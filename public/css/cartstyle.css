@@ -46,11 +46,10 @@ body {
 
 /* scroll table */
 .table-product-wrapper {
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
     border: 1px solid #ddd;
-    padding: 10px;
     position: relative;
     flex: 1; 
 }
@@ -162,6 +161,7 @@ body {
     overflow-y: hidden;
     background-color: #FFFED2;
     flex: 1; 
+    padding: 0;
 }
 
 #contact-payment-col .card-body {
@@ -182,7 +182,7 @@ body {
 .card-title {
     font-size: x-large;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 18px !important;
     color: #000000;
 }
 
