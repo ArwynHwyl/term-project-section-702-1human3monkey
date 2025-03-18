@@ -16,6 +16,7 @@
                       <th>Size</th>
                       <th>Color</th>
                       <th>Price</th>
+                      <th>Quantity</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -43,6 +44,15 @@
                           <td data-cell="Price">
                             <%= product.price %>
                               <%= product.currency %>
+                          </td>
+                          <td class="flex">
+                            <%= %>
+                            <input type="number" id="quantity" class="form-control" value="1" min="1" max="99" pattern="[0-9]*" inputmode="numeric">
+                          </td>
+                          <td>
+                            <a href="" class="icon-link-hover icon-link">
+                              <i class="bi bi-trash3"></i>
+                            </a>
                           </td>
                         </tr>
                         <% }) %>
