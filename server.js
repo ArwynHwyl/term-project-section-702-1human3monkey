@@ -1,5 +1,8 @@
 const express = require("express");
-const db = require("./services/db");
+const bodyParser = require("body-parser");
+const session = require("express-session");
+const mysqlStore = require("express-mysql-session")(session);
+const { db, config } = require("./services/db");
 const testDatabaseConnection = require("./services/testDatabaseConnection");
 const createTables = require("./services/database");
 const path = require("path");
@@ -14,6 +17,10 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// use authRouter for all routes starting with /auth
+// app.use("/auth", authRouter);
 
 // if this will cause bug?
 // app.set("views", path.join(__dirname, "views"));

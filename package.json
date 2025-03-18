@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/RinZ5/term-project-section-702-1human3monkey#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",

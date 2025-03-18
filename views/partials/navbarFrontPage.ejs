@@ -10,11 +10,26 @@
         <div class="navbar-icons">
             <a href="#"><i class="bi bi-search"></i></a>
             <div class="dropdown">
-                <a class="show" data-bs-toggle="dropdown" href="#" id="userDropdown" role="button"
-                    aria-expanded="false">
+                <a class="show" data-bs-toggle="dropdown" href="#" id="userDropdown" role="button">
                     <div class="w-100 rounded-circle" id="userIcon">
                         <i class="bi bi-person-fill"></i>
                     </div>
+                    <ul class="dropdown-menu"
+                        style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);">
+                       <% if(session.role == "admin") { %>
+                        <a href="/backoffice">
+                            <li class="dropdown-item">Backoffice</li>
+                        </a>
+                       <% } else { %>
+                        <a href="/history">
+                            <li class="dropdown-item">History</li>
+                        </a>
+                       <% } %>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <a href="/auth/logout"><li class="dropdown-item">Logout</li></a>
+                    </ul>
                 </a>
                 <ul class="dropdown-menu"
                     style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0.5px, 34px, 0px);">
