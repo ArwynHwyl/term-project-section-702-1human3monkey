@@ -5,6 +5,8 @@ const createBackofficeProductRoute = require("./backofficeProductRoute");
 const UserModel = require('../models/userModel');
 const CartModel = require('../models/cartModel');
 const ProductModel = require('../models/productModel');
+const CreditCardModel = require('../models/creditCardModel');
+const AddressModel = require('../models/addressModel');
 const AuthController = require('../controllers/authController');
 const CartController = require('../controllers/cartController');
 const createCartRoute = require('../routes/cart');
@@ -14,6 +16,8 @@ function createRouter(db) {
   const userModel = new UserModel(db);
   const cartModel = new CartModel(db);
   const productModel = new ProductModel(db);
+  const creditCardModel = new CreditCardModel(db);
+  const addressModel = new AddressModel(db);
   const authController = new AuthController(userModel);
   const cartController = new CartController(cartModel, userModel);
 
@@ -60,8 +64,11 @@ function createRouter(db) {
       // get cart items by cart id
       const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
 
-      console.log(cartItems);
+      const cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
+      const addressInfo = await addressModel.getAddressByUserId(req.session.userId);
 
+      console.log(cardInfo);
+      console.log(addressInfo);
 
       const mockData = {
         order: {
@@ -75,21 +82,8 @@ function createRouter(db) {
           contact: {
             email: "example@example.com"
           },
-          delivery: {
-            country: "Thailand",
-            firstName: "John",
-            lastName: "Doe",
-            address: "123 Main St",
-            city: "Bangkok",
-            province: "Bangkok",
-            postalCode: "10100",
-            phone: "0123456789"
-          },
-          payment: {
-            card_number: "1234 5678 9012 3456",
-            expiration_date: "12/25",
-            cvv: "123"
-          }
+          delivery: addressInfo,
+          payment: cardInfo
         }
       };
 
