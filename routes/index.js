@@ -4,6 +4,96 @@ const createBackofficeCategoryRoute = require("./backofficeCategoryRoute");
 const createBackofficeProductRoute = require("./backofficeProductRoute");
 const UserModel = require('../models/userModel');
 const AuthController = require('../controllers/authController');
+const createCartRoute = require('../routes/cart');
+
+const mockData = {
+  order: {
+    products: [
+      {
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },
+      {
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      }
+    ],
+    shipping: {
+      cost: 50,
+      currency: "THB"
+    }
+  },
+  customer: {
+    contact: {
+      email: "example@example.com"
+    },
+    delivery: {
+      country: "Thailand",
+      firstName: "John",
+      lastName: "Doe",
+      address: "123 Main St",
+      city: "Bangkok",
+      province: "Bangkok",
+      postalCode: "10100",
+      phone: "0123456789"
+    },
+    payment: {
+      cardNumber: "1234 5678 9012 3456",
+      expiryDate: "12/25",
+      securityCode: "123"
+    }
+  }
+};
 
 function createRouter(db) {
   const router = express.Router();
@@ -44,8 +134,13 @@ function createRouter(db) {
   router.get("/backoffice", (req, res) => {
     res.redirect("/backoffice/category");
   });
+
+  router.get('/checkout', authController.authentication, (req, res) => {
+    res.render('pages/checkout', { data: mockData, session: req.session });
+  });
   
   router.use("/auth", createAuthRoute(db));
+  router.use("/cart", createCartRoute(db));
   router.use(createBackofficeCategoryRoute(db));
   router.use(createBackofficeProductRoute(db));
 
