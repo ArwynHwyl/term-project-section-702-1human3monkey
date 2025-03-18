@@ -21,7 +21,98 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+const mockData = {
+  order: {
+    products: [
+      {
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },
+      {
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 2",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      },{
+        name: "Product 1",
+        size: "L",
+        color: "Red",
+        price: 12989,
+        currency: "THB",
+        quantity: 1,
+        src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
+      }
+    ],
+    shipping: {
+      cost: 50,
+      currency: "THB"
+    }
+  },
+  customer: {
+    contact: {
+      email: "example@example.com"
+    },
+    delivery: {
+      country: "Thailand",
+      firstName: "John",
+      lastName: "Doe",
+      address: "123 Main St",
+      city: "Bangkok",
+      province: "Bangkok",
+      postalCode: "10100",
+      phone: "0123456789"
+    },
+    payment: {
+      cardNumber: "1234 5678 9012 3456",
+      expiryDate: "12/25",
+      securityCode: "123"
+    }
+  }
+};
 
+app.get('/checkout', (req, res) => {
+  res.render('checkout', { data: mockData });
+});
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
@@ -76,104 +167,6 @@ async function startServer(dbConnection) {
       { userId: 'h123', productname: 'Elephant Pant', color: 'Vintage Washed Elephant Pant', size: 'Pants', quantity: '1000 THB', price: '0.000011 THB', status: '' }
     ];
     res.render('pages/backoffice-history-page', { history, activePage: 'history' });
-  });
-
-
-  app.set('views', [
-    path.join(__dirname, 'views'),
-    path.join(__dirname, 'views', 'pages')
-  ]);
-  const mockData = {
-    order: {
-      products: [
-        {
-          name: "Product 1",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },
-        {
-          name: "Product 2",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },{
-          name: "Product 2",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },{
-          name: "Product 1",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },{
-          name: "Product 1",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },{
-          name: "Product 1",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        },{
-          name: "Product 1",
-          size: "L",
-          color: "Red",
-          price: 12989,
-          currency: "THB",
-          quantity: 1,
-          src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-        }
-      ],
-      shipping: {
-        cost: 50,
-        currency: "THB"
-      }
-    },
-    customer: {
-      contact: {
-        email: "example@example.com"
-      },
-      delivery: {
-        country: "Thailand",
-        firstName: "John",
-        lastName: "Doe",
-        address: "123 Main St",
-        city: "Bangkok",
-        province: "Bangkok",
-        postalCode: "10100",
-        phone: "0123456789"
-      },
-      payment: {
-        cardNumber: "1234 5678 9012 3456",
-        expiryDate: "12/25",
-        securityCode: "123"
-      }
-    }
-  };
-  
-  app.get('/checkout', (req, res) => {
-    res.render('pages/checkout', { data: mockData });
   });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
