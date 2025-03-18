@@ -28,7 +28,7 @@ async function startServer(dbConnection) {
   app.use(createRouter(dbConnection));
 
   app.get("/", (req, res) => {
-    res.render("index");
+    res.redirect("/homepage");
   });
 
   app.get("/contact", (req, res) => {
@@ -46,8 +46,7 @@ async function startServer(dbConnection) {
         instagram: "https://www.instagram.com/since22_arwynhwyl"
       },
       map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.965940183367!2d100.49596631482264!3d13.744238990352118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e1a6f7e6b0d%3A0x7c1c1f8e6d0e0b1b!2sICONSIAM!5e0!3m2!1sen!2sth!4v1611608431910!5m2!1sen!2sth"
-    }
-
+    };
 
     res.render("contact", {
       pageTitle: title,
@@ -55,6 +54,7 @@ async function startServer(dbConnection) {
       pageContact: contact
     });
   });
+
   app.get('/backoffice/product/edit/:id', (req, res) => {
     const product = {
       image: 'https://via.placeholder.com/100',
@@ -68,6 +68,7 @@ async function startServer(dbConnection) {
     };
     res.render('pages/backoffice-product-edit-page', { product });
   });
+
   app.get('/backoffice/history', (req, res) => {
     const history = [
       { userId: '1123', productname: 'Hoodie', color: 'Black', size: 'Hood', quantity: 'x 50000', price: '2,252.231 THB', status: '' },
@@ -76,79 +77,9 @@ async function startServer(dbConnection) {
     res.render('pages/backoffice-history-page', { history, activePage: 'history' });
   });
 
-  const mockhomepage = {
-    carouselImages: [
-      "https://picsum.photos/200/300",
-      "https://picsum.photos/200/300",
-      "https://picsum.photos/200/300"
-    ],
-    discountedProducts: [
-      {
-        id: 1,
-        name: "Product 1",
-        price: 29.99,
-        originalPrice: 49.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 2,
-        name: "Product 2",
-        price: 19.99,
-        originalPrice: 39.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 3,
-        name: "Product 3",
-        price: 39.99,
-        originalPrice: 59.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 4,
-        name: "Product 4",
-        price: 15.99,
-        originalPrice: 29.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 5,
-        name: "Product 5",
-        price: 25.99,
-        originalPrice: 45.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 6,
-        name: "Product 6",
-        price: 35.99,
-        originalPrice: 55.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 7,
-        name: "Product 7",
-        price: 18.99,
-        originalPrice: 34.99,
-        image: "https://picsum.photos/200/300"
-      },
-      {
-        id: 8,
-        name: "Product 8",
-        price: 22.99,
-        originalPrice: 40.99,
-        image: "https://picsum.photos/200/300"
-      }
-    ]
-  };
-
-  app.get('/homepage', (req, res) => {
-    console.log("Sending mockhomepage with", mockhomepage.discountedProducts.length, "products"); // Debug
-    res.render('pages/homepage', { data: mockhomepage });
-  });
   app.listen(3000, () => {
     console.log("Server running on port 3000");
-  })
+  });
 }
 
 startServer(db);
