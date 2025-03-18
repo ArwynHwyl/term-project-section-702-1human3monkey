@@ -1,24 +1,19 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DAZZLE</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/public/css/homepagestyles.css">
-</head>
+
 <body>
+  <link rel="stylesheet" href="/public/css/homepagestyles.css">
+  <%- include('../partials/header') %>
+  <%- include('../partials/navbarFrontPage') %>
   <div class="container">
     <div class="main-content">
-      <section class="highlight mb-4">
-        <h2 class="h4 border-bottom pb-2">HIGHLIGHT</h2>
+      <section class="highlight mb-4" >
+        <h2 class="h4 border-bottom pb-2" style="padding-left: 10px;">HIGHLIGHT</h2>
         <div id="carouselHighlight" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
           <div class="carousel-inner">
             <% if (data.carouselImages && data.carouselImages.length > 0) { %>
               <% data.carouselImages.forEach((img, index) => { %>
                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                   <a href="/category/<%= index %>">
-                    <img src="<%= img %>" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
+                    <img src="/public/images/highlightbadge.jpg" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
                   </a>
                 </div>
               <% }) %>
@@ -87,14 +82,14 @@
       <div class="card mb-3">
         <div class="card-body text-center">
           <h3 class="card-title">ALL PRODUCT</h3>
-          <img src="https://picsum.photos/100/100" class="card-img-top mb-2" alt="All Products">
+          <img src="/public/images/allproduct.jpg" class="card-img-top mb-2" alt="All Products" style="width: 100%; height: 100%;">
           <a href="/products" class="btn btn-danger">View</a>
         </div>
       </div>
       <div class="card">
         <div class="card-body text-center">
           <h3 class="card-title">ALL CATEGORY</h3>
-          <img src="https://picsum.photos/100/100" class="card-img-top mb-2" alt="All Categories">
+          <img src="/public/images/allcategory.png" class="card-img-top mb-2" alt="All Categories" style="width: 100%; height: 100%;">
           <a href="/categories" class="btn btn-danger">View</a>
         </div>
       </div>
