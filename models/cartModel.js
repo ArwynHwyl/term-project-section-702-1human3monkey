@@ -15,6 +15,33 @@ class cartModel {
     }
   }
 
+  async getCartItemsByIds(cartId) {
+    const query = `
+    SELECT 
+      p.product_name AS name,
+      pa.size,
+      pa.color,
+      p.normal_price AS price,
+      ci.quantity,
+      p.image_path AS src
+    FROM 
+      CartItem ci
+    JOIN 
+      Product p ON ci.product_id = p.product_id
+    JOIN 
+      ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
+    WHERE 
+      ci.cart_id = ?
+  `;
+    try {
+      const [items] = await this.db.execute(query, [cartId]);
+      return items;
+    } catch (error) {
+      console.error("Error getting cart items by ids: ", error);
+      throw new Error("Error getting cart items by ids");
+    }
+  }
+
   async addCartItems(cartId, productId, productAttributeId, quantity) {
     const query = "INSERT INTO CartItem (cart_id, product_id, product_attribute_id, quantity) VALUES (?, ?, ?, ?)";
 
