@@ -10,7 +10,7 @@ const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-app.set('views', path.join(__dirname, 'views')); 
+app.set('views', path.join(__dirname, 'views'));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -110,16 +110,40 @@ async function startServer(dbConnection) {
         price: 15.99,
         originalPrice: 29.99,
         image: "https://picsum.photos/200/300"
-      },{
+      },
+      {
         id: 5,
-        name: "Product 4",
-        price: 15.99,
-        originalPrice: 29.99,
+        name: "Product 5",
+        price: 25.99,
+        originalPrice: 45.99,
+        image: "https://picsum.photos/200/300"
+      },
+      {
+        id: 6,
+        name: "Product 6",
+        price: 35.99,
+        originalPrice: 55.99,
+        image: "https://picsum.photos/200/300"
+      },
+      {
+        id: 7,
+        name: "Product 7",
+        price: 18.99,
+        originalPrice: 34.99,
+        image: "https://picsum.photos/200/300"
+      },
+      {
+        id: 8,
+        name: "Product 8",
+        price: 22.99,
+        originalPrice: 40.99,
         image: "https://picsum.photos/200/300"
       }
     ]
   };
+
   app.get('/homepage', (req, res) => {
+    console.log("Sending mockhomepage with", mockhomepage.discountedProducts.length, "products"); // Debug
     res.render('pages/homepage', { data: mockhomepage });
   });
   app.listen(3000, () => {
