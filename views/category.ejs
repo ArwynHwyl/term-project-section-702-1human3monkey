@@ -14,7 +14,7 @@
                     <div class="carousel-track">
                         <% categories.forEach((category, index)=> { %>
                             <div class="category-item" data-index="<%= index %>">
-                                <a href="<%= category.url %>" class="text-decoration-none">
+                                <a href="/category/<%= encodeURIComponent(category.name) %>" class="text-decoration-none">
                                     <div class="category-box">
                                         <div class="category-icon">
                                             <img src="<%= category.icon %>" alt="<%= category.name %>"
