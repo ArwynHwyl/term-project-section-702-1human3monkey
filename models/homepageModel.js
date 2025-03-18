@@ -6,8 +6,9 @@ class HomepageModel {
   async getDiscountedProducts() {
     const query = `
       SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.discount_percent, c.category_name
-      FROM Product p
-      LEFT JOIN Category c ON p.category_id = c.category_id
+      FROM Product p 
+      LEFT JOIN Category c ON p.category_id = c.category_id 
+      WHERE p.discount_percent > 0.00
       ORDER BY p.product_name DESC
     `;
     try {

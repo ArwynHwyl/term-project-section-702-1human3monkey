@@ -12,7 +12,7 @@
     <div class="main-content">
       <section class="highlight mb-4">
         <h2 class="h4 border-bottom pb-2">HIGHLIGHT</h2>
-        <div id="carouselHighlight" class="carousel slide" data-bs-ride="carousel">
+        <div id="carouselHighlight" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
           <div class="carousel-inner">
             <% if (data.carouselImages && data.carouselImages.length > 0) { %>
               <% data.carouselImages.forEach((img, index) => { %>
@@ -41,38 +41,64 @@
 
       <section class="discounted-products mb-4">
         <h2 class="h4 border-bottom pb-2">SHOP THE DISCOUNTED PRODUCTS</h2>
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <div class="row row-cols-1 row-cols-md-4 g-3">
-                <% if (data && data.discountedProducts && data.discountedProducts.length > 0) { %>
-                  <% data.discountedProducts.forEach((product, index) => { %>
-                    <div class="col">
-                      <div class="product-card card h-100">
-                        <img src="<%= product.image_path %>" class="card-img-top" alt="<%= product.product_name %>" style="height: 150px; object-fit: cover;">
-                        <div class="card-body text-center">
-                          <h4 class="card-title"><%= product.product_name %></h4>
-                          <p class="card-text">
-                            <s><%= Number(product.normal_price || 0).toFixed(2) %> THB</s>
-                            <% if (Number(product.normal_price) && Number(product.discount_percent)) { %>
-                              <%= (Number(product.normal_price) * (1 - Number(product.discount_percent))).toFixed(2) %> THB
-                            <% } else { %>
-                              N/A THB
-                            <% } %>
-                          </p>
+            <% if (data.discountedProducts && data.discountedProducts.length > 0) { %>
+              <% let chunkSize = 4; %>
+              <% for (let i = 0; i < Math.ceil(data.discountedProducts.length / chunkSize); i++) { %>
+                <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                  <div class="row row-cols-1 row-cols-md-4 g-3">
+                    <% for (let j = i * chunkSize; j < (i + 1) * chunkSize && j < data.discountedProducts.length; j++) { %>
+                      <div class="col">
+                        <div class="product-card card h-100">
+                          <img src="<%= data.discountedProducts[j].image_path || 'https://picsum.photos/200/300' %>" class="card-img-top" alt="<%= data.discountedProducts[j].product_name || 'Product' %>" style="height: 150px; object-fit: cover; transition: opacity 0.5s;">
+                          <div class="card-body text-center">
+                            <h4 class="card-title"><%= data.discountedProducts[j].product_name || 'Unnamed Product' %></h4>
+                            <p class="card-text">
+                              <s><%= Number(data.discountedProducts[j].normal_price || 0).toFixed(2) %> THB</s>
+                              <% let discountedPrice = Number(data.discountedProducts[j].normal_price || 0) * (1 - Number(data.discountedProducts[j].discount_percent || 0)); %>
+                              <%= discountedPrice.toFixed(2) %> THB
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  <% }) %>
-                <% } else { %>
-                  <p>No discounted products available or data is undefined. Debug: <%= JSON.stringify(data) %></p>
-                <% } %>
-              </div>
-            </div>
+                    <% } %>
+                  </div>
+                </div>
+              <% } %>
+            <% } else { %>
+              <p>No discounted products available. Debug: <%= JSON.stringify(data) %></p>
+            <% } %>
           </div>
+          <% if (data.discountedProducts && data.discountedProducts.length > 4) { %>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          <% } %>
         </div>
       </section>
     </div>
+    <aside class="sidebar">
+      <div class="card mb-3">
+        <div class="card-body text-center">
+          <h3 class="card-title">ALL PRODUCT</h3>
+          <img src="https://picsum.photos/100/100" class="card-img-top mb-2" alt="All Products">
+          <a href="/products" class="btn btn-danger">View</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <h3 class="card-title">ALL CATEGORY</h3>
+          <img src="https://picsum.photos/100/100" class="card-img-top mb-2" alt="All Categories">
+          <a href="/categories" class="btn btn-danger">View</a>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

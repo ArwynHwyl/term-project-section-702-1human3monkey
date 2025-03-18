@@ -3,7 +3,7 @@ function createHomepageController(homepageModel) {
     try {
       const discountedProducts = await homepageModel.getDiscountedProducts();
       const carouselImages = await homepageModel.getCarouselImages();
-
+      
       const mappedDiscountedProducts = discountedProducts.map(product => ({
         product_name: product.product_name || "Unnamed Product",
         image_path: product.image_path ? `/public/${product.image_path}` : "https://via.placeholder.com/150",
@@ -11,7 +11,6 @@ function createHomepageController(homepageModel) {
         discount_percent: product.discount_percent || 0,
       }));
 
-      console.log("Mapped discounted products from DB:", mappedDiscountedProducts);
 
       res.render("pages/homepage", {
         data: {

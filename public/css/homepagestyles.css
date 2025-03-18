@@ -8,6 +8,7 @@
 body {
   font-family: Arial, sans-serif;
   padding-top: 30px;
+  background: linear-gradient(to bottom, #f0f4f8, #d9e2ec); /* Gradient พื้นหลังทั้งหน้า */
 }
 
 .container {
@@ -16,6 +17,9 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   border: 1px solid #ccc;
+  background-color: #fff; /* พื้นหลังขาวสำหรับ container */
+  border-radius: 12px; /* ขอบมน */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* เงา container */
 }
 
 .main-content {
@@ -24,6 +28,32 @@ body {
   border-right: 1px solid #ccc;
 }
 
+/* Section: HIGHLIGHT */
+.highlight {
+  background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Gradient สีอ่อน */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05); /* เงาด้านใน */
+  margin-bottom: 30px;
+}
+
+.highlight h2 {
+  color: #2c3e50; /* สีเข้มเพื่อตัดกับพื้นหลัง */
+}
+
+/* Section: SHOP THE DISCOUNTED PRODUCTS */
+.discounted-products {
+  background: linear-gradient(135deg, #ffffff, #e0eafc); /* Gradient สีอ่อน */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05); /* เงาด้านใน */
+}
+
+.discounted-products h2 {
+  color: #2c3e50;
+}
+
+/* Sidebar */
 .sidebar {
   flex: 1;
   background-color: #8B0000;
@@ -32,45 +62,51 @@ body {
   margin-left: 40px;
 }
 
-.product-grid {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  width: 100%; /* ตรวจสอบว่าแสดงเต็ม */
-  margin-bottom: 20px;
+  width: 100%;
+  background: linear-gradient(135deg, #e0e0e0, #ffffff);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
 .product-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05) rotateX(5deg) rotateY(5deg);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .card {
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%; /* ตรวจสอบว่าแสดงเต็ม */
+  width: 100%;
 }
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .card-img-top {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  height: 150px; /* ตั้งค่าเริ่มต้น */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  height: 150px;
   object-fit: cover;
+  transition: opacity 0.5s, transform 0.3s ease;
+  opacity: 1;
+}
+
+.card-img-top:hover {
+  transform: scale(1.1);
 }
 
 .card-body {
   padding: 10px;
+  background-color: #fff;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .btn-danger {
@@ -120,13 +156,35 @@ body {
   }
 }
 
-/* Debug to ensure all items are visible */
+/* Adjust carousel and product grid */
+#carouselHighlight .carousel-item img {
+  height: 200px;
+  object-fit: cover;
+}
+
+#productCarousel .carousel-item {
+  height: 300px;
+}
+
+#productCarousel .row {
+  display: flex;
+  justify-content: space-between;
+  height: 100%;
+}
+
 .product-grid .col {
-  display: flex !important;
+  display: flex;
   justify-content: center;
 }
 
-.carousel-inner .row {
-  display: flex;
-  justify-content: space-between;
+.carousel-inner {
+  overflow: hidden;
+}
+
+.card-text s {
+  color: #888;
+}
+
+.card-text {
+  font-weight: bold;
 }
