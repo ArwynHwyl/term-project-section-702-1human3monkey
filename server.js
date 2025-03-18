@@ -11,15 +11,18 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoutes");
-const ProductModel = require("./models/productModel");
+const createCategoryMiddleware = require("./middleware/categoryMiddleware");
 
 dotenv.config();
+
+const categoryMiddleware = createCategoryMiddleware(db);
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(categoryMiddleware);
 
 // use authRouter for all routes starting with /auth
 // app.use("/auth", authRouter);

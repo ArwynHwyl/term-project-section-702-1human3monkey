@@ -68,11 +68,11 @@
                             </a>
                         </li>
                         <ul class="dropdown-menu-item">
-                            <!-- MUST comback => auto loop from back-end  -->
-                            <li><a class="dropdown-menu-item" href="#">SHIRTS</a></li>
-                            <li><a class="dropdown-menu-item" href="#">PANTS</a></li>
-                            <li><a class="dropdown-menu-item" href="#">HOOD</a></li>
-                            <li><a class="dropdown-menu-item" href="#">DRESS</a></li>
+                            <% categories.forEach(category => { %>
+                                <li>
+                                    <a class="dropdown-menu-item" href="/category/<%= category.category_name %>"><%= category.category_name %></a>
+                                </li>
+                            <% }) %>
                         </ul>
                     </div>
                 </div>
