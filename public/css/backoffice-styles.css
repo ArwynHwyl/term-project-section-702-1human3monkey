@@ -431,7 +431,6 @@ input[type="checkbox"] {
     overflow: hidden; /* ซ่อนส่วนที่ล้น */
     text-overflow: ellipsis; /* เพิ่ม ... ถ้ามีการตัด */
     display: -webkit-box; /* ใช้สำหรับ multi-line ellipsis */
-    -webkit-line-clamp: 2; /* จำกัด 2 บรรทัด */
     -webkit-box-orient: vertical; /* จัดแนวในแนวตั้ง */
   }
 
