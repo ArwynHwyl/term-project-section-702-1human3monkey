@@ -10,14 +10,12 @@ const AddressModel = require('../models/addressModel');
 const AuthController = require('../controllers/authController');
 const CartController = require('../controllers/cartController');
 const createCartRoute = require('../routes/cart');
+const createCheckoutRoute = require('../routes/checkout');
 
 function createRouter(db) {
   const router = express.Router();
   const userModel = new UserModel(db);
   const cartModel = new CartModel(db);
-  const productModel = new ProductModel(db);
-  const creditCardModel = new CreditCardModel(db);
-  const addressModel = new AddressModel(db);
   const authController = new AuthController(userModel);
   const cartController = new CartController(cartModel, userModel);
 
@@ -56,42 +54,12 @@ function createRouter(db) {
     res.redirect("/backoffice/category");
   });
 
-  router.get('/checkout', authController.authentication, async (req, res) => {
-    try {
-      // get cartId from user session
-      const [cart_id] = await userModel.getCart(req.session.userId);
-
-      // get cart items by cart id
-      const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
-
-      const cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
-      const addressInfo = await addressModel.getAddressByUserId(req.session.userId);
-
-      const mockData = {
-        order: {
-          products: cartItems,
-          shipping: {
-            cost: 50,
-            currency: "THB"
-          }
-        },
-        customer: {
-          delivery: addressInfo,
-          payment: cardInfo
-        }
-      };
-
-      res.render('pages/checkout', { data: mockData, session: req.session });
-    } catch (error) {
-      console.error("Error getting cart items:", error);
-      res.status(500).send("Error getting cart items");
-    }
-  });
 
   router.use("/auth", createAuthRoute(db));
   router.use("/cart", createCartRoute(db));
   router.use(createBackofficeCategoryRoute(db));
   router.use(createBackofficeProductRoute(db));
+  router.use("/checkout", createCheckoutRoute(db));
 
   return router;
 }
