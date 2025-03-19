@@ -173,6 +173,26 @@ class productModel {
       connection.release();
     }
   }
+
+  async searchProducts(searchQuery) {
+    const query = `
+      SELECT p.product_id, p.product_name, p.description, p.image_path, p.normal_price, p.discount_percent, c.category_name
+      FROM Product p
+      JOIN Category c ON p.category_id = c.category_id
+      WHERE p.product_name LIKE ?
+      ORDER BY p.product_name DESC
+    `
+
+    const value = [`%${searchQuery}%`];
+
+    try {
+      const [products] = await this.db.execute(query, value);
+      return products;
+    } catch (error) {
+      console.error("Error searching products: ", error);
+      throw new Error("Error searching products");
+    }
+  }
 }
 
 module.exports = productModel;

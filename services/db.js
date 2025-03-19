@@ -3,7 +3,7 @@ const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } = require("./do
 
 require("dotenv").config();
 
-const db = mysql.createPool({
+const config = {
   host: MYSQL_HOST,
   user: MYSQL_USER,
   password: MYSQL_PASSWORD,
@@ -11,6 +11,11 @@ const db = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-}).promise();
+}
 
-module.exports = db;
+const db = mysql.createPool(config).promise();
+
+module.exports = {
+  db,
+  config
+};
