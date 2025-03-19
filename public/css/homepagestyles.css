@@ -170,6 +170,14 @@ body {
   height: 300px;
 }
 
+#productCarousel .carousel-item a {
+  text-decoration: none;
+}
+
+#productCarousel .carousel-item .card-title {
+  font-size: 1.2rem;
+}
+
 #productCarousel .row {
   display: flex;
   justify-content: space-between;
@@ -192,3 +200,4 @@ body {
 .card-text {
   font-weight: bold;
 }
+
