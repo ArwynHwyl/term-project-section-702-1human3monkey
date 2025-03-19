@@ -1,159 +1,46 @@
-<style>
-  /* Pagination Styles */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-
-  .pagination button {
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 25px;
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .pagination button:hover {
-    background-color: #f7a41f;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .pagination button.active {
-    background-color: #8B1A1A;
-    color: white;
-    font-weight: bold;
-  }
-</style>
 <div class="products-section">
-  <h2 class="section-title">ALL PRODUCT</h2>
-
-  <div class="products-grid" id="products-grid"></div>
-
-  <div class="no-products" id="no-products" style="display: none;">
-    <p>No products found</p>
+    <h2 class="section-title">ALL PRODUCT</h2>
+  
+    <div class="products-grid">
+      <% if (products && products.length > 0) { %>
+        <% products.forEach((product) => { %>
+          <%- include('./productCard.ejs', {product: product}) %>
+        <% }); %>
+      <% } else { %>
+        <div class="no-products">
+          <p>No products found</p>
+        </div>
+      <% } %>
+    </div>
+  
+    <!-- Pagination -->
+    <% if (pagination && pagination.totalPages > 1) { %>
+      <div class="pagination">
+        <% if (pagination.currentPage > 1) { %>
+          <a href="?page=1" class="page-btn">First</a>
+        <% } %>
+        
+        <% 
+          let startPage = Math.max(1, pagination.currentPage - 2);
+          let endPage = Math.min(pagination.totalPages, pagination.currentPage + 2);
+          
+          // Always show at least 5 pages if available
+          if (endPage - startPage < 4 && pagination.totalPages > 4) {
+            if (startPage === 1) {
+              endPage = Math.min(pagination.totalPages, 5);
+            } else if (endPage === pagination.totalPages) {
+              startPage = Math.max(1, pagination.totalPages - 4);
+            }
+          }
+        %>
+        
+        <% for (let i = startPage; i <= endPage; i++) { %>
+          <a href="?page=<%= i %>" class="page-btn <%= i === pagination.currentPage ? 'active' : '' %>"><%= i %></a>
+        <% } %>
+        
+        <% if (pagination.currentPage < pagination.totalPages) { %>
+          <a href="?page=<%= pagination.totalPages %>" class="page-btn">Last</a>
+        <% } %>
+      </div>
+    <% } %>
   </div>
-
-  <!-- Pagination -->
-  <div class="pagination" id="pagination"></div>
-</div>
-
-<script>
-  const allProducts = <%- JSON.stringify(products) %>; // Array of products from API
-  const productsPerPage = 4; // Number of products per page
-  let currentPage = 1;
-
-  function createProductCard(product) {
-    const productCard = document.createElement("div");
-    productCard.classList.add("product-item", "card");
-
-    const productLink = document.createElement("a");
-    productLink.href = `/product/${encodeURIComponent(product.product_name.replace(/\s+/g, '-'))}/${product.product_id}`;
-
-    const productImage = document.createElement("img");
-    productImage.classList.add("card-img-top");
-    productImage.src = product.image_path || "/public/images/placeholder.jpg";
-    productImage.alt = product.product_name;
-
-    const productInfo = document.createElement("div");
-    productInfo.classList.add("product-info", "card-body");
-
-    const productTitle = document.createElement("h5");
-    productTitle.classList.add("card-title");
-    productTitle.textContent = product.product_name;
-
-    const productPrice = document.createElement("div");
-    productPrice.classList.add("product-price", "card-text");
-
-    if (product.discount_percent > 0) {
-      const originalPrice = document.createElement("span");
-      originalPrice.classList.add("original-price");
-      originalPrice.textContent = `฿${parseFloat(product.normal_price).toLocaleString()}`;
-
-      const discountPrice = document.createElement("span");
-      discountPrice.classList.add("discount-price");
-      discountPrice.textContent = `฿${(parseFloat(product.normal_price) * (1 - parseFloat(product.discount_percent) / 100)).toLocaleString()}`;
-
-      productPrice.appendChild(originalPrice);
-      productPrice.appendChild(discountPrice);
-    } else {
-      productPrice.textContent = `฿${parseFloat(product.normal_price).toLocaleString()}`;
-    }
-
-    productInfo.appendChild(productTitle);
-    productInfo.appendChild(productPrice);
-    productLink.appendChild(productImage);
-    productLink.appendChild(productInfo);
-    productCard.appendChild(productLink);
-
-    return productCard;
-  }
-
-  function renderProducts() {
-    const productsGrid = document.getElementById("products-grid");
-    const noProducts = document.getElementById("no-products");
-    productsGrid.innerHTML = ""; // Clear previous products
-
-    const start = (currentPage - 1) * productsPerPage;
-    const end = start + productsPerPage;
-    const paginatedProducts = allProducts.slice(start, end);
-
-    if (paginatedProducts.length > 0) {
-      noProducts.style.display = "none";
-      paginatedProducts.forEach(product => {
-        productsGrid.appendChild(createProductCard(product));
-      });
-    } else {
-      noProducts.style.display = "block";
-    }
-  }
-
-  function renderPagination() {
-    const paginationContainer = document.getElementById("pagination");
-    paginationContainer.innerHTML = ""; // Clear previous pagination
-    const totalPages = Math.ceil(allProducts.length / productsPerPage);
-
-    if (totalPages <= 1) return; // Hide pagination if only one page
-
-    if (currentPage > 1) {
-      paginationContainer.innerHTML += `<button onclick="changePage(1)">First</button>`;
-    }
-
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = Math.min(totalPages, currentPage + 2);
-
-    if (endPage - startPage < 4 && totalPages > 4) {
-      if (startPage === 1) {
-        endPage = Math.min(totalPages, 5);
-      } else if (endPage === totalPages) {
-        startPage = Math.max(1, totalPages - 4);
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      paginationContainer.innerHTML += `<button onclick="changePage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
-    }
-
-    if (currentPage < totalPages) {
-      paginationContainer.innerHTML += `<button onclick="changePage(${totalPages})">Last</button>`;
-    }
-  }
-
-  function changePage(page) {
-    currentPage = page;
-    renderProducts();
-    renderPagination();
-  }
-
-  // Initial render
-  renderProducts();
-  renderPagination();
-</script>

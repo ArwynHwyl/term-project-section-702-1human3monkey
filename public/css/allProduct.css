@@ -4,39 +4,7 @@
     margin: 0 auto;
     padding: 20px;
   }
-  /* Pagination Styles */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-
-  .pagination button {
-    text-decoration: none;
-    padding: 10px 15px;
-    border-radius: 25px;
-    background-color: #f0f0f0;
-    color: #333;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.pagination button:hover {
-    background-color: #ffb300; /* สีทอง */
-    color: #333; /* เปลี่ยนสีตัวอักษรเป็นสีเข้มเพื่อให้ตัดกับสีทอง */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pagination button.active {
-    background-color: #8B1A1A; /* สีแดงเข้ม */
-    color: white;
-    font-weight: bold;
-}
+  
   .section-title {
     font-size: 20px;
     font-weight: 600;
