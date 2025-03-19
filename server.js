@@ -233,7 +233,6 @@ async function startServer(dbConnection) {
       });
     }
   });
-
   app.get("/product/:name/:id", (req, res) => {
     res.render("product", { productId: req.params.id, session: req.session });
   });
