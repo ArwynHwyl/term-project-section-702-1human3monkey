@@ -7,6 +7,7 @@ function createHomepageController(homepageModel) {
       const carouselImages = await homepageModel.getCarouselImages();
       
       const mappedDiscountedProducts = discountedProducts.map(product => ({
+        product_id: product.product_id,
         product_name: product.product_name || "Unnamed Product",
         image_path: product.image_path ? `${product.image_path}` : "https://via.placeholder.com/150",
         normal_price: product.normal_price || 0,
