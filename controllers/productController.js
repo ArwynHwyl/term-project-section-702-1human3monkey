@@ -51,7 +51,7 @@ async function getProductById(req, res) {
 async function getAllProducts(req, res) {
   try {
     const db = req.app.locals.db;
-    const { category, search, limit = 10, page = 1 } = req.query;
+    const { category, search, limit = 16, page = 1 } = req.query;
     
     // Calculate offset for pagination
     const offset = (page - 1) * limit;
@@ -262,21 +262,11 @@ async function deleteProduct(req, res) {
 
 const searchProducts = async (req, res) => {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
-    const offset = (page - 1) * limit;
     const searchQuery = req.query.search;
     const searchResults = await productModel.searchProducts(searchQuery);
 
-    const totalProducts = searchResults.length;
-    const totalPages = Math.ceil(totalProducts / limit);
     res.render('pages/search-product', { 
-      searchResults,
-      pagination: {
-        currentPage: page,
-        totalPages,
-        totalProducts
-      },
+      products: searchResults,
       pageTitle: "Search Products",
       session: req.session
     });

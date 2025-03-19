@@ -198,8 +198,7 @@ async function startServer(dbConnection) {
         FROM Product p
         LEFT JOIN Category c ON p.category_id = c.category_id
         ORDER BY p.created_at DESC
-        LIMIT ? OFFSET ?
-      `, [limit, offset]);
+      `);
 
       // Get total count for pagination
       const [countResult] = await db.query(`
@@ -211,11 +210,6 @@ async function startServer(dbConnection) {
 
       res.render("pages/all-products", {
         products,
-        pagination: {
-          currentPage: page,
-          totalPages,
-          totalProducts
-        },
         pageTitle: "All Products",
         session: req.session
       });

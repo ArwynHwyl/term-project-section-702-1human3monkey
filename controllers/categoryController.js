@@ -30,8 +30,8 @@ async function getCategoryProducts(req, res) {
        JOIN Category c ON p.category_id = c.category_id
        WHERE c.category_name = ?
        ORDER BY p.created_at DESC
-       LIMIT ? OFFSET ?`,
-      [categoryName, limit, offset]
+      `,
+      [categoryName]
     );
 
     const [countResult] = await db.query(
@@ -47,10 +47,6 @@ async function getCategoryProducts(req, res) {
     res.render("pages/category/all-category-product", {
         categoryName,
         products,
-        pagination: {
-          currentPage: page,
-          totalPages,
-        },
         session: req.session,
       });
   } catch (error) {
