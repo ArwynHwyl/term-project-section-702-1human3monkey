@@ -91,12 +91,15 @@ const createHistoryTableQuery = `
   CREATE TABLE IF NOT EXISTS History (
     history_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
-    cart_item_id INT,
+    product_id INT,
+    product_attribute_id INT,
+    quantity INT,
     address_id INT,
     credit_card_id INT,
     order_date DATE,
     FOREIGN KEY (user_id) REFERENCES User(user_id),
-    FOREIGN KEY (cart_item_id) REFERENCES CartItem(cart_item_id),
+    FOREIGN KEY (product_id) REFERENCES Product(product_id),
+    FOREIGN KEY (product_attribute_id) REFERENCES ProductAttribute(product_attribute_id),
     FOREIGN KEY (address_id) REFERENCES Address(address_id),
     FOREIGN KEY (credit_card_id) REFERENCES CreditCard(credit_card_id)
   );
