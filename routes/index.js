@@ -2,6 +2,7 @@ const express = require("express");
 const createAuthRoute = require('./auth');
 const createBackofficeCategoryRoute = require("./backofficeCategoryRoute");
 const createBackofficeProductRoute = require("./backofficeProductRoute");
+const createHomepageRoute = require("./homepageRoute");
 const UserModel = require('../models/userModel');
 const AuthController = require('../controllers/authController');
 
@@ -48,7 +49,7 @@ function createRouter(db) {
   router.use("/auth", createAuthRoute(db));
   router.use(createBackofficeCategoryRoute(db));
   router.use(createBackofficeProductRoute(db));
-
+  router.use(createHomepageRoute(db));
   return router;
 }
 
