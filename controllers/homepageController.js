@@ -1,3 +1,5 @@
+const session = require("express-session");
+
 function createHomepageController(homepageModel) {
   async function getHomepageData(req, res) {
     try {
@@ -6,7 +8,7 @@ function createHomepageController(homepageModel) {
       
       const mappedDiscountedProducts = discountedProducts.map(product => ({
         product_name: product.product_name || "Unnamed Product",
-        image_path: product.image_path ? `/public/${product.image_path}` : "https://via.placeholder.com/150",
+        image_path: product.image_path ? `${product.image_path}` : "https://via.placeholder.com/150",
         normal_price: product.normal_price || 0,
         discount_percent: product.discount_percent || 0,
       }));
@@ -17,6 +19,7 @@ function createHomepageController(homepageModel) {
           carouselImages,
           discountedProducts: mappedDiscountedProducts,
         },
+        session: req.session,
       });
     } catch (error) {
       console.error("Error in getHomepageData:", error);

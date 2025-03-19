@@ -1,5 +1,5 @@
 <body>
-  <link rel="stylesheet" href="/public/css/homepagestyles.css">
+  <link rel="stylesheet" href="/css/homepagestyles.css">
   <%- include('../partials/header') %>
   <%- include('../partials/navbarFrontPage') %>
   <div class="container">
@@ -12,7 +12,7 @@
               <% data.carouselImages.forEach((img, index) => { %>
                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                   <a href="/category/<%= index %>">
-                    <img src="/public/images/highlightbadge.jpg" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
+                    <img src="/images/highlightbadge.jpg" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
                   </a>
                 </div>
               <% }) %>
@@ -83,14 +83,14 @@
       <div class="card mb-3">
         <div class="card-body text-center">
           <h3 class="card-title">ALL PRODUCT</h3>
-          <img src="/public/images/allproduct.jpg" class="card-img-top mb-2" alt="All Products" style="width: 100%; height: 100%;">
+          <img src="/images/allproduct.jpg" class="card-img-top mb-2" alt="All Products" style="width: 100%; height: 100%;">
           <a href="/products" class="btn btn-danger">View</a>
         </div>
       </div>
       <div class="card">
         <div class="card-body text-center">
           <h3 class="card-title">ALL CATEGORY</h3>
-          <img src="/public/images/allcategory.png" class="card-img-top mb-2" alt="All Categories" style="width: 100%; height: 100%;">
+          <img src="/images/allcategory.png" class="card-img-top mb-2" alt="All Categories" style="width: 100%; height: 100%;">
           <a href="/categories" class="btn btn-danger">View</a>
         </div>
       </div>

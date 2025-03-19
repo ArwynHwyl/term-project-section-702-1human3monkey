@@ -56,7 +56,7 @@ const mockData = {
         currency: "THB",
         quantity: 1,
         src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
+      }, {
         name: "Product 2",
         size: "L",
         color: "Red",
@@ -64,7 +64,7 @@ const mockData = {
         currency: "THB",
         quantity: 1,
         src: "/images/product.jpg" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
+      }, {
         name: "Product 1",
         size: "L",
         color: "Red",
@@ -72,7 +72,7 @@ const mockData = {
         currency: "THB",
         quantity: 1,
         src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
+      }, {
         name: "Product 1",
         size: "L",
         color: "Red",
@@ -80,7 +80,7 @@ const mockData = {
         currency: "THB",
         quantity: 1,
         src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
+      }, {
         name: "Product 1",
         size: "L",
         color: "Red",
@@ -88,7 +88,7 @@ const mockData = {
         currency: "THB",
         quantity: 1,
         src: "https://picsum.photos/200/300" // เปลี่ยนจาก imageUrl เป็น src และตรวจสอบว่าไฟล์นี้อยู่ใน /public/images/
-      },{
+      }, {
         name: "Product 1",
         size: "L",
         color: "Red",
@@ -139,7 +139,7 @@ async function startServer(dbConnection) {
   app.get("/", (req, res) => {
     res.redirect("/homepage");
   });
-  
+
   // Set up session store
   const sessionStore = new mysqlStore(config, dbConnection);
 
