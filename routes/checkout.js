@@ -33,8 +33,8 @@ function createCheckoutRoute(db) {
           }
         },
         customer: {
-          delivery: addressInfo,
-          payment: cardInfo
+          delivery: addressInfo[0],
+          payment: cardInfo[0]
         }
       };
 
