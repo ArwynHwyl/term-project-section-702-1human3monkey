@@ -10,3 +10,107 @@ Arwynhwyl Sattaya Mingsathia 662115050
 
 UI designed + User flow
 https://www.figma.com/design/qTdQm42Gcuc8QkYXhz8dLK/Frontend-Project?node-id=2-2&t=liKnoWEs2ok8ZnnT-1
+
+---
+
+# Guideline
+### Commit Message Guidelines
+This project follows the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification.
+
+#### **Formats**
+##### Default
+```
+<type>(scope): <description>
+<optional body>
+<optional footer>
+``` 
+
+##### Merge Commit  
+```
+Merge branch '<branch name>'
+```
+
+##### Revert Commit  
+```
+Revert '<reverted commit name>'
+```
+
+##### Types
+| Type      | Purpose                                                                 |
+|-----------|-------------------------------------------------------------------------|
+| `feat`    | Introduces a new feature                                                |
+| `fix`     | Fixes a bug                                                             |
+| `docs`    | Updates documentation                                                   |
+| `style`   | Code style changes (no logic changes)                                   |
+| `refactor`| Code restructuring (no behavior change)                                 |
+| `test`    | Adds or modifies tests                                                  |
+| `chore`   | Maintenance tasks (e.g., CI/CD, dependencies)                           |
+
+##### Scope
+The scope provides additional contextual information.
+```
+feat(api): add api for fetching all user
+```
+More example of the scope:
+- navbar
+- login
+- cart
+- image
+- readme
+
+##### Breaking Changes Indicator
+Breaking change **MUST** be indicated by an `!` before `:` in this commit name
+```
+feat(api)!: change api endpoint for adding new product to cart
+```
+Information about the change **MUST** also be include in commit message footer.
+
+##### Description
+`Description` contains a concise description of the change.
+- Use imperative, present tense: "change" not "changed" or "changes"
+- Don't capitalize the first letter
+- No dot (`.`) at the end
+
+##### body
+`Body` isn't mandatory but you should include it to explain complex commit or commit that fix bug.
+```
+fix(api): handle null values in user response
+
+Previously, if a user had missing data, the API would return `null` without default values, causing frontend crashes. Now, we ensure a default structure in the response.
+```
+
+##### Footer
+The `footer` should contain information about **Breaking Changes**(BREAKING CHANGES: ) you can also place **Reference Issues** that the commit refers to.
+```
+feat(api)!: change api endpoint for adding new product to cart
+
+BREAKING CHANGES: use cart/add/[productID] instead of the old product/add/[productID]
+```
+```
+chore(config): hide api key in the .env
+
+Closes #69
+```
+
+### Naming Convention
+#### For coding
+- **camelCase** for js file: `server.js`
+- **camelCase** for variables and functions: `fetchProductData()`
+- **camelCase** for html and css filenames: `cartPage.html`
+
+#### For branching
+Branch should follow this structure:
+`<type>/<short-description>`
+Example:
+```
+feature/user-authentication
+feature/cart-page
+```
+you may include feature of each page in `feature/[]-page` like fetching api and dynamically create a list of product in the page with JS.
+if you don't know wheter you should make a new branch for that feature or put in other breanch you may ask in group chat for discussion.
+
+### Code Styling Specification
+- `""` for `string`, `"\filepath"` and `"\api\endpoint"`
+- `''` for `char`
+- **2** tab spaces
+    - I recommend you change VSCode default tab space in Setting > Editor: Tab Size or you can change it manually using `CTRL\COMMAND + SHIFT + P` > Change Tab Display Size
