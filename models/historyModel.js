@@ -3,11 +3,11 @@ class historyModel {
     this.db = db;
   }
 
-  async addHistoryItem(userId, cartItemId, addressId, creditCardId, orderDate) {
-    const query = "INSERT INTO History (user_id, cart_item_id, address_id, credit_card_id, order_date) VALUES (?, ?, ?, ?, ?)";
+  async addHistoryItem(userId, product_id, product_attribute_id, quantity, addressId, creditCardId, orderDate) {
+    const query = "INSERT INTO History (user_id, product_id, product_attribute_id, quantity, address_id, credit_card_id, order_date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     try {
-      const [result] = await this.db.execute(query, [userId, cartItemId, addressId, creditCardId, orderDate]);
+      const [result] = await this.db.execute(query, [userId, product_id, product_attribute_id, quantity, addressId, creditCardId, orderDate]);
       return result;
     }
     catch (error) {

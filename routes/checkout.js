@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const CartModel = require('../models/cartModel');
 const UserModel = require('../models/userModel');
+const HistoryModel = require('../models/historyModel');
 const AuthController = require('../controllers/authController');
 const CreditCardModel = require('../models/creditCardModel');
 const AddressModel = require('../models/addressModel');
@@ -9,6 +10,7 @@ const AddressModel = require('../models/addressModel');
 function createCheckoutRoute(db) {
   const cartModel = new CartModel(db);
   const userModel = new UserModel(db);
+  const historyModel = new HistoryModel(db);
   const creditCardModel = new CreditCardModel(db);
   const addressModel = new AddressModel(db);
   const authController = new AuthController(userModel);
@@ -47,8 +49,8 @@ function createCheckoutRoute(db) {
 
   router.post('/', authController.authentication, async (req, res) => {
     try {
+      const { items } = req.body;
       const [cart_id] = await userModel.getCart(req.session.userId);
-      const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
 
       let cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
       let addressInfo = await addressModel.getAddressByUserId(req.session.userId);
@@ -65,7 +67,6 @@ function createCheckoutRoute(db) {
         cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
       }
 
-      // userId, city, street, province, zipCode, phoneNumber
       // address info is empty
       if (addressInfo.length === 0) {
         await addressModel.createAddress(req.session.userId, {
@@ -79,25 +80,28 @@ function createCheckoutRoute(db) {
         addressInfo = await addressModel.getAddressByUserId(req.session.userId);
       }
 
-      const order = {
-        products: cartItems,
-        shipping: {
-          cost: 50,
-          currency: "THB"
-        },
-        payment: cardInfo,
-        delivery: addressInfo
-      };
+      // add history items
+      if(items){
+        const itemsArray = Object.values(items);
 
-      // create order
-      // const order_id = await userModel.createOrder(req.session.userId, order);
+        itemsArray.forEach(async (item) => {
+          await historyModel.addHistoryItem(
+            req.session.userId,
+            item.product_id,
+            item.product_attribute_id,
+            item.quantity,
+            addressInfo[0].address_id,
+            cardInfo[0].credit_card_id,
+            new Date()
+          );
+        }
+        );
+      }
 
-      // // clear cart
-      // await cartModel.clearCart(cart_id.cart_id);
+      // clear cart
+      await cartModel.clearCart(cart_id.cart_id);
 
-      res.json(order);
-
-      // res.redirect(`/order/${order_id}`);
+      res.redirect(`/`);
     } catch (error) {
       console.error("Error checking out:", error);
       res.status(500).send("Error checking out");

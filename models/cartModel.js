@@ -19,6 +19,8 @@ class cartModel {
     const query = `
     SELECT 
       ci.cart_item_id,
+      pa.product_attribute_id,
+      p.product_id,
       p.product_name AS name,
       pa.size,
       pa.color,
