@@ -47,9 +47,8 @@
                                 THB
                             </td>
                             <td class="flex">
-                              <%= %>
-                                <input type="number" id="quantity" class="form-control" value="<%= product.quantity %>"
-                                  min="1" max="99" pattern="[0-9]*" inputmode="numeric">
+                              <input type="number" id="quantity" class="form-control" value="<%= product.quantity %>"
+                                min="1" max="99" pattern="[0-9]*" inputmode="numeric">
                             </td>
                             <td>
                               <a href="/cart/delete/<%= product.cart_item_id %>" class="icon-link">
@@ -133,87 +132,68 @@
                   <div class="col">
                     <label for="firstName" class="form-label">First name</label>
                     <input type="text" class="form-control" id="firstName"
-                      value="<%= (data && session.firstName) ? session.firstName : '' %>"
-                      placeholder="Enter first name"
+                      value="<%= (data && session.firstName) ? session.firstName : '' %>" placeholder="Enter first name"
                       required>
                   </div>
                   <div class="col">
                     <label for="lastName" class="form-label">Last name</label>
                     <input type="text" class="form-control" id="lastName"
-                      value="<%= (data && session.lastName) ? session.lastName : '' %>" 
-                      placeholder="Enter last name" 
-                      required
-                      >
+                      value="<%= (data && session.lastName) ? session.lastName : '' %>" placeholder="Enter last name"
+                      required>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="address" class="form-label">Address</label>
-                  <input type="text" class="form-control" id="address"
+                  <input type="text" class="form-control" id="address" name="address"
                     value="<%= (data && data.customer && data.customer.delivery && data.customer.delivery.street) ? data.customer.delivery.street : '' %>"
-                    placeholder="Enter address"
-                    required
-                    >
+                    placeholder="Enter address" required>
                 </div>
                 <div class="row mb-3">
                   <div class="col">
                     <label for="city" class="form-label">City</label>
-                    <input type="text" class="form-control" id="city"
+                    <input type="text" class="form-control" id="city" name="city"
                       value="<%= (data && data.customer && data.customer.delivery && data.customer.delivery.city) ? data.customer.delivery.city : '' %>"
-                      placeholder="Enter city"
-                      required
-                      >
+                      placeholder="Enter city" required>
                   </div>
                   <div class="col">
                     <label for="province" class="form-label">Province</label>
-                    <input type="text" class="form-control" id="province"
+                    <input type="text" class="form-control" id="province" name="province"
                       value="<%= (data && data.customer && data.customer.delivery && data.customer.delivery.province) ? data.customer.delivery.province : '' %>"
-                      placeholder="Enter province"
-                      required
-                      >
+                      placeholder="Enter province" required>
                   </div>
                   <div class="col">
                     <label for="postalCode" class="form-label">Postcode</label>
-                    <input type="text" class="form-control" id="postalCode"
+                    <input type="text" class="form-control" id="postalCode" name="zip_code"
                       value="<%= (data && data.customer && data.customer.delivery && data.customer.delivery.zip_code) ? data.customer.delivery.zip_code : '' %>"
-                      placeholder="Enter postal code"
-                      required
-                      >
+                      placeholder="Enter postal code" required>
                   </div>
                 </div>
                 <div class="mb-3">
                   <label for="phone" class="form-label">Phone</label>
-                  <input type="tel" class="form-control" id="phone"
+                  <input type="tel" class="form-control" id="phone" name="phone_number"
                     value="<%= (data && data.customer && data.customer.delivery && data.customer.delivery.phone) ? data.customer.delivery.phone : '' %>"
-                    placeholder="Enter phone number"
-                    required
-                    >
+                    placeholder="Enter phone number" required>
                 </div>
                 <h5 class="card-title fw-bold">Payment</h5>
                 <div class="credit-card-form">
                   <div class="creditbox mb-3">
                     <label for="creditCard" class="form-label">Credit card</label>
                   </div>
-                  <input type="text" class="form-control" id="creditCard"
+                  <input type="text" class="form-control" id="creditCard" name="card_number"
                     value="<%= (data && data.customer && data.customer.payment && data.customer.payment.card_number) ? data.customer.payment.card_number : '' %>"
-                    placeholder="Card number"
-                    required
-                    >
+                    placeholder="Card number" required>
                   <div class="row mb-3">
                     <div class="col" style="padding: 0; padding-right: 5px;">
                       <label for="expiryDate" class="form-label">Expiration Date (MM/YY)</label>
-                      <input type="text" class="form-control" id="expiryDate"
+                      <input type="text" class="form-control" id="expiryDate" name="expiration_date"
                         value="<%= (data && data.customer && data.customer.payment && data.customer.payment.expiration_date) ? data.customer.payment.expiration_date : '' %>"
-                        placeholder="MM/YY"
-                        required
-                        >
+                        placeholder="MM/YY" required>
                     </div>
                     <div class="col" style="padding: 0; padding-left: 5px;">
                       <label for="securityCode" class="form-label">Security Code</label>
-                      <input type="text" class="form-control" id="securityCode"
+                      <input type="text" class="form-control" id="securityCode" name="cvv"
                         value="<%= (data && data.customer && data.customer.payment && data.customer.payment.cvv) ? data.customer.payment.cvv : '' %>"
-                        placeholder="Security Code"
-                        required
-                        >
+                        placeholder="Security Code" required>
                     </div>
                   </div>
                 </div>

@@ -7,100 +7,104 @@ const CreditCardModel = require('../models/creditCardModel');
 const AddressModel = require('../models/addressModel');
 
 function createCheckoutRoute(db) {
-	const cartModel = new CartModel(db);
-	const userModel = new UserModel(db);
-	const creditCardModel = new CreditCardModel(db);
-	const addressModel = new AddressModel(db);
-	const authController = new AuthController(userModel);
+  const cartModel = new CartModel(db);
+  const userModel = new UserModel(db);
+  const creditCardModel = new CreditCardModel(db);
+  const addressModel = new AddressModel(db);
+  const authController = new AuthController(userModel);
 
-	router.get('/', authController.authentication, async (req, res) => {
-		try {
-			// get cartId from user session
-			const [cart_id] = await userModel.getCart(req.session.userId);
+  router.get('/', authController.authentication, async (req, res) => {
+    try {
+      // get cartId from user session
+      const [cart_id] = await userModel.getCart(req.session.userId);
 
-			// get cart items by cart id
-			const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
+      // get cart items by cart id
+      const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
 
-			const cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
-			const addressInfo = await addressModel.getAddressByUserId(req.session.userId);
+      const cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
+      const addressInfo = await addressModel.getAddressByUserId(req.session.userId);
 
-			const mockData = {
-				order: {
-					products: cartItems,
-					shipping: {
-						cost: 50,
-						currency: "THB"
-					}
-				},
-				customer: {
-					delivery: addressInfo,
-					payment: cardInfo
-				}
-			};
+      const mockData = {
+        order: {
+          products: cartItems,
+          shipping: {
+            cost: 50,
+            currency: "THB"
+          }
+        },
+        customer: {
+          delivery: addressInfo,
+          payment: cardInfo
+        }
+      };
 
-			res.render('pages/checkout', { data: mockData, session: req.session });
-		} catch (error) {
-			console.error("Error getting cart items:", error);
-			res.status(500).send("Error getting cart items");
-		}
-	});
+      res.render('pages/checkout', { data: mockData, session: req.session });
+    } catch (error) {
+      console.error("Error getting cart items:", error);
+      res.status(500).send("Error getting cart items");
+    }
+  });
 
-	router.post('/', authController.authentication, async (req, res) => {
-		try {
-			const [cart_id] = await userModel.getCart(req.session.userId);
-			const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
+  router.post('/', authController.authentication, async (req, res) => {
+    try {
+      const [cart_id] = await userModel.getCart(req.session.userId);
+      const cartItems = await cartModel.getCartItemsByIds(cart_id.cart_id);
 
-			let cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
-			let addressInfo = await addressModel.getAddressByUserId(req.session.userId);
+      let cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
+      let addressInfo = await addressModel.getAddressByUserId(req.session.userId);
 
-			// card info is empty
-			if (cardInfo.length === 0) {
-				await creditCardModel.createCreditCard(req.session.userId, {
-					card_number: req.body.card_number,
-					expiration_date: req.body.expiration_date,
-					cvv: req.body.cvv
-				});
+      // card info is empty
+      if (cardInfo.length === 0) {
+        await creditCardModel.createCreditCard(
+          req.session.userId,
+          req.body.card_number,
+          req.body.expiration_date,
+          req.body.cvv
+        );
 
-				cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
-			} 
+        cardInfo = await creditCardModel.getCreditCardsByUserId(req.session.userId);
+      }
 
-			// address info is empty
-			if (addressInfo.length === 0) {
-				await addressModel.createAddress(req.session.userId, {
-					city: req.body.city,
-					street: req.body.address,
-					province: req.body.province,
-					zip_code: req.body.zip_code,
-					phone_number: req.body.phone_number
-				});
+      // userId, city, street, province, zipCode, phoneNumber
+      // address info is empty
+      if (addressInfo.length === 0) {
+        await addressModel.createAddress(req.session.userId, {
+          city: req.body.city,
+          street: req.body.address,
+          province: req.body.province,
+          zip_code: req.body.zip_code,
+          phone_number: req.body.phone_number
+        });
 
-				addressInfo = await addressModel.getAddressByUserId(req.session.userId);
-			} 
+        addressInfo = await addressModel.getAddressByUserId(req.session.userId);
+      }
 
-			const order = {
-				products: cartItems,
-				shipping: {
-					cost: 50,
-					currency: "THB"
-				},
-				payment: cardInfo,
-				delivery: addressInfo
-			};
+      const order = {
+        products: cartItems,
+        shipping: {
+          cost: 50,
+          currency: "THB"
+        },
+        payment: cardInfo,
+        delivery: addressInfo
+      };
 
-			// create order
-			const order_id = await userModel.createOrder(req.session.userId, order);
+      // create order
+      // const order_id = await userModel.createOrder(req.session.userId, order);
 
-			// clear cart
-			await cartModel.clearCart(cart_id.cart_id);
+      // // clear cart
+      // await cartModel.clearCart(cart_id.cart_id);
 
-			res.redirect(`/order/${order_id}`);
-		} catch (error) {
-			console.error("Error checking out:", error);
-			res.status(500).send("Error checking out");
-		}
-	});
+      res.json(order);
 
-	return router;
+      // res.redirect(`/order/${order_id}`);
+    } catch (error) {
+      console.error("Error checking out:", error);
+      res.status(500).send("Error checking out");
+    }
+  });
+
+  return router;
 }
 
 module.exports = createCheckoutRoute;
