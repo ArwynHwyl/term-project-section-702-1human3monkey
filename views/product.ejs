@@ -55,12 +55,17 @@
               ${(product.features || []).map(feature => `<li>${feature}</li>`).join('')}
             </ul>
           </div>
-          <div class="product-options">
-            <div class="size-selector">
+
+          <form id="add-to-cart-form" action="/cart/add" method="POST">
+            <input type="hidden" name="product_id" value="${product.product_id}">
+            <input type="hidden" id="product_attribute_id" name="product_attribute_id" value="">
+
+            <div class="product-options">
+              <div class="size-selector">
               <h3>Size</h3>
               <div class="size-options">
                 ${getUniqueSizes(product.attributes).map(size => `
-                  <button class="size-btn ${product.attributes.some(attr => attr.size === size && attr.quantity > 0) ? '' : 'disabled'}"
+                  <button type="button" class="size-btn ${product.attributes.some(attr => attr.size === size && attr.quantity > 0) ? '' : 'disabled'}"
                     data-size="${size}"
                     ${product.attributes.some(attr => attr.size === size && attr.quantity > 0) ? '' : 'disabled'}>
                     ${size}
@@ -75,9 +80,17 @@
               </div>
             </div>
           </div>
-          <div class="product-actions">
-            <button class="add-to-cart-btn">ADD TO CART</button>
+
+          <div class="quantity-selector pt-3">
+            <h3>Quantity</h3>
+            <input type="number" id="quantity" class="form-control" name="quantity" value="1" min="1" max="99" pattern="[0-9]*" inputmode="numeric">
           </div>
+
+          <div class="product-actions">
+            <button type="submit" class="add-to-cart-btn">ADD TO CART</button>
+          </div>
+        </form>
+
           <div class="shipping-info">
             <p>*No refund on return</p>
           </div>
@@ -99,6 +112,44 @@
 
           updateAvailableColors(this.dataset.size);
         });
+      });
+
+      document.getElementById('add-to-cart-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const selectedSize = document.querySelector('.size-btn.selected')?.dataset.size;
+        const selectedColor = document.querySelector('.color-btn.selected')?.dataset.color;
+
+        const selectedAttribute = productData.attributes.find(attr => 
+          attr.size === selectedSize && attr.color === selectedColor
+        );
+
+        if (!selectedSize || !selectedColor || !selectedAttribute) {
+          alert('Please select size and color');
+          return;
+        }
+
+        document.getElementById('product_attribute_id').value = selectedAttribute.product_attribute_id;
+
+        console.log('Adding to cart:', {
+          productId: productData.product_id,
+          productAttributeId: selectedAttribute.product_attribute_id,
+          size: selectedSize,
+          color: selectedColor,
+          quantity: document.getElementById('quantity').value
+        });
+
+        const submitBtn = this.querySelector('.add-to-cart-btn');
+        submitBtn.textContent = 'ADDED!';
+
+        const quantity = document.getElementById('quantity').value;
+        if (quantity < 1 || quantity > selectedAttribute.quantity) {
+          alert('Invalid quantity');
+          return;
+        }
+
+        document.getElementById('product_attribute_id').value = selectedAttribute.product_attribute_id;
+        this.submit();
       });
 
       document.querySelector('.add-to-cart-btn').addEventListener('click', function () {
@@ -147,6 +198,7 @@
       [...new Set(availableColors)].forEach(color => {
         const colorBtn = document.createElement('button');
         colorBtn.classList.add('color-btn');
+        colorBtn.setAttribute('type', 'button');
         colorBtn.style.backgroundColor = color;
         if (color.toLowerCase() === 'white') colorBtn.style.border = '1px solid #ddd';
         colorBtn.dataset.color = color;

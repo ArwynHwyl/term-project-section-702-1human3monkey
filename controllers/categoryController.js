@@ -44,7 +44,7 @@ async function getCategoryProducts(req, res) {
     const totalProducts = countResult[0].total;
     const totalPages = Math.ceil(totalProducts / limit);
 
-    res.render("pages/all-category-product", {
+    res.render("pages/category/all-category-product", {
         categoryName,
         products,
         pagination: {
