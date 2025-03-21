@@ -12,6 +12,7 @@ function createCartRoute(db){
     const controller = new cartController(cart, user);
 
     router.post('/add', authController.authentication , controller.addToCart);
+    router.post('/update', authController.authentication, controller.updateCart);
     router.get('/delete/:cart_item_id', authController.authentication, controller.removeFromCart);
 
     return router;

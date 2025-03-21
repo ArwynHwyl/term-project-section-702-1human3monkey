@@ -41,9 +41,27 @@ function createCartController(cartModel, userModel) {
     }
   }
 
+  async function updateCart(req, res) {
+    try {
+      const { cart_item_id, quantity } = req.body;
+
+      const result = await cartModel.updateCartItemQuantity(cart_item_id, quantity);
+
+      if(result.affectedRows === 0) {
+        return res.status(400).send("Failed to update cart");
+      }
+
+      res.redirect("/checkout");
+    } catch (error) {
+      console.error("Error updating cart:", error);
+      res.status(500).send("Error updating cart");
+    }
+  }
+
   return {
     addToCart,
-    removeFromCart
+    removeFromCart,
+    updateCart
   }
 }
 
