@@ -11,15 +11,18 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoutes");
-const ProductModel = require("./models/productModel");
+const createCategoryMiddleware = require("./middleware/categoryMiddleware");
 
 dotenv.config();
+
+const categoryMiddleware = createCategoryMiddleware(db);
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(categoryMiddleware);
 
 // if this will cause bug?
 // app.set("views", path.join(__dirname, "views"));
@@ -39,6 +42,10 @@ async function startServer(dbConnection) {
 
   // Store the database connection in app.locals so it's accessible in routes
   app.locals.db = dbConnection;
+
+  app.get("/", (req, res) => {
+    res.redirect("/homepage");
+  });
 
   // Set up session store
   const sessionStore = new mysqlStore(config, dbConnection);
@@ -78,7 +85,7 @@ async function startServer(dbConnection) {
         twitter: "https://www.twitter.com/elonmusk",
         instagram: "https://www.instagram.com/since22_arwynhwyl",
       },
-      map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.965940183367!2d100.49596631482264!3d13.744238990352118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e1a6f7e6b0d%3A0x7c1c1f8e6d0e0b1b!2sICONSIAM!5e0!3m2!1sen!2sth!4v1611608431910!5m2!1sen!2sth",
+      map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3875.965940183367!2d100.49596631482264!3d13.744238990352118!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29e1a6f7e6b0d%3A0x7c1c1f8e6d0e0b1b!2sICONSIAM!5e0!3m2!1sen!2sth!4v1611608431910!5m2!1sen!2sth"
     };
 
     res.render("pages/contact", {
@@ -88,6 +95,7 @@ async function startServer(dbConnection) {
       session: req.session,
     });
   });
+
 
   app.get("/backoffice/product/edit/:id", async (req, res) => {
     try {

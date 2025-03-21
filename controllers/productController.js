@@ -4,6 +4,11 @@
  */
 
 // Get a single product by ID with its attributes
+const session = require('express-session');
+const model = require('../models/productModel');
+const { db } = require('../services/db');
+const productModel = new model(db);
+
 async function getProductById(req, res) {
   try {
     const db = req.app.locals.db;
@@ -255,10 +260,36 @@ async function deleteProduct(req, res) {
   }
 }
 
+const searchProducts = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
+    const offset = (page - 1) * limit;
+    const searchQuery = req.query.search;
+    const searchResults = await productModel.searchProducts(searchQuery);
+
+    const totalProducts = searchResults.length;
+    const totalPages = Math.ceil(totalProducts / limit);
+    res.render('pages/search-product', { 
+      searchResults,
+      pagination: {
+        currentPage: page,
+        totalPages,
+        totalProducts
+      },
+      pageTitle: "Search Products",
+      session: req.session
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error', details: error.message });
+  }
+}
+
 module.exports = {
   getProductById,
   getAllProducts,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  searchProducts
 };

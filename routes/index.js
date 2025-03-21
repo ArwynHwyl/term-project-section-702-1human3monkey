@@ -2,6 +2,7 @@ const express = require("express");
 const createAuthRoute = require('./auth');
 const createBackofficeCategoryRoute = require("./backofficeCategoryRoute");
 const createBackofficeProductRoute = require("./backofficeProductRoute");
+const createHomepageRoute = require("./homepageRoute");
 const UserModel = require('../models/userModel');
 const CartModel = require('../models/cartModel');
 const ProductModel = require('../models/productModel');
@@ -57,10 +58,10 @@ function createRouter(db) {
 
   router.use("/auth", createAuthRoute(db));
   router.use("/cart", createCartRoute(db));
+  router.use("/checkout", createCheckoutRoute(db));
   router.use(createBackofficeCategoryRoute(db));
   router.use(createBackofficeProductRoute(db));
-  router.use("/checkout", createCheckoutRoute(db));
-
+  router.use(createHomepageRoute(db));
   return router;
 }
 
