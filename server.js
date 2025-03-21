@@ -144,33 +144,34 @@ async function startServer(dbConnection) {
     try {
       // Get order history with details
       const [historyRecords] = await dbConnection.query(`
-        SELECT h.history_id, h.user_id, h.order_date,
-               p.product_name, pa.color, pa.size, ci.quantity,
-               p.normal_price, p.discount_percent
+        SELECT h.history_id, h.user_id, h.product_id, h.product_attribute_id, 
+               h.quantity, h.address_id, h.credit_card_id, h.order_date,
+               p.product_name, p.normal_price, p.discount_percent,
+               pa.color, pa.size, u.first_name, u.last_name
         FROM History h
-        JOIN CartItem ci ON h.cart_item_id = ci.cart_item_id
-        JOIN Product p ON ci.product_id = p.product_id
-        JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
+        JOIN Product p ON h.product_id = p.product_id
+        JOIN ProductAttribute pa ON h.product_attribute_id = pa.product_attribute_id
+        JOIN User u ON h.user_id = u.user_id
         ORDER BY h.order_date DESC
       `);
-
+      
       // Format the data for the view
       const history = historyRecords.map(record => {
         const discountedPrice = record.normal_price * (1 - (record.discount_percent / 100));
         const totalPrice = discountedPrice * record.quantity;
-
+        
         return {
-          userId: record.user_id,
-          productname: record.product_name,
+          userId: record.first_name + " " + record.last_name,
+          productName: record.product_name,
           color: record.color,
           size: record.size,
           quantity: `x ${record.quantity}`,
           price: `${totalPrice.toLocaleString()} THB`,
-          status: record.status || "Completed",
+          status: "Completed", // Status field isn't in your diagram, using default
           orderDate: new Date(record.order_date).toLocaleDateString()
         };
       });
-
+      
       res.render("pages/backoffice-history-page", {
         history,
         activePage: "history",

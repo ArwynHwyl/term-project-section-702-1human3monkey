@@ -21,19 +21,17 @@
               <th>Size</th>
               <th>Quantity</th>
               <th>Price</th>
-              <th>Status</th>
             </tr>
           </thead>
           <tbody>
             <% history.forEach(item => { %>
               <tr>
                 <td><%= item.userId %></td>
-                <td><%= item.productname %></td>
+                <td><%= item.productName %></td>
                 <td><%= item.color %></td>
                 <td><%= item.size %></td>
                 <td><%= item.quantity %></td>
                 <td><%= item.price %></td>
-                <td><%= item.status %></td>
               </tr>
             <% }) %>
           </tbody>
