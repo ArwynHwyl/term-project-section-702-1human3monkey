@@ -63,7 +63,7 @@ function createRouter(db) {
   router.use(createHomepageRoute(db));
   router.use(createProductRoutes(db));
   router.use(createHistoryRoute(db));
-  router.use(createCategoryRoute);
+  router.use(createCategoryRoute(db));
 
   return router;
 }

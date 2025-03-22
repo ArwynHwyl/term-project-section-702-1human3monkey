@@ -9,7 +9,7 @@ const path = require("path");
 const createRouter = require("./routes/index");
 const fs = require("fs");
 const productRoute = require("./routes/productRoute");
-const categoryRoutes = require("./routes/categoryRoutes");
+const categoryRoutes = require("./routes/categoryRoute");
 const createCategoryMiddleware = require("./middleware/categoryMiddleware");
 
 const categoryMiddleware = createCategoryMiddleware(db);
@@ -55,8 +55,6 @@ async function startServer(dbConnection) {
   app.locals.session = session;
 
   app.use(createRouter(dbConnection));
-  app.use("/api", productRoute);
-  app.use("/category", categoryRoutes);
 
   app.get("/backoffice/history", async (req, res) => {
     try {
