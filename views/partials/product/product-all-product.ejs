@@ -21,7 +21,7 @@
       productCard.classList.add("product-item", "card");
 
       const productLink = document.createElement("a");
-      productLink.href = `/product/${encodeURIComponent(product.product_name.replace(/\s+/g, '-'))}/${product.product_id}`;
+      productLink.href = `/product/${product.product_id}`;
 
       const productImage = document.createElement("img");
       productImage.classList.add("card-img-top");

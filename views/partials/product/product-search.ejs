@@ -1,5 +1,5 @@
 <div class="products-section">
-  <h2 class="section-title">ALL PRODUCTS</h2>
+  <h2 class="section-title">Search Result for: <%= pageTitle %></h2>
 
   <div id="products-grid" class="products-grid"></div>
   <div id="no-products" class="no-products" style="display: none;">
@@ -20,7 +20,7 @@
       productCard.classList.add("product-item", "card");
 
       const productLink = document.createElement("a");
-      productLink.href = `/product/${encodeURIComponent(product.product_name.replace(/\s+/g, '-'))}/${product.product_id}`;
+      productLink.href = `/product/${product.product_id}`;
 
       const productImage = document.createElement("img");
       productImage.classList.add("card-img-top");

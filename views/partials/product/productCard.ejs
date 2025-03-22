@@ -1,6 +1,6 @@
 <!-- views/partials/productCard.ejs -->
 <div class="product-item card">
-    <a href="/product/<%= encodeURIComponent(product.product_name.replace(/\s+/g, '-')) %>/<%= product.product_id %>">
+    <a href="/product/<%= product.product_id %>">
       <img class="card-img-top" src="<%= product.image_path || '/public/images/placeholder.jpg' %>" alt="<%= product.product_name %>">
       <div class="product-info card-body">
         <h5 class="card-title"><%= product.product_name %></h5>

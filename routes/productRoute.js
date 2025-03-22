@@ -1,20 +1,19 @@
 const express = require('express');
-const router = express.Router();
 const productController = require('../controllers/productController');
+const ProductModel = require('../models/productModel');
+const createProductController = require('../controllers/productController');
 
-// GET routes
-router.get('/product/:id', productController.getProductById);
-router.get('/products', productController.getAllProducts);
+function createProductRoutes(db) {
+  const router = express.Router();
+  const productModel = new ProductModel(db);
+  const productController = createProductController(productModel);
 
-router.get('/search', productController.searchProducts);
+  router.get('/products', productController.getAllProducts);
+  router.get('/product/:id', productController.renderProductPage);
+  router.get('/product/:id/details', productController.getProductById);
+  router.get('/search', productController.searchProducts);
 
-// POST routes
-router.post('/product', productController.createProduct);
+  return router;
+}
 
-// PUT routes
-router.put('/product/:id', productController.updateProduct);
-
-// DELETE routes
-router.delete('/product/:id', productController.deleteProduct);
-
-module.exports = router;
+module.exports = createProductRoutes;
