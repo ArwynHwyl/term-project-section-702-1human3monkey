@@ -11,8 +11,8 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // const allProducts = <% - JSON.stringify(products) %>; // Products data from API
-    const allProducts = JSON.parse('<%- JSON.stringify(products || []) %>');
+    // Server-side, the correct way:
+    const allProducts = <%- JSON.stringify(products || []) %>;
     const productsPerPage = 12; // Number of products per page
     let currentPage = 1;
 
