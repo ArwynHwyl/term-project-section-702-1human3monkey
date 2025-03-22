@@ -8,6 +8,7 @@ function createHomepageController(homepageModel) {
       
       const mappedDiscountedProducts = discountedProducts.map(product => ({
         product_id: product.product_id,
+        description: product.description || "No description available",
         product_name: product.product_name || "Unnamed Product",
         image_path: product.image_path ? `${product.image_path}` : "https://via.placeholder.com/150",
         normal_price: product.normal_price || 0,
