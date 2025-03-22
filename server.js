@@ -8,12 +8,9 @@ const createTables = require("./services/database");
 const path = require("path");
 const createRouter = require("./routes/index");
 const fs = require("fs");
-const dotenv = require("dotenv");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoutes");
 const createCategoryMiddleware = require("./middleware/categoryMiddleware");
-
-dotenv.config();
 
 const categoryMiddleware = createCategoryMiddleware(db);
 
@@ -23,10 +20,6 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(categoryMiddleware);
-
-// if this will cause bug?
-// app.set("views", path.join(__dirname, "views"));
-// app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -40,30 +33,26 @@ async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
   await createTables(dbConnection);
 
-  // Store the database connection in app.locals so it's accessible in routes
   app.locals.db = dbConnection;
 
-  app.get("/", (req, res) => {
-    res.redirect("/homepage");
-  });
-
-  // Set up session store
   const sessionStore = new mysqlStore(config, dbConnection);
 
   app.use(
     session({
       store: sessionStore,
-      secret: "jklfsodifjsktnwjasdp465dd", // A secret key used to sign the session ID cookie
-      resave: true, // Forces the session to be saved back to the session store
-      saveUninitialized: true, // Forces a session that is "uninitialized" to be saved to the store
+      secret: "jklfsodifjsktnwjasdp465dd",
+      resave: true,
+      saveUninitialized: true,
       cookie: {
-        maxAge: 3600000, // Sets the cookie expiration time in milliseconds (1 hour here)
+        maxAge: 3600000,
         sameSite: true,
-        httpOnly: true, // Reduces client-side script control over the cookie
-        secure: false, // Ensures cookies are only sent over HTTPS //we do not impmentment HTTPS yet, so, this is false
+        httpOnly: true,
+        secure: false,
       },
     })
   );
+
+  app.locals.session = session;
 
   app.use(createRouter(dbConnection));
   app.use("/api", productRoute);
@@ -96,82 +85,35 @@ async function startServer(dbConnection) {
     });
   });
 
-
-  app.get("/backoffice/product/edit/:id", async (req, res) => {
-    try {
-      const productId = req.params.id;
-
-      // Get product details
-      const [products] = await dbConnection.query(`
-        SELECT p.*, c.category_name 
-        FROM Product p
-        LEFT JOIN Category c ON p.category_id = c.category_id
-        WHERE p.product_id = ?
-      `,
-        [productId]
-      );
-
-      if (!products || products.length === 0) {
-        return res.status(404).send("Product not found");
-      }
-
-      // Get product attributes
-      const [variants] = await dbConnection.query(`
-        SELECT color, size, quantity
-        FROM ProductAttribute
-        WHERE product_id = ?
-      `, [productId]);
-
-      const product = {
-        product_id: products[0].product_id,
-        image: products[0].image_path,
-        name: products[0].product_name,
-        category: products[0].category_name,
-        description: products[0].description,
-        normal_price: products[0].normal_price,
-        discount_percent: products[0].discount_percent,
-        variants: variants
-      };
-
-      res.render("pages/backoffice-product-edit-page", { product });
-    } catch (error) {
-      console.error("Error fetching product for edit:", error);
-      res.status(500).send("Error loading product");
-    }
-  });
-
   app.get("/backoffice/history", async (req, res) => {
     try {
-      // Get order history with details
       const [historyRecords] = await dbConnection.query(`
-        SELECT h.history_id, h.user_id, h.product_id, h.product_attribute_id, 
-               h.quantity, h.address_id, h.credit_card_id, h.order_date,
-               p.product_name, p.normal_price, p.discount_percent,
-               pa.color, pa.size, u.first_name, u.last_name
+        SELECT h.history_id, h.user_id, h.order_date,
+               p.product_name, pa.color, pa.size, ci.quantity,
+               p.normal_price, p.discount_percent
         FROM History h
-        JOIN Product p ON h.product_id = p.product_id
-        JOIN ProductAttribute pa ON h.product_attribute_id = pa.product_attribute_id
-        JOIN User u ON h.user_id = u.user_id
+        JOIN CartItem ci ON h.cart_item_id = ci.cart_item_id
+        JOIN Product p ON ci.product_id = p.product_id
+        JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
         ORDER BY h.order_date DESC
       `);
-      
-      // Format the data for the view
+
       const history = historyRecords.map(record => {
         const discountedPrice = record.normal_price * (1 - (record.discount_percent / 100));
         const totalPrice = discountedPrice * record.quantity;
-        
+
         return {
-          userId: record.first_name + " " + record.last_name,
-          productName: record.product_name,
+          userId: record.user_id,
+          productname: record.product_name,
           color: record.color,
           size: record.size,
           quantity: `x ${record.quantity}`,
           price: `${totalPrice.toLocaleString()} THB`,
-          status: "Completed", // Status field isn't in your diagram, using default
+          status: record.status || "Completed",
           orderDate: new Date(record.order_date).toLocaleDateString()
         };
       });
-      
+
       res.render("pages/backoffice-history-page", {
         history,
         activePage: "history",
@@ -184,52 +126,6 @@ async function startServer(dbConnection) {
         error: "Failed to load order history"
       });
     }
-  });
-
-  app.get("/products", async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 12; // 12 products per page (4x3 grid)
-      const offset = (page - 1) * limit;
-
-      // Get products with pagination
-      const [products] = await db.query(`
-        SELECT p.*, c.category_name 
-        FROM Product p
-        LEFT JOIN Category c ON p.category_id = c.category_id
-        ORDER BY p.created_at DESC
-      `);
-
-      // Get total count for pagination
-      const [countResult] = await db.query(`
-        SELECT COUNT(*) as total FROM Product
-      `);
-
-      const totalProducts = countResult[0].total;
-      const totalPages = Math.ceil(totalProducts / limit);
-
-      res.render("pages/all-products", {
-        products,
-        pageTitle: "All Products",
-        session: req.session
-      });
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      res.status(500).render("pages/all-products", {
-        products: [],
-        pagination: {
-          currentPage: 1,
-          totalPages: 1,
-          totalProducts: 0
-        },
-        pageTitle: "All Products",
-        error: "Failed to load products"
-      });
-    }
-  });
-
-  app.get("/product/:name/:id", (req, res) => {
-    res.render("product", { productId: req.params.id, session: req.session });
   });
 
   app.listen(3000, () => {

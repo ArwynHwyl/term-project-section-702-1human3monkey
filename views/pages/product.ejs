@@ -1,5 +1,5 @@
-<%- include("./partials/header.ejs") %>
-<%- include("./partials/navbarFrontPage.ejs") %>
+<%- include("../partials/header.ejs") %>
+<%- include("../partials/navbarFrontPage.ejs") %>
 
 <div class="product-container">
   <div id="product-detail" class="product-detail"></div>
@@ -14,7 +14,7 @@
         const productId = '<%= productId %>'; // Get the product ID from server
         console.log("Fetching product data for ID:", productId);
         
-        const response = await fetch(`/api/product/${productId}`);
+        const response = await fetch(`/product/${productId}/details`);
         productData = await response.json();
 
         if (productData.error) {
@@ -25,7 +25,7 @@
         populateProductDetails(productData);
       } catch (error) {
         console.error('Error fetching product data:', error);
-        document.getElementById('product-detail').innerHTML = "<p>Error loading product.</p>";
+        document.getElementById('product-detail').innerHTML = "<p>Error loading product.</p>" + error;
       }
     }
 
@@ -220,4 +220,4 @@
   });
 </script>
 
-<%- include("./partials/footer.ejs") %>
+<%- include("../partials/footer.ejs") %>

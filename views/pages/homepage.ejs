@@ -44,7 +44,7 @@
                   <div class="row row-cols-1 row-cols-md-4 g-3">
                     <% for (let j = i * chunkSize; j < (i + 1) * chunkSize && j < data.discountedProducts.length; j++) { %>
                       <div class="col">
-                       <a href="/product/<%= data.discountedProducts[j].product_name %>/<%= data.discountedProducts[j].product_id %>">
+                       <a href="/product/<%= data.discountedProducts[j].product_id %>">
                         <div class="product-card card h-100">
                           <img src="<%= data.discountedProducts[j].image_path || 'https://picsum.photos/200/300' %>" class="card-img-top" alt="<%= data.discountedProducts[j].product_name || 'Product' %>" style="height: 150px; object-fit: cover; transition: opacity 0.5s;">
                           <div class="card-body text-center">
