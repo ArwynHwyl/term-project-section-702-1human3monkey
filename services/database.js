@@ -105,7 +105,12 @@ const createHistoryTableQuery = `
   );
 `;
 
-async function createTables(dbConnection) {
+const createAdminUserQuery = `
+  INSERT INTO User (email, password, role, first_name, last_name)
+  VALUES (?, ?, 'admin', 'admin', 'admin');
+`;
+
+async function createTables(dbConnection, adminEmail, adminPassword) {
   try {
     await dbConnection.query(createCategoryTableQuery);
     await dbConnection.query(createProductTableQuery);
@@ -116,6 +121,10 @@ async function createTables(dbConnection) {
     await dbConnection.query(createCartTableQuery);
     await dbConnection.query(createCartItemTableQuery);
     await dbConnection.query(createHistoryTableQuery);
+     
+    // Insert admin user with parameterized query
+    await dbConnection.query(createAdminUserQuery, [adminEmail, adminPassword]);
+
   } catch (error) {
     console.error("ERROR: Failed to create tables: ", error.message);
     throw error;
