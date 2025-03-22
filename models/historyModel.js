@@ -28,6 +28,21 @@ class historyModel {
       throw new Error("Error getting all history items");
     }
   }
+
+  async getHistoryRecords() {
+    const query = `
+      SELECT h.history_id, h.user_id, h.order_date,
+             p.product_name, pa.color, pa.size, ci.quantity,
+             p.normal_price, p.discount_percent
+      FROM History h
+      JOIN CartItem ci ON h.cart_item_id = ci.cart_item_id
+      JOIN Product p ON ci.product_id = p.product_id
+      JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
+      ORDER BY h.order_date DESC
+    `;
+    const [historyRecords] = await this.db.query(query);
+    return historyRecords;
+  }
 }
 
 module.exports = historyModel;
