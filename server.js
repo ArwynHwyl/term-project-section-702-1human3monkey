@@ -8,12 +8,13 @@ const createTables = require("./services/database");
 const path = require("path");
 const createRouter = require("./routes/index");
 const fs = require("fs");
-const dotenv = require("dotenv");
+const { ADMIN_EMAIL, ADMIN_PASSWORD } = require("./dotenv");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoutes");
 const createCategoryMiddleware = require("./middleware/categoryMiddleware");
 
-dotenv.config();
+// is this gonna cause a bug?
+// dotenv.config();
 
 const categoryMiddleware = createCategoryMiddleware(db);
 
@@ -23,10 +24,6 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(categoryMiddleware);
-
-// if this will cause bug?
-// app.set("views", path.join(__dirname, "views"));
-// app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
@@ -38,7 +35,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
-  await createTables(dbConnection);
+  await createTables(dbConnection, ADMIN_EMAIL, ADMIN_PASSWORD);
 
   // Store the database connection in app.locals so it's accessible in routes
   app.locals.db = dbConnection;

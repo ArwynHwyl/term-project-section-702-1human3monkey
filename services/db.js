@@ -1,7 +1,8 @@
 const mysql = require("mysql2");
 const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } = require("./dotenv");
 
-require("dotenv").config();
+// if this gonna cause a bug?
+// require("dotenv").config();
 
 const config = {
   host: MYSQL_HOST,
