@@ -4,21 +4,21 @@
   <%- include('../partials/navbarFrontPage') %>
   <div class="container">
     <div class="main-content">
-      <section class="highlight mb-4" >
+      <section class="highlight mb-4">
         <h2 class="h4 border-bottom pb-2" style="padding-left: 10px;">HIGHLIGHT</h2>
         <div id="carouselHighlight" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
           <div class="carousel-inner">
             <% if (data.carouselImages && data.carouselImages.length > 0) { %>
               <% data.carouselImages.forEach((img, index) => { %>
                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                  <a href="/category/<%= index %>">
-                    <img src="/images/highlightbadge.jpg" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
+                  <a href="/category/<%= img.category_name %>">
+                    <img src="<%= img.carousel_image_path %>" class="d-block w-100" alt="Category <%= img.category_name %>">
                   </a>
                 </div>
               <% }) %>
             <% } else { %>
               <div class="carousel-item active">
-                <img src="https://via.placeholder.com/200x300" class="d-block w-100" alt="No Image" style="height: 200px; object-fit: cover;">
+                <img src="/public/images/highlightbadge.jpg" class="d-block w-100" alt="No Image" style="height: 200px; object-fit: cover;">
               </div>
             <% } %>
           </div>
@@ -85,12 +85,10 @@
               <span class="visually-hidden">Next</span>
             </button>
           <% } %>
-
         </div>
       </section>
     </div>
     <aside class="sidebar">
-
       <div class="card mb-3">
         <div class="card-body text-center">
           <h3 class="card-title">ALL PRODUCT</h3>
@@ -108,3 +106,4 @@
     </aside>
   </div>
   <%- include('../partials/footer') %>
+</body>
