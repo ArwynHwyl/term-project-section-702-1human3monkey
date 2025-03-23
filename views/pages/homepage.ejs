@@ -11,14 +11,14 @@
             <% if (data.carouselImages && data.carouselImages.length > 0) { %>
               <% data.carouselImages.forEach((img, index) => { %>
                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                  <a href="/category/<%= index %>">
-                    <img src="/images/highlightbadge.jpg" class="d-block w-100" alt="Category Badge" style="height: 200px; object-fit: cover;">
+                  <a href="/category/<%= img.category_name %>">
+                    <img src="<%= img.carousel_image_path %>" class="d-block w-100" alt="Category <%= img.category_name %>">
                   </a>
                 </div>
               <% }) %>
             <% } else { %>
               <div class="carousel-item active">
-                <img src="https://via.placeholder.com/200x300" class="d-block w-100" alt="No Image" style="height: 200px; object-fit: cover;">
+                <img src="/public/images/highlightbadge.jpg" class="d-block w-100" alt="No Image" style="height: 200px; object-fit: cover;">
               </div>
             <% } %>
           </div>
@@ -44,8 +44,10 @@
                 <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
                   <div class="row g-3 product-row">
                     <% for (let j = i * chunkSize; j < (i + 1) * chunkSize && j < data.discountedProducts.length; j++) { %>
-                      <div class="col product-col">
-                        <a href="/product/<%= data.discountedProducts[j].product_id %>">
+
+                      <div class="col">
+                       <a href="/product/<%= data.discountedProducts[j].product_id %>">
+
                           <div class="product-card card h-100">
                             <img src="<%= data.discountedProducts[j].image_path || 'https://picsum.photos/200/300' %>" 
                                  class="card-img-top" 
@@ -100,6 +102,7 @@
                   <div class="row g-3 product-row">
                     <div class="col product-col">
                       <a href="/product/<%= product.product_id %>">
+
                         <div class="product-card card h-100">
                           <img src="<%= product.image_path || 'https://picsum.photos/200/300' %>" 
                                class="card-img-top" 

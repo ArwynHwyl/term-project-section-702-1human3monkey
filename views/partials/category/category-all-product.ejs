@@ -14,7 +14,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     const allProducts = <%- JSON.stringify(products || []) %>;
     const productsPerPage = 8;
-    
     let currentPage = 1;
 
     function createProductCard(product) {
@@ -46,12 +45,16 @@
 
         const discountPrice = document.createElement("span");
         discountPrice.classList.add("discount-price");
+
         discountPrice.textContent = `฿${(parseFloat(product.normal_price) - (parseFloat(product.normal_price) * parseFloat(product.discount_percent))).toLocaleString()}`;
+
 
         productPrice.appendChild(originalPrice);
         productPrice.appendChild(discountPrice);
       } else {
+
         productPrice.textContent = `฿${parseFloat(product.normal_price * 100).toLocaleString()}`;
+
       }
 
       productInfo.appendChild(productTitle);
@@ -123,6 +126,7 @@
         pageLink.classList.add("page-btn");
         if (i === currentPage) {
           pageLink.classList.add("active");
+
         }
         pageLink.textContent = i;
         pageLink.onclick = (e) => {

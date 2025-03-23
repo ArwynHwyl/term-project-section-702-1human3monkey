@@ -8,12 +8,16 @@
     <a class="navbar-brand" href="/">DAZZLE</a>
 
     <div class="navbar-icons">
+
       <form action="/search" method="GET" class="d-flex d-none" id="searchForm">
+
         <input type="text" placeholder="Search" name="search" class="form-control search-input"
           placeholder="Search for products..." required>
         <button type="submit"><i class="bi bi-search"></i></button>
       </form>
+
       <i class="bi bi-search" id="toggleSearch" style="cursor: pointer;"></i>
+
       <div class="dropdown">
         <% if(session.authenticated) { %>
           <a class="show" data-bs-toggle="dropdown" href="#" id="userDropdown" role="button">
@@ -52,7 +56,9 @@
                 <li class="dropdown-item"><a href="#">Logout</a></li>
               </ul>
       </div>
+
       <a href="/checkout"><i class="bi bi-bag-fill"></i></a>
+
     </div>
 
     <div class="collapse navbar-collapse" id="navbarContent">

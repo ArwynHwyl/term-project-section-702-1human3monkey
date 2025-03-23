@@ -253,7 +253,7 @@ body {
 
 /* Adjust Carousel and Product Grid */
 #carouselHighlight .carousel-item img {
-  height: 200px;
+  height: 400px; /* ปรับขนาดรูปภาพใน Highlight carousel เป็น 400px */
   object-fit: cover;
 }
 
