@@ -51,7 +51,7 @@ function createRouter(db) {
     });
   });
 
-  router.get("/backoffice", (req, res) => {
+  router.get("/backoffice", authController.authentication,  (req, res) => {
     res.redirect("/backoffice/category");
   });
 
