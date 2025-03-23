@@ -9,6 +9,10 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="/css/backoffice-styles.css" />
+    <link
+      rel="stylesheet"
+      href="/css/backoffice-productedit-style.css"
+    />
   </head>
   <body>
     <!-- Header -->
@@ -105,7 +109,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td>
+                  <td data-cell="Color">
                     <input
                       type="text"
                       class="form-control"
@@ -114,7 +118,7 @@
                       required
                     />
                   </td>
-                  <td>
+                  <td data-cell="Size">
                     <input
                       type="text"
                       class="form-control"
@@ -123,7 +127,7 @@
                       required
                     />
                   </td>
-                  <td>
+                  <td data-cell="Quantity">
                     <input
                       type="number"
                       class="form-control"
@@ -151,7 +155,7 @@
             </table>
           </div>
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success confirm-button">Submit</button>
       </form>
     </div>
 
@@ -220,9 +224,9 @@
         const table = $("#attributesTable tbody");
         const newRow = `
           <tr>
-            <td><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color" required></td>
-            <td><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size" required></td>
-            <td><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity" required></td>
+            <td data-cell="Color"><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color" required></td>
+            <td data-cell="Size"><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size" required></td>
+            <td data-cell="Quatity"><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity" required></td>
             <td><button type="button" class="btn btn-danger" onclick="removeAttribute(this)">Remove</button></td>
           </tr>
         `;
