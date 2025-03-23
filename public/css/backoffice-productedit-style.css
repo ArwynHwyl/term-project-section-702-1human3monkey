@@ -126,6 +126,10 @@
   
   /* Media Queries */
   @media (max-width: 768px) {
+    table th:nth-child(1), table td:nth-child(1) { /* Checkbox */
+      width: 20%;
+      text-align: center;
+    }
     .table-responsive {
       overflow-x: auto;
     }
