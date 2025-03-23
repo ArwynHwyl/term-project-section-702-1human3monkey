@@ -195,6 +195,7 @@
     
     .product-image {
         max-width: 100%;
+        align-self: center;
     }
     
     .product-info {
