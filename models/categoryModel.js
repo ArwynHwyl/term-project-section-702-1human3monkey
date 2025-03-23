@@ -57,6 +57,24 @@ class categoryModel {
       throw new Error("Error deleting category");
     }
   }
+
+  async getAllCategories() {
+    const query = "SELECT category_id, category_name AS name, image_path AS icon FROM Category";
+    const [categories] = await this.db.query(query);
+    return categories;
+  }
+
+  async getCategoryProducts(categoryName) {
+    const query = `
+      SELECT p.*, c.category_name 
+      FROM Product p
+      JOIN Category c ON p.category_id = c.category_id
+      WHERE c.category_name = ?
+      ORDER BY p.created_at DESC
+    `;
+    const [products] = await this.db.query(query, [categoryName]);
+    return products;
+  }
 }
 
 module.exports = categoryModel;

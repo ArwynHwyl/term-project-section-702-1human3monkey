@@ -56,6 +56,95 @@ body {
   color: #2c3e50;
 }
 
+/* Product Carousel */
+.carousel-item {
+  height: auto;
+  opacity: 0; /* Start with hidden for fade effect */
+  transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out; /* Smooth sliding and fading */
+}
+
+.carousel-item.active {
+  opacity: 1; /* Fade in when active */
+}
+
+.product-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Animation for product cards when they appear */
+.product-col {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.carousel-item.active .product-col {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.2s; /* Slight delay for staggered effect */
+}
+
+/* Desktop: 4 products per slide, slide by 4 */
+@media (min-width: 769px) {
+  .mobile-carousel {
+    display: none;
+  }
+
+  .desktop-carousel {
+    display: block;
+  }
+
+  #productCarouselDesktop .product-row {
+    flex-wrap: nowrap;
+  }
+
+  #productCarouselDesktop .product-col {
+    flex: 0 0 25%; /* 4 items per slide */
+    max-width: 25%;
+  }
+
+  /* Staggered animation for each product card in desktop */
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(4) {
+    transition-delay: 0.4s;
+  }
+}
+
+/* Mobile: 1 product per slide, slide by 1 */
+@media (max-width: 768px) {
+  .desktop-carousel {
+    display: none;
+  }
+
+  .mobile-carousel {
+    display: block;
+  }
+
+  #productCarouselMobile .carousel-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  #productCarouselMobile .product-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  #productCarouselMobile .product-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
 /* Sidebar */
 .sidebar {
   flex: 1;
@@ -66,6 +155,7 @@ body {
   border-radius: 6px;
 }
 
+/* Product Card */
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 12px;
@@ -78,10 +168,12 @@ body {
 }
 
 .product-card:hover {
-  transform: scale(1.05) rotateX(5deg) rotateY(5deg);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05) rotateX(5deg) rotateY(5deg) translateY(-10px); /* Enhanced hover effect */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #ffffff, #f0f0f0); /* Subtle background change on hover */
 }
 
+/* General Card Styles */
 .card {
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -113,17 +205,20 @@ body {
   border-bottom-right-radius: 12px;
 }
 
+/* Buttons */
 .btn-danger {
   background-color: #8B0000;
   border-color: #8B0000;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-danger:hover {
   background-color: #700000;
   border-color: #700000;
+  transform: scale(1.05);
 }
 
-/* Media queries for responsiveness */
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -144,10 +239,6 @@ body {
   .card-img-top {
     height: 100px;
   }
-
-  .carousel-inner .row {
-    flex-wrap: nowrap;
-  }
 }
 
 @media (max-width: 480px) {
@@ -160,33 +251,18 @@ body {
   }
 }
 
-/* Adjust carousel and product grid */
+/* Adjust Carousel and Product Grid */
 #carouselHighlight .carousel-item img {
-  height: 200px;
+  height: 400px; /* ปรับขนาดรูปภาพใน Highlight carousel เป็น 400px */
   object-fit: cover;
 }
 
-#productCarousel .carousel-item {
-  height: 300px;
-}
-
-#productCarousel .carousel-item a {
+.carousel-item a {
   text-decoration: none;
 }
 
-#productCarousel .carousel-item .card-title {
+.carousel-item .card-title {
   font-size: 1.2rem;
-}
-
-#productCarousel .row {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.product-grid .col {
-  display: flex;
-  justify-content: center;
 }
 
 .carousel-inner {
@@ -198,6 +274,5 @@ body {
 }
 
 .card-text {
-  font-weight: bold;
+  font-weight: 500;
 }
-

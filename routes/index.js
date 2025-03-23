@@ -5,13 +5,13 @@ const createBackofficeProductRoute = require("./backofficeProductRoute");
 const createHomepageRoute = require("./homepageRoute");
 const UserModel = require('../models/userModel');
 const CartModel = require('../models/cartModel');
-const ProductModel = require('../models/productModel');
-const CreditCardModel = require('../models/creditCardModel');
-const AddressModel = require('../models/addressModel');
 const AuthController = require('../controllers/authController');
 const CartController = require('../controllers/cartController');
 const createCartRoute = require('../routes/cart');
 const createCheckoutRoute = require('../routes/checkout');
+const createProductRoutes = require('../routes/productRoute');
+const createHistoryRoute = require("./historyRoute");
+const createCategoryRoute = require("./categoryRoute");
 
 function createRouter(db) {
   const router = express.Router();
@@ -21,7 +21,7 @@ function createRouter(db) {
   const cartController = new CartController(cartModel, userModel);
 
   router.get("/", (req, res) => {
-    res.render("index", { session: req.session });
+    res.redirect("/homepage");
   });
 
   router.get("/contact", (req, res) => {
@@ -55,13 +55,16 @@ function createRouter(db) {
     res.redirect("/backoffice/category");
   });
 
-
   router.use("/auth", createAuthRoute(db));
   router.use("/cart", createCartRoute(db));
   router.use("/checkout", createCheckoutRoute(db));
   router.use(createBackofficeCategoryRoute(db));
   router.use(createBackofficeProductRoute(db));
   router.use(createHomepageRoute(db));
+  router.use(createProductRoutes(db));
+  router.use(createHistoryRoute(db));
+  router.use(createCategoryRoute(db));
+
   return router;
 }
 
