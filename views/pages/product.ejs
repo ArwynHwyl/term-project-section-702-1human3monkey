@@ -44,6 +44,7 @@
           <div class="product-price">
             ${product.discount_percent > 0 ? 
               `<span class="original-price">$${product.normal_price.toLocaleString()}</span>
+
                <span class="discount-price">$${(product.normal_price - (product.normal_price * product.discount_percent)).toLocaleString()}</span>
                <span class="discount-badge">-${product.discount_percent*100}%</span>` : 
               `$${product.normal_price.toLocaleString()}`
@@ -218,6 +219,7 @@
 
     fetchProductData();
 
+
     let logo = document.querySelector(".navbar-brand");
     if (logo) {
       logo.style.position = "absolute";
@@ -236,6 +238,7 @@
         }
       });
     }
+
   });
 </script>
 

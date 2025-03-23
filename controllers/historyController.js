@@ -7,7 +7,7 @@ function createHistoryController(historyModel) {
         const totalPrice = discountedPrice * record.quantity;
 
         return {
-          userId: record.user_id,
+          userId: record.first_name + " " + record.last_name,
           productname: record.product_name,
           color: record.color,
           size: record.size,

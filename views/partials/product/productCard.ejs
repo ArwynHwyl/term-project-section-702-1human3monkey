@@ -1,4 +1,5 @@
 <!-- views/partials/productCard.ejs -->
+
 <div class="container">
   <div class="row">
     <div class="col-md-3 col-sm-6">
@@ -22,10 +23,10 @@
             </p>
             <div class="product-price card-text">
               <% if (product.discount_percent > 0) { %>
-                <span class="original-price">฿<%= parseFloat(product.normal_price).toLocaleString() %></span>
-                <span class="discount-price">฿<%= (parseFloat(product.normal_price) * (1 - parseFloat(product.discount_percent)/100)).toLocaleString() %></span>
+                <span class="original-price">$<%= parseFloat(product.normal_price).toLocaleString() %></span>
+                <span class="discount-price">$<%= (parseFloat(product.normal_price) * (1 - parseFloat(product.discount_percent)/100)).toLocaleString() %></span>
               <% } else { %>
-                ฿<%= parseFloat(product.normal_price).toLocaleString() %>
+                $<%= parseFloat(product.normal_price).toLocaleString() %>
               <% } %>
             </div>
           </div>
