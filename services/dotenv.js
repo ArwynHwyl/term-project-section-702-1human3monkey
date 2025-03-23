@@ -18,6 +18,8 @@ const requiredEnv = [
   "MYSQL_USER",
   "MYSQL_PASSWORD",
   "MYSQL_DATABASE",
+  "ADMIN_EMAIL",
+  "ADMIN_PASSWORD"
 ];
 const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
@@ -33,4 +35,6 @@ module.exports = {
   MYSQL_USER: process.env.MYSQL_USER,
   MYSQL_PASSWORD: process.env.MYSQL_PASSWORD,
   MYSQL_DATABASE: process.env.MYSQL_DATABASE,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD
 };

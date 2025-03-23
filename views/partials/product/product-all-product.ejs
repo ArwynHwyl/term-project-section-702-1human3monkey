@@ -10,10 +10,18 @@
 </div>
 
 <script>
+    function truncateString(str, num) {
+      if (str.length <= num) {
+        return str;
+      }
+      return str.slice(0, num) + '...';
+    }
+    
   document.addEventListener("DOMContentLoaded", function () {
-    // Server-side, the correct way:
+
     const allProducts = <%- JSON.stringify(products || []) %>;
-    const productsPerPage = 12; // Number of products per page
+    const productsPerPage = 8; // Number of products per page
+
     let currentPage = 1;
 
     function createProductCard(product) {
@@ -35,6 +43,10 @@
       productTitle.classList.add("card-title");
       productTitle.textContent = product.product_name;
 
+      const productDescription = document.createElement("div");
+      productDescription.classList.add("card-text", "text-secondary");
+      productDescription.textContent = truncateString(product.description, 30);
+
       const productPrice = document.createElement("div");
       productPrice.classList.add("product-price", "card-text");
 
@@ -50,10 +62,11 @@
         productPrice.appendChild(originalPrice);
         productPrice.appendChild(discountPrice);
       } else {
-        productPrice.textContent = `฿${parseFloat(product.normal_price).toLocaleString()}`;
+        productPrice.textContent = `$${parseFloat(product.normal_price).toLocaleString()}`;
       }
 
       productInfo.appendChild(productTitle);
+      productInfo.appendChild(productDescription);
       productInfo.appendChild(productPrice);
       productLink.appendChild(productImage);
       productLink.appendChild(productInfo);
@@ -85,7 +98,7 @@
       const paginationContainer = document.getElementById("pagination");
       paginationContainer.innerHTML = ""; // Clear previous pagination
       const totalPages = Math.ceil(allProducts.length / productsPerPage);
-      
+
       console.log(`Total Products: ${allProducts.length}, Total Pages: ${totalPages}`);
 
       if (totalPages <= 1) return; // Hide pagination if only one page
@@ -159,5 +172,24 @@
     // Initial render
     renderProducts();
     renderPagination();
+
+    let logo = document.querySelector(".navbar-brand");
+    if (logo) {
+      logo.style.position = "absolute";
+      logo.style.top = "5.5px";
+      logo.style.left = "50%";
+      logo.style.transform = "translateX(-50%)";
+    }
+    const togglerIcon = document.querySelector(".navbar-toggler-icon");
+    if (togglerIcon) {
+      togglerIcon.addEventListener("click", function () {
+        if (logo) {
+          logo.style.position = "absolute";
+          logo.style.top = "5.5px";
+          logo.style.left = "50%";
+          logo.style.transform = "translateX(-50%)";
+        }
+      });
+    }
   });
 </script>

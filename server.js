@@ -11,6 +11,7 @@ const fs = require("fs");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoute");
 const createCategoryMiddleware = require("./middleware/categoryMiddleware");
+const { ADMIN_EMAIL, ADMIN_PASSWORD } = require("./services/dotenv");
 
 const categoryMiddleware = createCategoryMiddleware(db);
 
@@ -31,7 +32,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
-  await createTables(dbConnection);
+  await createTables(dbConnection, ADMIN_EMAIL, ADMIN_PASSWORD);
 
   app.locals.db = dbConnection;
 
