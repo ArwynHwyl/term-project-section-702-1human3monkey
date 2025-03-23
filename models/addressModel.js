@@ -15,8 +15,7 @@ class addressModel {
   }
 
   async createAddress(userId, city, street, province, zipCode, phoneNumber) {
-    const query =
-      "INSERT INTO Address (user_id, city, street, province, zip_code, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
+    const query = `INSERT INTO Address (user_id, city, street, province, zip_code, phone_number) VALUES (?, ?, ?, ?, ?, ?)`;
     try {
       const [result] = this.db.execute(query, [userId, city, street, province, zipCode, phoneNumber]);
       return result;

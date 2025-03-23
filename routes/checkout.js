@@ -69,19 +69,19 @@ function createCheckoutRoute(db) {
 
       // address info is empty
       if (addressInfo.length === 0) {
-        await addressModel.createAddress(req.session.userId, {
-          city: req.body.city,
-          street: req.body.address,
-          province: req.body.province,
-          zip_code: req.body.zip_code,
-          phone_number: req.body.phone_number
-        });
+        await addressModel.createAddress(req.session.userId,
+          req.body.city,
+          req.body.address,
+          req.body.province,
+          req.body.zip_code,
+          req.body.phone_number
+        );
 
         addressInfo = await addressModel.getAddressByUserId(req.session.userId);
       }
 
       // add history items
-      if(items){
+      if (items) {
         const itemsArray = Object.values(items);
 
         itemsArray.forEach(async (item) => {
