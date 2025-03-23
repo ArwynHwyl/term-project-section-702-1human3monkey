@@ -44,7 +44,7 @@
 
         const discountPrice = document.createElement("span");
         discountPrice.classList.add("discount-price");
-        discountPrice.textContent = `฿${(parseFloat(product.normal_price) * (1 - parseFloat(product.discount_percent) / 100)).toLocaleString()}`;
+        discountPrice.textContent = `฿${(parseFloat(product.normal_price) - (parseFloat(product.normal_price) * parseFloat(product.discount_percent))).toLocaleString()}`;
 
         productPrice.appendChild(originalPrice);
         productPrice.appendChild(discountPrice);
