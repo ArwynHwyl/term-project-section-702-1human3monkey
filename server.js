@@ -11,6 +11,7 @@ const fs = require("fs");
 const productRoute = require("./routes/productRoute");
 const categoryRoutes = require("./routes/categoryRoute");
 const createCategoryMiddleware = require("./middleware/categoryMiddleware");
+const { ADMIN_EMAIL, ADMIN_PASSWORD } = require("./services/dotenv");
 
 const categoryMiddleware = createCategoryMiddleware(db);
 
