@@ -169,7 +169,11 @@ table td:nth-child(1) {
   min-width: 100px; /* Minimum width for image */
   text-align: center;
 }
-
+table td:nth-child(1) img{
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
 table th:nth-child(2),
 table td:nth-child(2) {
   width: 15%; /* Product Name column */
@@ -237,8 +241,8 @@ table th {
 }
 
 .tableImage {
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 300px;
   object-fit: cover;
   display: block; /* Ensure block display for centering */
   margin: 0 auto; /* Center the image in desktop view */
@@ -372,11 +376,10 @@ input[type="checkbox"] {
   }
   
   table td:first-child {
-    padding-left: 0; /* Remove padding-left to center the image properly */
-    text-align: center; /* Center the image in mobile view */
-    padding-right: 0; /* Remove padding to make image flush with right edge */
-    width: 100%; /* Ensure td takes full width */
-    min-height: 170px; /* Accommodate image height (150px + margin) */
+    padding-left: 0;
+    text-align: center;
+    padding-right: 0; 
+    width: 100%;
   }
   
   table td:first-child .product-image,

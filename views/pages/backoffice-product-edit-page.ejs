@@ -126,7 +126,7 @@
               <tbody>
                 <% product.attributes.forEach(attribute => { %>
                 <tr>
-                  <td>
+                  <td data-cell="Color">
                     <input
                       type="text"
                       class="form-control"
@@ -135,7 +135,7 @@
                       placeholder="Enter color"
                     />
                   </td>
-                  <td>
+                  <td data-cell="Size">
                     <input
                       type="text"
                       class="form-control"
@@ -144,7 +144,7 @@
                       placeholder="Enter size"
                     />
                   </td>
-                  <td>
+                  <td data-cell="Quantity">
                     <input
                       type="number"
                       class="form-control"
@@ -179,7 +179,7 @@
             </table>
           </div>
         </div>
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success confirm-button">Submit</button>
       </form>
     </div>
 
@@ -250,9 +250,9 @@
         const table = $("#attributesTable tbody");
         const newRow = `
         <tr>
-          <td><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color"></td>
-          <td><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size"></td>
-          <td><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity"></td>
+          <td data-cell="Color"><input type="text" class="form-control" name="attributeColor[]" placeholder="Enter color"></td>
+          <td data-cell="Size"><input type="text" class="form-control" name="attributeSize[]" placeholder="Enter size"></td>
+          <td data-cell="Quantity"><input type="number" class="form-control" name="attributeQuantity[]" placeholder="Enter quantity"></td>
           <td><button type="button" class="btn btn-danger" onclick="removeAttribute(this)">Remove</button></td>
         </tr>
       `;
