@@ -56,6 +56,62 @@ body {
   color: #2c3e50;
 }
 
+/* Product Carousel */
+#productCarousel .carousel-item {
+  height: auto;
+}
+
+#productCarousel .product-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Desktop: 4 products per slide, slide by 4 */
+@media (min-width: 769px) {
+  #productCarousel .mobile-carousel {
+    display: none;
+  }
+
+  #productCarousel .desktop-carousel {
+    display: block;
+  }
+
+  #productCarousel .product-row {
+    flex-wrap: nowrap;
+  }
+
+  #productCarousel .product-col {
+    flex: 0 0 25%; /* 4 items per slide */
+    max-width: 25%;
+  }
+}
+
+/* Mobile: 1 product per slide, slide by 1 */
+@media (max-width: 768px) {
+  #productCarousel .desktop-carousel {
+    display: none;
+  }
+
+  #productCarousel .mobile-carousel {
+    display: block;
+  }
+
+  #productCarousel .carousel-item {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  #productCarousel .product-row {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  #productCarousel .product-col {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
 /* Sidebar */
 .sidebar {
   flex: 1;
@@ -66,6 +122,7 @@ body {
   border-radius: 6px;
 }
 
+/* Product Card */
 .product-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border-radius: 12px;
@@ -82,6 +139,7 @@ body {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* General Card Styles */
 .card {
   border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -113,6 +171,7 @@ body {
   border-bottom-right-radius: 12px;
 }
 
+/* Buttons */
 .btn-danger {
   background-color: #8B0000;
   border-color: #8B0000;
@@ -123,7 +182,7 @@ body {
   border-color: #700000;
 }
 
-/* Media queries for responsiveness */
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -144,10 +203,6 @@ body {
   .card-img-top {
     height: 100px;
   }
-
-  .carousel-inner .row {
-    flex-wrap: nowrap;
-  }
 }
 
 @media (max-width: 480px) {
@@ -160,14 +215,10 @@ body {
   }
 }
 
-/* Adjust carousel and product grid */
+/* Adjust Carousel and Product Grid */
 #carouselHighlight .carousel-item img {
   height: 200px;
   object-fit: cover;
-}
-
-#productCarousel .carousel-item {
-  height: 300px;
 }
 
 #productCarousel .carousel-item a {
@@ -176,17 +227,6 @@ body {
 
 #productCarousel .carousel-item .card-title {
   font-size: 1.2rem;
-}
-
-#productCarousel .row {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.product-grid .col {
-  display: flex;
-  justify-content: center;
 }
 
 .carousel-inner {
