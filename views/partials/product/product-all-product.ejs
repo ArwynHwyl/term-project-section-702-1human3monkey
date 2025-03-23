@@ -53,16 +53,16 @@
       if (product.discount_percent > 0) {
         const originalPrice = document.createElement("span");
         originalPrice.classList.add("original-price");
-        originalPrice.textContent = `฿${parseFloat(product.normal_price).toLocaleString()}`;
+        originalPrice.textContent = `$${parseFloat(product.normal_price).toLocaleString()}`;
 
         const discountPrice = document.createElement("span");
         discountPrice.classList.add("discount-price");
-        discountPrice.textContent = `฿${(parseFloat(product.normal_price) - (parseFloat(product.normal_price) * parseFloat(product.discount_percent))).toLocaleString()}`;
+        discountPrice.textContent = `$${(parseFloat(product.normal_price) - (parseFloat(product.normal_price) * parseFloat(product.discount_percent))).toLocaleString()}`;
 
         productPrice.appendChild(originalPrice);
         productPrice.appendChild(discountPrice);
       } else {
-        productPrice.textContent = `฿${parseFloat(product.normal_price * 100).toLocaleString()}`;
+        productPrice.textContent = `$${parseFloat(product.normal_price).toLocaleString()}`;
       }
 
       productInfo.appendChild(productTitle);

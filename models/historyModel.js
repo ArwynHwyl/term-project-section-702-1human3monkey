@@ -31,14 +31,15 @@ class historyModel {
 
   async getHistoryRecords() {
     const query = `
-      SELECT h.history_id, h.user_id, h.order_date,
-             p.product_name, pa.color, pa.size, ci.quantity,
-             p.normal_price, p.discount_percent
-      FROM History h
-      JOIN CartItem ci ON h.cart_item_id = ci.cart_item_id
-      JOIN Product p ON ci.product_id = p.product_id
-      JOIN ProductAttribute pa ON ci.product_attribute_id = pa.product_attribute_id
-      ORDER BY h.order_date DESC
+      SELECT h.history_id, h.user_id, h.product_id, h.product_attribute_id, 
+               h.quantity, h.address_id, h.credit_card_id, h.order_date,
+               p.product_name, p.normal_price, p.discount_percent,
+               pa.color, pa.size, u.first_name, u.last_name
+        FROM History h
+        JOIN Product p ON h.product_id = p.product_id
+        JOIN ProductAttribute pa ON h.product_attribute_id = pa.product_attribute_id
+        JOIN User u ON h.user_id = u.user_id
+        ORDER BY h.order_date DESC
     `;
     const [historyRecords] = await this.db.query(query);
     return historyRecords;
