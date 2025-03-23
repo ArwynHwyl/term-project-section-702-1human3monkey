@@ -26,12 +26,12 @@ class HomepageModel {
 
   async getCarouselImages() {
     const query = `
-      SELECT image_path FROM Category WHERE image_path IS NOT NULL
+      SELECT category_name, image_path FROM Category WHERE image_path IS NOT NULL
     `;
     try {
       const [images] = await this.db.execute(query);
       console.log("Fetched carousel images from DB:", images); // Debug
-      return images.map(row => row.image_path) || ["https://via.placeholder.com/200x300"];
+      return images.map(row => ({ category_name: row.category_name, image_path: row.image_path }));
     } catch (error) {
       console.error("Error getting carousel images: ", error);
       throw new Error("Error getting carousel images");
