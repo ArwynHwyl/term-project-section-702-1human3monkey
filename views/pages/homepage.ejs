@@ -44,10 +44,8 @@
                 <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
                   <div class="row g-3 product-row">
                     <% for (let j = i * chunkSize; j < (i + 1) * chunkSize && j < data.discountedProducts.length; j++) { %>
-
-                      <div class="col">
-                       <a href="/product/<%= data.discountedProducts[j].product_id %>">
-
+                      <div class="col product-col">
+                        <a href="/product/<%= data.discountedProducts[j].product_id %>">
                           <div class="product-card card h-100">
                             <img src="<%= data.discountedProducts[j].image_path || 'https://picsum.photos/200/300' %>" 
                                  class="card-img-top" 
@@ -102,7 +100,6 @@
                   <div class="row g-3 product-row">
                     <div class="col product-col">
                       <a href="/product/<%= product.product_id %>">
-
                         <div class="product-card card h-100">
                           <img src="<%= product.image_path || 'https://picsum.photos/200/300' %>" 
                                class="card-img-top" 
@@ -164,4 +161,6 @@
     </aside>
   </div>
   <%- include('../partials/footer') %>
+  <!-- Bootstrap JS (รวม Popper.js) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
