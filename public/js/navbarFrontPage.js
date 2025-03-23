@@ -14,10 +14,25 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.getElementById("toggleSearch").addEventListener("click", function () {
+if (window.innerWidth > 600) { // Check if the screen width is less than or equal to 768px (mobile responsive)
+  document.getElementById("toggleSearch").addEventListener("click", function () {
     let form = document.getElementById("searchForm");
+    let logo = document.querySelector(".navbar-brand");
+    let login = document.querySelector(".dropdown");
+    let cart = document.querySelector(".cart");
+
+    logo.classList.toggle("d-none");
+    login.classList.toggle("d-none");
+    cart.classList.toggle("d-none");
     form.classList.toggle("d-none");
   });
+  } else {
+    document.getElementById("toggleSearch").addEventListener("click", function () {
+      let form = document.getElementById("searchForm");
+    
+      form.classList.toggle("d-none");
+      });
+  }
   
   document.addEventListener("DOMContentLoaded", function() {
     document.querySelector(".navbar-toggler-icon").addEventListener("click", function () {
