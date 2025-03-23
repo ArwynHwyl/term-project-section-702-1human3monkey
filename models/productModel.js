@@ -87,7 +87,7 @@ class productModel {
       WHERE p.product_id = ?
     `;
     const attributeQuery = `
-      SELECT color, size, quantity
+      SELECT color, size, quantity, product_attribute_id
       FROM ProductAttribute
       WHERE product_id = ?
     `;
