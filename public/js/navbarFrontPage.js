@@ -29,7 +29,6 @@ if (window.innerWidth > 600) { // Check if the screen width is less than or equa
   } else {
     document.getElementById("toggleSearch").addEventListener("click", function () {
       let form = document.getElementById("searchForm");
-    
       form.classList.toggle("d-none");
       });
   }
