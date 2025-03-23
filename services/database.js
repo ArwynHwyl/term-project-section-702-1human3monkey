@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const createCategoryTableQuery = `
   CREATE TABLE IF NOT EXISTS Category (
     category_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -121,9 +123,12 @@ async function createTables(dbConnection, adminEmail, adminPassword) {
     await dbConnection.query(createCartTableQuery);
     await dbConnection.query(createCartItemTableQuery);
     await dbConnection.query(createHistoryTableQuery);
+
+    // Hash admin password
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
      
     // Insert admin user with parameterized query
-    await dbConnection.query(createAdminUserQuery, [adminEmail, adminPassword]);
+    await dbConnection.query(createAdminUserQuery, [adminEmail, hashedPassword]);
 
   } catch (error) {
     console.error("ERROR: Failed to create tables: ", error.message);
