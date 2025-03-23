@@ -68,11 +68,17 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 1.5rem;
+}
+
+.navbar-icons .submitBtn{
+    background-color: #c01818;
 }
 
 .navbar-icons .bi {
     color: white;
-    margin-left: 1rem;
+    margin-left: 0.6rem;
+    margin-right: 0.6rem;
     font-size: 1.2rem;
 }
 
