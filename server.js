@@ -31,7 +31,7 @@ if (!fs.existsSync(uploadsDir)) {
 
 async function startServer(dbConnection) {
   await testDatabaseConnection(dbConnection);
-  await createTables(dbConnection);
+  await createTables(dbConnection, ADMIN_EMAIL, ADMIN_PASSWORD);
 
   app.locals.db = dbConnection;
 
