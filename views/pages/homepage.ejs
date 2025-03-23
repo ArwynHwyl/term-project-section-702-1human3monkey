@@ -35,8 +35,9 @@
 
       <section class="discounted-products mb-4">
         <h2 class="h4 border-bottom pb-2">SHOP THE DISCOUNTED PRODUCTS</h2>
-        <div id="productCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="7000">
-          <div class="carousel-inner desktop-carousel">
+        <!-- Desktop Carousel: 4 products per slide -->
+        <div id="productCarouselDesktop" class="carousel slide desktop-carousel" data-bs-ride="carousel" data-bs-interval="7000" data-bs-wrap="true">
+          <div class="carousel-inner">
             <% if (data.discountedProducts && data.discountedProducts.length > 0) { %>
               <% let chunkSize = 4; %>
               <% for (let i = 0; i < Math.ceil(data.discountedProducts.length / chunkSize); i++) { %>
@@ -78,7 +79,21 @@
               <p>No discounted products available. Debug: <%= JSON.stringify(data) %></p>
             <% } %>
           </div>
-          <div class="carousel-inner mobile-carousel">
+          <% if (data.discountedProducts && data.discountedProducts.length > 4) { %>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarouselDesktop" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarouselDesktop" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          <% } %>
+        </div>
+
+        <!-- Mobile Carousel: 1 product per slide -->
+        <div id="productCarouselMobile" class="carousel slide mobile-carousel" data-bs-ride="carousel" data-bs-interval="7000" data-bs-wrap="true">
+          <div class="carousel-inner">
             <% if (data.discountedProducts && data.discountedProducts.length > 0) { %>
               <% data.discountedProducts.forEach((product, index) => { %>
                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
@@ -116,11 +131,11 @@
             <% } %>
           </div>
           <% if (data.discountedProducts && data.discountedProducts.length > 1) { %>
-            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarouselMobile" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarouselMobile" data-bs-slide="next">
               <span class="carousel-control-next-icon" aria-hidden="true"></span>
               <span class="visually-hidden">Next</span>
             </button>
