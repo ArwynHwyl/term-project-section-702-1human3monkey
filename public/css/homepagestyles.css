@@ -59,11 +59,30 @@ body {
 /* Product Carousel */
 .carousel-item {
   height: auto;
+  opacity: 0; /* Start with hidden for fade effect */
+  transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out; /* Smooth sliding and fading */
+}
+
+.carousel-item.active {
+  opacity: 1; /* Fade in when active */
 }
 
 .product-row {
   display: flex;
   justify-content: space-between;
+}
+
+/* Animation for product cards when they appear */
+.product-col {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.carousel-item.active .product-col {
+  opacity: 1;
+  transform: scale(1);
+  transition-delay: 0.2s; /* Slight delay for staggered effect */
 }
 
 /* Desktop: 4 products per slide, slide by 4 */
@@ -83,6 +102,20 @@ body {
   #productCarouselDesktop .product-col {
     flex: 0 0 25%; /* 4 items per slide */
     max-width: 25%;
+  }
+
+  /* Staggered animation for each product card in desktop */
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(1) {
+    transition-delay: 0.1s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(2) {
+    transition-delay: 0.2s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(3) {
+    transition-delay: 0.3s;
+  }
+  #productCarouselDesktop .carousel-item.active .product-col:nth-child(4) {
+    transition-delay: 0.4s;
   }
 }
 
@@ -135,8 +168,9 @@ body {
 }
 
 .product-card:hover {
-  transform: scale(1.05) rotateX(5deg) rotateY(5deg);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05) rotateX(5deg) rotateY(5deg) translateY(-10px); /* Enhanced hover effect */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #ffffff, #f0f0f0); /* Subtle background change on hover */
 }
 
 /* General Card Styles */
@@ -175,11 +209,13 @@ body {
 .btn-danger {
   background-color: #8B0000;
   border-color: #8B0000;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .btn-danger:hover {
   background-color: #700000;
   border-color: #700000;
+  transform: scale(1.05);
 }
 
 /* Media Queries for Responsiveness */
