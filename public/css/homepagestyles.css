@@ -57,30 +57,30 @@ body {
 }
 
 /* Product Carousel */
-#productCarousel .carousel-item {
+.carousel-item {
   height: auto;
 }
 
-#productCarousel .product-row {
+.product-row {
   display: flex;
   justify-content: space-between;
 }
 
 /* Desktop: 4 products per slide, slide by 4 */
 @media (min-width: 769px) {
-  #productCarousel .mobile-carousel {
+  .mobile-carousel {
     display: none;
   }
 
-  #productCarousel .desktop-carousel {
+  .desktop-carousel {
     display: block;
   }
 
-  #productCarousel .product-row {
+  #productCarouselDesktop .product-row {
     flex-wrap: nowrap;
   }
 
-  #productCarousel .product-col {
+  #productCarouselDesktop .product-col {
     flex: 0 0 25%; /* 4 items per slide */
     max-width: 25%;
   }
@@ -88,25 +88,25 @@ body {
 
 /* Mobile: 1 product per slide, slide by 1 */
 @media (max-width: 768px) {
-  #productCarousel .desktop-carousel {
+  .desktop-carousel {
     display: none;
   }
 
-  #productCarousel .mobile-carousel {
+  .mobile-carousel {
     display: block;
   }
 
-  #productCarousel .carousel-item {
+  #productCarouselMobile .carousel-item {
     flex: 0 0 100%;
     max-width: 100%;
   }
 
-  #productCarousel .product-row {
+  #productCarouselMobile .product-row {
     flex-wrap: nowrap;
     justify-content: flex-start;
   }
 
-  #productCarousel .product-col {
+  #productCarouselMobile .product-col {
     flex: 0 0 100%;
     max-width: 100%;
   }
@@ -221,11 +221,11 @@ body {
   object-fit: cover;
 }
 
-#productCarousel .carousel-item a {
+.carousel-item a {
   text-decoration: none;
 }
 
-#productCarousel .carousel-item .card-title {
+.carousel-item .card-title {
   font-size: 1.2rem;
 }
 
