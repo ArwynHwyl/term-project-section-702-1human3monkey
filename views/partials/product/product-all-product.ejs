@@ -11,9 +11,9 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // const allProducts = <% - JSON.stringify(products) %>; // Products data from API
-    const allProducts = JSON.parse('<%- JSON.stringify(products || []) %>');
+    const allProducts = <%- JSON.stringify(products || []) %>;
     const productsPerPage = 8; // Number of products per page
+    
     let currentPage = 1;
 
     function createProductCard(product) {
